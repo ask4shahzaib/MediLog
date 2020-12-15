@@ -18,9 +18,9 @@ from django.urls.conf import include, path
 from BackEndApp import urls
 
 urlpatterns = [
-    path('partner/', include(urls)),
     path('admin/', admin.site.urls),
     path('', include(urls)),
     path('login/', include(urls)),
+    path('logout/', include(urls)),
     path('register/', include(urls)),
 ]
