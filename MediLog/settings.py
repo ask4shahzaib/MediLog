@@ -75,6 +75,14 @@ WSGI_APPLICATION = 'MediLog.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
+'''
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'mydatabase',
+    }
+}
+'''
 DATABASES = {
     'default': {
         'ENGINE': 'djongo',
@@ -124,6 +132,10 @@ STATIC_URL = '/static/'
 
 MEDIA_URL = '/images/'
 
+MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
+
 STATICFILES_DIR = [
     os.path.join(BASE_DIR, 'static')
 ]
+
+USE_TRANSACTIONS = False
