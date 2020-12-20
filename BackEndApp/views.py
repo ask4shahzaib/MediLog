@@ -18,7 +18,6 @@ def home(request):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed=['Patient'])
 def feed(request):
     return HttpResponse('Hello Patient you are in 😉')
 

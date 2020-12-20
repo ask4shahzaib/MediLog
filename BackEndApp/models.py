@@ -2,11 +2,10 @@ from django.core.files import storage
 from django.db import connections, models
 from django.core.validators import MinLengthValidator
 from django.db.models.deletion import CASCADE
-from django.db.models.expressions import F
-from djongo.storage import GridFSStorage
 from django.contrib.auth.models import User as _user
 
 # Create your models here.
+
 
 class User(models.Model):
     id = models.CharField(max_length=13, primary_key=True)
@@ -15,8 +14,9 @@ class User(models.Model):
     password = models.CharField(max_length=999, validators=[
                                 MinLengthValidator(8)])
 
+
 class Patient(User):
-    
+
     age = models.IntegerField(default=0)
     phone = models.CharField(max_length=11, null=True,
                              validators=[MinLengthValidator(11)])
@@ -28,6 +28,7 @@ class Patient(User):
 
     def __str__(self):
         return self.firstName+' '+self.lastName
+
 
 class Contact(models.Model):
     person = models.ForeignKey(
