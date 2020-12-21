@@ -1,22 +1,19 @@
-from django.core.files import storage
-from django.db import connections, models
+from django.db import models
 from django.core.validators import MinLengthValidator
 from django.db.models.deletion import CASCADE
-from django.contrib.auth.models import User as _user
+from django.contrib.auth.models import User as us
 
 # Create your models here.
 
 
 class User(models.Model):
-    id = models.CharField(max_length=13, primary_key=True)
+    NIC = models.CharField(max_length=13, primary_key=True)
     firstName = models.CharField(max_length=30)
     lastName = models.CharField(max_length=30)
-    password = models.CharField(max_length=999, validators=[
-                                MinLengthValidator(8)])
 
 
 class Patient(User):
-
+    user = models.OneToOneField(us, null=True, blank=True, on_delete=CASCADE)
     age = models.IntegerField(default=0)
     phone = models.CharField(max_length=11, null=True,
                              validators=[MinLengthValidator(11)])
