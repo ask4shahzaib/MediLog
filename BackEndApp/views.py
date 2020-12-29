@@ -1,3 +1,4 @@
+from django.core.exceptions import ObjectDoesNotExist
 from BackEndApp.models import Patient
 from django.contrib import auth
 from django.contrib.auth.forms import UsernameField
@@ -48,17 +49,36 @@ def logoutUser(request):
 
 @unauthenticated_user
 def register(request):
-    form = CreateUserForm()
     if request.method == 'POST':
-        form = CreateUserForm(request.POST)
-        if form.is_valid():
-            user = form.save()
+        cnic = request.POST['cnic']
+        password = request.POST['password']
+        fname = request.POST['fname']
+        lname = request.POST['lname']
+        phone = request.POST['phone']
+        email = request.POST['email']
+        age = request.POST['age']
+        age = int(age)
+        address = request.POST['address']
+        photo = request.POST['photo']
+        try:
+            y = User.objects.get(username=cnic)
+        except ObjectDoesNotExist:
+            y = None
+        if y is None:
+            x = User.objects.create_user(
+                username=cnic, first_name=fname, last_name=lname, password=password, email=email)
+            x.save()
             group = Group.objects.get(name='Patient')
             messages.success(request, 'Account Created Succesfully')
-            user.groups.add(group)
-            Patient.objects.create(
-                user=user
-            )
+            x.groups.add(group)
+            z = Patient(CNIC=cnic, fName=fname, lName=lname,
+                        age=age, phone=phone, address=address, email=email, photo=photo, user=x, verification=False)
+            z.save()
+            messages.success(request, 'Account Created Successfully')
             return redirect('login')
-    context = {'form': form}
-    return render(request, 'BackEndApp/register.html', context)
+        else:
+            messages.error(
+                request, "Already a patient found with same CNIC")
+            return redirect('register')
+    else:
+        return render(request, 'BackEndApp/register.html')

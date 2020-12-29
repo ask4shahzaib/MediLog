@@ -1,30 +1,27 @@
 from django.db import models
-from django.core.validators import MinLengthValidator
+from django.core.validators import MaxLengthValidator, MinLengthValidator
 from django.db.models.deletion import CASCADE
-from django.contrib.auth.models import User as us
+from django.contrib.auth.models import User
 
 # Create your models here.
 
 
-class User(models.Model):
-    NIC = models.CharField(max_length=13, primary_key=True)
-    firstName = models.CharField(max_length=30)
-    lastName = models.CharField(max_length=30)
-
-
-class Patient(User):
-    user = models.OneToOneField(us, null=True, blank=True, on_delete=CASCADE)
+class Patient(models.Model):
+    user = models.ForeignKey(User, null=False, on_delete=CASCADE)
+    CNIC = models.CharField(max_length=13, primary_key=True)
+    fName = models.CharField(max_length=30)
+    lName = models.CharField(max_length=30)
     age = models.IntegerField(default=0)
     phone = models.CharField(max_length=11, null=True,
                              validators=[MinLengthValidator(11)])
     address = models.CharField(max_length=999, null=True)
     email = models.CharField(max_length=100, null=True)
-    photo = models.ImageField(default='image.jpeg', null=True, blank=True)
+    photo = models.ImageField(null=True, blank=True)
     verification = models.BooleanField(
         default=False)
 
     def __str__(self):
-        return self.firstName+' '+self.lastName
+        return self.fName+' '+self.lName
 
 
 class Contact(models.Model):
@@ -35,3 +32,19 @@ class Contact(models.Model):
 
     def __str__(self):
         return str(self.person) + "'s trusted contact is "+str(self.contact)
+
+
+class Doctor(models.Model):
+    CNIC = models.CharField(max_length=13)
+    fName = models.CharField(max_length=30)
+    lName = models.CharField(max_length=30)
+    license_No = models.CharField(max_length=20, null=False, primary_key=True)
+    phone = models.CharField(max_length=11, null=True,
+                             validators=[MinLengthValidator(11)])
+    address = models.CharField(max_length=999, null=True)
+    email = models.CharField(max_length=100, null=True)
+    photo = models.ImageField(default='image.jpeg', null=True, blank=True)
+    verification = True
+
+    def __str__(self):
+        return self.fName+' '+self.lName
