@@ -6,7 +6,7 @@
 </head>
 
 <body>
-    <form action="" method="POST">
+    <form action="" enctype="multipart/form-data" method="POST">
         {%csrf_token%}
         <div>
             CNIC: <input type="text" name="cnic" required><br> Password: <input type="password" name="password"><br> First Name: <input type="text" name="fname" required><br> Last Name: <input type="text" name="lname" required><br> Phone: <input type="text"

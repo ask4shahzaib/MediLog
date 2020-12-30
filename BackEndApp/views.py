@@ -59,7 +59,7 @@ def register(request):
         age = request.POST['age']
         age = int(age)
         address = request.POST['address']
-        photo = request.POST['photo']
+        photo = request.FILES['photo']
         try:
             y = User.objects.get(username=cnic)
         except ObjectDoesNotExist:
