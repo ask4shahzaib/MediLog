@@ -69,7 +69,6 @@ def register(request):
                 username=cnic, first_name=fname, last_name=lname, password=password, email=email)
             x.save()
             group = Group.objects.get(name='Patient')
-            messages.success(request, 'Account Created Succesfully')
             x.groups.add(group)
             z = Patient(CNIC=cnic, fName=fname, lName=lname,
                         age=age, phone=phone, address=address, email=email, photo=photo, user=x, verification=False)

@@ -1,9 +1,24 @@
+import os
+from MediLog.settings import BASE_DIR
+from django.core.files.storage import FileSystemStorage
 from django.db import models
 from django.core.validators import MaxLengthValidator, MinLengthValidator
 from django.db.models.deletion import CASCADE
 from django.contrib.auth.models import User
 
 # Create your models here.
+
+
+def patient_profile(instance, filename):
+    ext = filename.split('.')[-1]
+    filename = "%s.%s" % (instance.CNIC, ext)
+    return os.path.join(BASE_DIR, 'static/images/patient_profile', filename)
+
+
+def doctor_profile(instance, filename):
+    ext = filename.split('.')[-1]
+    filename = "%s.%s" % (instance.CNIC, ext)
+    return os.path.join(BASE_DIR, 'static/images/doctor_profile', filename)
 
 
 class Patient(models.Model):
@@ -16,7 +31,8 @@ class Patient(models.Model):
                              validators=[MinLengthValidator(11)])
     address = models.CharField(max_length=999, null=True)
     email = models.CharField(max_length=100, null=True)
-    photo = models.ImageField(null=True, blank=True)
+    photo = models.ImageField(
+        upload_to=patient_profile, null=True, blank=True)
     verification = models.BooleanField(
         default=False)
 
@@ -43,7 +59,7 @@ class Doctor(models.Model):
                              validators=[MinLengthValidator(11)])
     address = models.CharField(max_length=999, null=True)
     email = models.CharField(max_length=100, null=True)
-    photo = models.ImageField(default='image.jpeg', null=True, blank=True)
+    photo = models.ImageField(upload_to=doctor_profile, null=True, blank=True)
     verification = True
 
     def __str__(self):
