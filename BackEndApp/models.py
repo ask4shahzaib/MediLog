@@ -1,8 +1,7 @@
 import os
 from MediLog.settings import BASE_DIR
-from django.core.files.storage import FileSystemStorage
 from django.db import models
-from django.core.validators import MaxLengthValidator, MinLengthValidator
+from django.core.validators import MinLengthValidator
 from django.db.models.deletion import CASCADE
 from django.contrib.auth.models import User
 

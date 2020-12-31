@@ -7,7 +7,6 @@ from django.http import HttpResponse
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, password_validation
 from django.shortcuts import render, redirect
-from .forms import CreateUserForm, RegisterForm
 from django.contrib.auth.decorators import login_required
 from .decorators import *
 from django.contrib.auth.models import Group
@@ -15,13 +14,15 @@ from django.contrib.auth.models import Group
 
 @login_required(login_url='login')
 def home(request):
-    return HttpResponse("Hello, Home Page!")
+    return render(request, 'BackEndApp/patient_home.html')
 
 
 @login_required(login_url='login')
 @allowed_users(allowed=['Patient'])
 def feed(request):
-    return HttpResponse('Hello Patient you are in 😉')
+    patient = Patient.objects.get(CNIC='111')
+    context = {'patient': patient}
+    return render(request, 'BackEndApp/patient_home.html', context)
 
 
 @unauthenticated_user

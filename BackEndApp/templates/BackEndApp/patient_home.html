@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <body>
+        {%load static%} {%block content%} {{patient.CNIC}} <br> {{patient.fName}} <br> {{patient.lName}} <br> {{patient.email}} <br> {{patient.age}} <br> {{patient.phone}} <br> {{patient.address}} <br>
+        <img src="{{patient.photo.url}}" alt="Patient-imgs"> {%endblock%}
+    </body>
+</head>
+
+</html>
