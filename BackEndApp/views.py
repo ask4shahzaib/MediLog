@@ -18,7 +18,7 @@ def home(request):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed=['Patient'])
+@allowed_users(allowed=['Patient', 'Doctor', 'Hospital'])
 def feed(request):
     patient = Patient.objects.get(CNIC=request.session['id'])
     context = {'patient': patient}

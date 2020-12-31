@@ -1,4 +1,6 @@
 import os
+
+from django.db.models.expressions import F
 from MediLog.settings import BASE_DIR
 from django.db import models
 from django.core.validators import MinLengthValidator
@@ -20,6 +22,12 @@ def doctor_profile(instance, filename):
     return os.path.join(BASE_DIR, 'static/images/doctor_profile', filename)
 
 
+def laboratory_profile(instance, filename):
+    ext = filename.split('.')[-1]
+    filename = "%s.%s" % (instance.id, ext)
+    return os.path.join(BASE_DIR, 'static/images/laboratory_profile', filename)
+
+
 class Patient(models.Model):
     user = models.ForeignKey(User, null=False, on_delete=CASCADE)
     CNIC = models.CharField(max_length=13, primary_key=True)
@@ -34,6 +42,11 @@ class Patient(models.Model):
         upload_to=patient_profile, null=True, blank=True)
     verification = models.BooleanField(
         default=False)
+
+    class Meta:
+        default_permissions = ('add',)
+        permissions = (('add_report', 'Add Test Report'),
+                       ('add_prescription', 'Add Doctor Prescription'))
 
     def __str__(self):
         return self.fName+' '+self.lName
@@ -50,6 +63,7 @@ class Contact(models.Model):
 
 
 class Doctor(models.Model):
+    user = models.ForeignKey(User, null=False, on_delete=CASCADE)
     CNIC = models.CharField(max_length=13)
     fName = models.CharField(max_length=30)
     lName = models.CharField(max_length=30)
@@ -63,3 +77,17 @@ class Doctor(models.Model):
 
     def __str__(self):
         return self.fName+' '+self.lName
+
+
+class Laboratory(models.Model):
+    user = models.ForeignKey(User, null=False, on_delete=CASCADE)
+    id = models.CharField(max_length=20, primary_key=True)
+    name = models.CharField(max_length=999)
+    license_No = models.CharField(max_length=10)
+    branch_code = models.IntegerField()
+    photo = models.ImageField(
+        upload_to=laboratory_profile, null=True, blank=True)
+    verification = True
+
+    def __str__(self):
+        return self.name
