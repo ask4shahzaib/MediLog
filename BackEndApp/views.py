@@ -20,7 +20,7 @@ def home(request):
 @login_required(login_url='login')
 @allowed_users(allowed=['Patient'])
 def feed(request):
-    patient = Patient.objects.get(CNIC='111')
+    patient = Patient.objects.get(CNIC=request.session['id'])
     context = {'patient': patient}
     return render(request, 'BackEndApp/patient_home.html', context)
 
@@ -30,7 +30,7 @@ def loginPage(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
-
+        request.session['id'] = username
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
