@@ -4,8 +4,7 @@
 <head>
 
     <body>
-        {%load static%} {%block content%} <img src="{{patient.photo.url}}" alt="Patient-imgs"> <br> {{patient.CNIC}} <br> {{patient.fName}} <br> {{patient.lName}} <br> {{patient.email}} <br> {{patient.age}} <br> {{patient.phone}} <br> {{patient.address}}
-        {%endblock%}
+        {%load static%} {%block content%} <img src="{{patient.photo.url}}"> <br> {{patient.CNIC}} <br> {{patient.fName}} <br> {{patient.lName}} <br> {{patient.email}} <br> {{patient.age}} <br> {{patient.phone}} <br> {{patient.address}} {%endblock%}
     </body>
 </head>
 

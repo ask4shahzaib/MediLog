@@ -1,5 +1,5 @@
 from django.core.exceptions import ObjectDoesNotExist
-from BackEndApp.models import Patient
+from BackEndApp.models import Doctor, Laboratory, Patient
 from django.contrib import auth
 from django.contrib.auth.forms import UsernameField
 from django.contrib.auth.models import User
@@ -14,15 +14,32 @@ from django.contrib.auth.models import Group
 
 @login_required(login_url='login')
 def home(request):
-    return render(request, 'BackEndApp/patient_home.html')
+    return redirect('login')
 
 
 @login_required(login_url='login')
-@allowed_users(allowed=['Patient', 'Doctor', 'Hospital'])
+@allowed_users(allowed=['Patient', 'Laboratory', 'Doctor', 'Hospital'])
 def feed(request):
-    patient = Patient.objects.get(CNIC=request.session['id'])
-    context = {'patient': patient}
-    return render(request, 'BackEndApp/patient_home.html', context)
+    print(request.session)
+    if (request.session['group'] == 'Patient'):
+        patient = Patient.objects.get(CNIC=request.session['id'])
+        context = {'patient': patient}
+        return render(request, 'BackEndApp/patient_home.html', context)
+
+    if (request.session['group'] == 'Laboratory'):
+        lab = Laboratory.objects.get(id=request.session['id'])
+        context = {'lab': lab}
+        return render(request, 'BackEndApp/lab_home.html', context)
+
+    if (request.session['group'] == 'Doctor'):
+        doctor = Doctor.objects.get(CNIC=request.session['id'])
+        context = {'doctor': doctor}
+        return render(request, 'BackEndApp/patient_home.html', context)
+
+    # if (request.session['group'] == 'Hospital'):
+    #     Hospital = Hospital.objects.get(CNIC=request.session['id'])
+    #     context = {'patient': patient}
+    #     return render(request, 'BackEndApp/patient_home.html', context)
 
 
 @unauthenticated_user
@@ -35,6 +52,8 @@ def loginPage(request):
 
         if user is not None:
             login(request, user)
+            x = user.groups.all()
+            request.session['group'] = str(x[0])
             return redirect('feed')
         else:
             messages.info(request, 'Username or Password is incorrect')
