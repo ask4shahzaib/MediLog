@@ -1,11 +1,11 @@
 from django.core.exceptions import ObjectDoesNotExist
-from BackEndApp.models import Doctor, Laboratory, Patient
+from BackEndApp.models import Doctor, Hospital, Laboratory, Patient
 from django.contrib import auth
 from django.contrib.auth.forms import UsernameField
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout, password_validation
+from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .decorators import *
@@ -35,6 +35,11 @@ def feed(request):
         doctor = Doctor.objects.get(CNIC=request.session['id'])
         context = {'doctor': doctor}
         return render(request, 'BackEndApp/patient_home.html', context)
+
+    if (request.session['group'] == 'Hospital'):
+        hospital = Hospital.objects.get(id=request.session['id'])
+        context = {'hospital': hospital}
+        return render(request, 'BackEndApp/hospital_home.html', context)
 
     # if (request.session['group'] == 'Hospital'):
     #     Hospital = Hospital.objects.get(CNIC=request.session['id'])

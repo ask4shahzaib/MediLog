@@ -22,12 +22,6 @@ def doctor_profile(instance, filename):
     return os.path.join(BASE_DIR, 'static/images/doctor_profile', filename)
 
 
-def laboratory_profile(instance, filename):
-    ext = filename.split('.')[-1]
-    filename = "%s.%s" % (instance.id, ext)
-    return os.path.join(BASE_DIR, 'static/images/laboratory_profile', filename)
-
-
 class Patient(models.Model):
     user = models.ForeignKey(User, null=False, on_delete=CASCADE)
     CNIC = models.CharField(max_length=13, primary_key=True)
@@ -64,10 +58,10 @@ class Contact(models.Model):
 
 class Doctor(models.Model):
     user = models.ForeignKey(User, null=False, on_delete=CASCADE)
-    CNIC = models.CharField(max_length=13)
+    CNIC = models.CharField(max_length=13, primary_key=True)
     fName = models.CharField(max_length=30)
     lName = models.CharField(max_length=30)
-    license_No = models.CharField(max_length=20, null=False, primary_key=True)
+    license_No = models.CharField(max_length=20, null=False)
     phone = models.CharField(max_length=11, null=True,
                              validators=[MinLengthValidator(11)])
     address = models.CharField(max_length=999, null=True)
@@ -85,8 +79,18 @@ class Laboratory(models.Model):
     name = models.CharField(max_length=999)
     license_No = models.CharField(max_length=10)
     branch_code = models.IntegerField()
-    photo = models.ImageField(
-        upload_to=laboratory_profile, null=True, blank=True)
+    verification = True
+
+    def __str__(self):
+        return self.name
+
+
+class Hospital(models.Model):
+    user = models.ForeignKey(User, null=False, on_delete=CASCADE)
+    id = models.CharField(max_length=20, primary_key=True)
+    name = models.CharField(max_length=999)
+    license_No = models.CharField(max_length=10)
+    branch_code = models.IntegerField()
     verification = True
 
     def __str__(self):
