@@ -1,11 +1,10 @@
 import os
-
-from django.db.models.expressions import F
+from django.contrib.auth.models import User
 from MediLog.settings import BASE_DIR
 from django.db import models
 from django.core.validators import MinLengthValidator
-from django.db.models.deletion import CASCADE
-from django.contrib.auth.models import User
+from django.db.models.deletion import CASCADE, DO_NOTHING
+
 
 # Create your models here.
 
@@ -22,6 +21,12 @@ def doctor_profile(instance, filename):
     return os.path.join(BASE_DIR, 'static/images/doctor_profile', filename)
 
 
+def prescriptions(instance, filename):
+    ext = filename.split('.')[-1]
+    filename = "%s.%s" % (instance.CNIC, ext)
+    return os.path.join(BASE_DIR, 'static/images/prescriptions', filename)
+
+
 class Patient(models.Model):
     user = models.ForeignKey(User, null=False, on_delete=CASCADE)
     CNIC = models.CharField(max_length=13, primary_key=True)
@@ -36,6 +41,7 @@ class Patient(models.Model):
         upload_to=patient_profile, null=True, blank=True)
     verification = models.BooleanField(
         default=False)
+    objects = models.Manager()
 
     class Meta:
         default_permissions = ('add',)
@@ -51,6 +57,7 @@ class Contact(models.Model):
         "Patient", related_name="person_himself", on_delete=CASCADE, null=False)
     contact = models.ForeignKey(
         "Patient", related_name="trustedContact", on_delete=CASCADE, null=False)
+    objects = models.Manager()
 
     def __str__(self):
         return str(self.person) + "'s trusted contact is "+str(self.contact)
@@ -68,6 +75,7 @@ class Doctor(models.Model):
     email = models.CharField(max_length=100, null=True)
     photo = models.ImageField(upload_to=doctor_profile, null=True, blank=True)
     verification = True
+    objects = models.Manager()
 
     def __str__(self):
         return self.fName+' '+self.lName
@@ -80,6 +88,7 @@ class Laboratory(models.Model):
     license_No = models.CharField(max_length=10)
     branch_code = models.IntegerField()
     verification = True
+    objects = models.Manager()
 
     def __str__(self):
         return self.name
@@ -92,6 +101,16 @@ class Hospital(models.Model):
     license_No = models.CharField(max_length=10)
     branch_code = models.IntegerField()
     verification = True
+    objects = models.Manager()
 
     def __str__(self):
         return self.name
+
+
+class Prescription(models.Model):
+    file = models.FileField(upload_to=prescriptions)
+    date = models.DateField()
+    description = models.CharField(max_length=99999)
+    patient = models.ForeignKey(Patient, null=False, on_delete=CASCADE)
+    doctor = models.ForeignKey(Doctor, null=True, on_delete=DO_NOTHING)
+    objects = models.Manager()
