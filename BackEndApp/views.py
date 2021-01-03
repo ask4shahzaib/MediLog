@@ -1,10 +1,12 @@
 from django.core.exceptions import ObjectDoesNotExist
-from BackEndApp.models import Patient, Doctor, Laboratory, Hospital
+from django.core.files.storage import FileSystemStorage
+from BackEndApp.models import Patient, Doctor, Laboratory, Hospital, Prescription
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .decorators import *
+import datetime
 from django.contrib.auth.models import Group, User
 
 
@@ -18,8 +20,10 @@ def home(request):
 def feed(request):
     print(request.session)
     if (request.session['group'] == 'Patient'):
+        prescriptions = Prescription.objects.filter(
+            patient=request.session['id'])
         patient = Patient.objects.get(CNIC=request.session['id'])
-        context = {'patient': patient}
+        context = {'patient': patient, 'prescriptions': prescriptions}
         return render(request, 'BackEndApp/patient_home.html', context)
 
     if (request.session['group'] == 'Laboratory'):
@@ -36,11 +40,6 @@ def feed(request):
         hospital = Hospital.objects.get(id=request.session['id'])
         context = {'hospital': hospital}
         return render(request, 'BackEndApp/hospital_home.html', context)
-
-    # if (request.session['group'] == 'Hospital'):
-    #     Hospital = Hospital.objects.get(CNIC=request.session['id'])
-    #     context = {'patient': patient}
-    #     return render(request, 'BackEndApp/patient_home.html', context)
 
 
 @unauthenticated_user
@@ -61,6 +60,39 @@ def loginPage(request):
 
     context = {}
     return render(request, 'BackEndApp/login.html', context)
+
+
+def prescription(request):
+    if request.method == "POST" and request.FILES['file']:
+        file = request.FILES['file']
+        patient = request.POST.get('patient')
+        try:
+            Patient.objects.get(CNIC=patient)
+        except:
+            messages.error(request, "Incorrect Patient CNIC")
+            return redirect('prescription')
+        doctor = request.POST.get('doctor')
+        try:
+            Doctor.objects.get(license_No=doctor)
+        except:
+            messages.error(request, "Incorrect Doctor License Number")
+            return redirect('prescription')
+        hospital = request.POST.get('hospital')
+        try:
+            Hospital.objects.get(id=hospital)
+        except:
+            messages.error(request, "Incorrect Hospital ID")
+            return redirect('prescription')
+        description = request.POST.get('description')
+        date = request.POST.get('date')
+        date = datetime.datetime.strptime(
+            date, '%Y-%m-%d').strftime("%Y-%m-%d")
+        x = Prescription(file=file, date=date, description=description,
+                         patient=patient, doctor=doctor, hospital=hospital)
+        x.save()
+    hospital = Hospital.objects.get(id=request.session['id'])
+    context = {'hospital': hospital}
+    return render(request, 'BackEndApp/prescription.html', context)
 
 
 def logoutUser(request):

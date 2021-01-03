@@ -4,7 +4,16 @@
 <head>
 
     <body>
-        {%load static%} {%block content%} {{hospital.id}} <br> {{hospital.name}} <br> {{hospital.license_No}} <br> {{hospital.branch_code}} <br> {%endblock%}
+        <div>{%load static%} {%block content%} {{hospital.id}} <br> {{hospital.name}} <br> {{hospital.license_No}} <br> {{hospital.branch_code}} <br> {%endblock%}</div>
+        <form action="/prescription/" method="GET">
+            {%csrf_token%}
+            <div>
+                <input type="submit">
+            </div>
+        </form>
+        {{form.errors}} {% for message in messages %}
+        <p id="messages"> {{message}} </p>
+        {% endfor %}
     </body>
 </head>
 

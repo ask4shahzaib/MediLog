@@ -22,8 +22,6 @@ def doctor_profile(instance, filename):
 
 
 def prescriptions(instance, filename):
-    ext = filename.split('.')[-1]
-    filename = "%s.%s" % (instance.CNIC, ext)
     return os.path.join(BASE_DIR, 'static/images/prescriptions', filename)
 
 
@@ -65,10 +63,10 @@ class Contact(models.Model):
 
 class Doctor(models.Model):
     user = models.ForeignKey(User, null=False, on_delete=CASCADE)
-    CNIC = models.CharField(max_length=13, primary_key=True)
+    CNIC = models.CharField(max_length=13)
     fName = models.CharField(max_length=30)
     lName = models.CharField(max_length=30)
-    license_No = models.CharField(max_length=20, null=False)
+    license_No = models.CharField(max_length=20, null=False, primary_key=True)
     phone = models.CharField(max_length=11, null=True,
                              validators=[MinLengthValidator(11)])
     address = models.CharField(max_length=999, null=True)
@@ -111,6 +109,10 @@ class Prescription(models.Model):
     file = models.FileField(upload_to=prescriptions)
     date = models.DateField()
     description = models.CharField(max_length=99999)
-    patient = models.ForeignKey(Patient, null=False, on_delete=CASCADE)
-    doctor = models.ForeignKey(Doctor, null=True, on_delete=DO_NOTHING)
+    patient = models.CharField(max_length=99)
+    doctor = models.CharField(max_length=99)
+    hospital = models.CharField(max_length=99)
     objects = models.Manager()
+
+    def __str__(self):
+        return self.description
