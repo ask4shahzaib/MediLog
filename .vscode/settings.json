@@ -1,0 +1,7 @@
+{
+    "python.pythonPath": "c:\\Program Files (x86)\\python.exe",
+    "python.linting.mypyEnabled": false,
+    "python.linting.pylintEnabled": true,
+    "python.linting.enabled": true,
+    "python.formatting.provider": "autopep8"
+}
