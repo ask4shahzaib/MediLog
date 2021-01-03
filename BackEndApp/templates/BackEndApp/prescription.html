@@ -7,7 +7,7 @@
         <form action="" enctype="multipart/form-data" method="POST">
             {%csrf_token%}
             <div>
-                Patient: <input type="text" name="patient" required><br> Doctor: <input type="text" name="doctor" required><br> Hospital: <input type="text" name="hospital" required><br> File: <input type="file" accept="application/pdf" name="file"><br>                Description: <input type="text" name="description"><br> Date: <input type="date" name="date" required><br> Upload
+                Patient: <input type="text" name="patient" required><br> Doctor: <input type="text" name="doctor" required><br> File: <input type="file" accept="application/pdf image/*" name="file"><br> Description: <input type="text" name="description"><br>                Date: <input type="date" name="date" required><br> Upload
                 <input type="submit">
             </div>
         </form>

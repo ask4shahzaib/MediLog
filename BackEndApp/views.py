@@ -62,6 +62,7 @@ def loginPage(request):
     return render(request, 'BackEndApp/login.html', context)
 
 
+@allowed_users(allowed=['Hospital'])
 def prescription(request):
     if request.method == "POST" and request.FILES['file']:
         file = request.FILES['file']
@@ -77,12 +78,7 @@ def prescription(request):
         except:
             messages.error(request, "Incorrect Doctor License Number")
             return redirect('prescription')
-        hospital = request.POST.get('hospital')
-        try:
-            Hospital.objects.get(id=hospital)
-        except:
-            messages.error(request, "Incorrect Hospital ID")
-            return redirect('prescription')
+        hospital = request.session['id']
         description = request.POST.get('description')
         date = request.POST.get('date')
         date = datetime.datetime.strptime(
