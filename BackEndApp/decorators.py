@@ -4,7 +4,12 @@ from django.shortcuts import redirect
 
 def unauthenticated_user(view_func):
     def wrapper_func(request, *args, **kwargs):
-        if request.user.is_authenticated:
+        try:
+            group = request.user.groups.all()
+            group = str(group[0])
+        except:
+            group = None
+        if group != 'Management' and request.user.is_authenticated:
             return redirect('feed')
         else:
             return view_func(request,

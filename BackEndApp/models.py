@@ -41,11 +41,6 @@ class Patient(models.Model):
         default=False)
     objects = models.Manager()
 
-    class Meta:
-        default_permissions = ('add',)
-        permissions = (('add_report', 'Add Test Report'),
-                       ('add_prescription', 'Add Doctor Prescription'))
-
     def __str__(self):
         return self.fName+' '+self.lName
 

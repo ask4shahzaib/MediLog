@@ -16,30 +16,36 @@ def home(request):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed=['Patient', 'Laboratory', 'Doctor', 'Hospital'])
+@allowed_users(allowed=['Patient', 'Laboratory', 'Management', 'Doctor', 'Hospital'])
 def feed(request):
-    print(request.session)
-    if (request.session['group'] == 'Patient'):
+    group = request.user.groups.all()
+    group = str(group[0])
+    id = request.user.username
+    if (group == 'Patient'):
         prescriptions = Prescription.objects.filter(
-            patient=request.session['id'])
-        patient = Patient.objects.get(CNIC=request.session['id'])
+            patient=request.user.username)
+        patient = Patient.objects.get(CNIC=id)
         context = {'patient': patient, 'prescriptions': prescriptions}
         return render(request, 'BackEndApp/patient_home.html', context)
 
-    if (request.session['group'] == 'Laboratory'):
-        lab = Laboratory.objects.get(id=request.session['id'])
+    if (group == 'Laboratory'):
+        lab = Laboratory.objects.get(id=id)
         context = {'lab': lab}
         return render(request, 'BackEndApp/lab_home.html', context)
 
-    if (request.session['group'] == 'Doctor'):
-        doctor = Doctor.objects.get(CNIC=request.session['id'])
+    if (group == 'Doctor'):
+        doctor = Doctor.objects.get(license_No=id)
         context = {'doctor': doctor}
         return render(request, 'BackEndApp/patient_home.html', context)
 
-    if (request.session['group'] == 'Hospital'):
-        hospital = Hospital.objects.get(id=request.session['id'])
+    if (group == 'Hospital'):
+        hospital = Hospital.objects.get(id=id)
         context = {'hospital': hospital}
         return render(request, 'BackEndApp/hospital_home.html', context)
+
+    if (group == 'Management'):
+        context = {'user': request.user}
+        return render(request, 'BackEndApp/management_home.html', context)
 
 
 @unauthenticated_user
@@ -47,13 +53,10 @@ def loginPage(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
-        request.session['id'] = username
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
             login(request, user)
-            x = user.groups.all()
-            request.session['group'] = str(x[0])
             return redirect('feed')
         else:
             messages.info(request, 'Username or Password is incorrect')
@@ -78,7 +81,7 @@ def prescription(request):
         except:
             messages.error(request, "Incorrect Doctor License Number")
             return redirect('prescription')
-        hospital = request.session['id']
+        hospital = request.user.username
         description = request.POST.get('description')
         date = request.POST.get('date')
         date = datetime.datetime.strptime(
@@ -86,7 +89,7 @@ def prescription(request):
         x = Prescription(file=file, date=date, description=description,
                          patient=patient, doctor=doctor, hospital=hospital)
         x.save()
-    hospital = Hospital.objects.get(id=request.session['id'])
+    hospital = Hospital.objects.get(id=request.user.username)
     context = {'hospital': hospital}
     return render(request, 'BackEndApp/prescription.html', context)
 
@@ -99,6 +102,12 @@ def logoutUser(request):
 @unauthenticated_user
 def register(request):
     if request.method == 'POST':
+        group = request.user.groups.all()
+        group = str(group[0])
+        if group == 'Patient':
+            verification = False
+        else:
+            verification = True
         cnic = request.POST['cnic']
         password = request.POST['password']
         fname = request.POST['fname']
@@ -117,10 +126,14 @@ def register(request):
             x = User.objects.create_user(
                 username=cnic, first_name=fname, last_name=lname, password=password, email=email)
             x.save()
-            group = Group.objects.get(name='Patient')
+            try:
+                group = Group.objects.get(name='Patient')
+            except:
+                messages.error(request, 'User Group not Found')
+                return redirect('register')
             x.groups.add(group)
             z = Patient(CNIC=cnic, fName=fname, lName=lname,
-                        age=age, phone=phone, address=address, email=email, photo=photo, user=x, verification=False)
+                        age=age, phone=phone, address=address, email=email, photo=photo, user=x, verification=verification)
             z.save()
             messages.success(request, 'Account Created Successfully')
             return redirect('login')
