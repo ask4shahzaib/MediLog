@@ -25,7 +25,8 @@ def feed(request):
         prescriptions = Prescription.objects.filter(
             patient=request.user.username)
         patient = Patient.objects.get(CNIC=id)
-        context = {'patient': patient, 'prescriptions': prescriptions}
+        context = {'patient': patient,
+                   'prescriptions': prescriptions}
         return render(request, 'BackEndApp/patient_home.html', context)
 
     if (group == 'Laboratory'):
@@ -117,10 +118,12 @@ def register(request):
         lname = request.POST['lname']
         phone = request.POST['phone']
         email = request.POST['email']
-        age = request.POST['age']
-        age = int(age)
+        dob = request.POST['dob']
         address = request.POST['address']
-        photo = request.FILES['photo']
+        try:
+            photo = request.FILES['photo']
+        except:
+            photo = None
         try:
             y = User.objects.get(username=cnic)
         except ObjectDoesNotExist:
@@ -132,12 +135,18 @@ def register(request):
             try:
                 group = Group.objects.get(name='Patient')
             except:
-                messages.error(request, 'User Group not Found')
-                return redirect('register')
+                group = Group(name='Patient')
+                group.save()
+                group = Group.objects.get(name='Patient')
             x.groups.add(group)
-            z = Patient(CNIC=cnic, fName=fname, lName=lname,
-                        age=age, phone=phone, address=address, email=email, photo=photo, user=x, verification=verification)
-            z.save()
+            if photo != None:
+                z = Patient(CNIC=cnic, fName=fname, lName=lname,
+                            dob=dob, phone=phone, address=address, email=email, photo=photo, user=x, verification=verification)
+                z.save()
+            else:
+                z = Patient(CNIC=cnic, fName=fname, lName=lname,
+                            dob=dob, phone=phone, address=address, email=email, user=x, verification=verification)
+                z.save()
             messages.success(request, 'Account Created Successfully')
             return redirect('login')
         else:

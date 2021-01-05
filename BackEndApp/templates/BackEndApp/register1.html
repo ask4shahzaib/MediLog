@@ -36,7 +36,6 @@
           <input name="password" id="password" type="password" required />
           <div class="label-text">Password</div>
         </label>
-                <!-- <input class="file-btn" type="checkbox" onclick="myFunction()"> -->
 
             </div>
 
@@ -61,8 +60,11 @@
       </label>
 
             <label class="animate">
-        <input name="age" id="age" type="number" required />
-        <div class="label-text">Age</div>
+
+              <input name="dob" type="text" onfocus="(this.type='date')" onfocusout="(this.type='text')">
+
+        <!-- <input name="dob" id="dob" type=date  required /> -->
+        <div class="label-text">Date of Birth</div>
       </label>
 
             <label class="animate">

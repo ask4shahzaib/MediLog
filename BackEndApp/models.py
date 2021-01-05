@@ -30,13 +30,13 @@ class Patient(models.Model):
     CNIC = models.CharField(max_length=13, primary_key=True)
     fName = models.CharField(max_length=30)
     lName = models.CharField(max_length=30)
-    age = models.IntegerField(default=0)
+    dob = models.DateField()
     phone = models.CharField(max_length=11, null=True,
                              validators=[MinLengthValidator(11)])
     address = models.CharField(max_length=999, null=True)
     email = models.CharField(max_length=100, null=True)
     photo = models.ImageField(
-        upload_to=patient_profile, null=True, blank=True)
+        upload_to=patient_profile, default="profile.jpg", null=True, blank=True)
     verification = models.BooleanField(
         default=False)
     objects = models.Manager()
