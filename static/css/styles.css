@@ -1,0 +1,200 @@
+.signUpBody {
+    /* background-image: url("images/login.jpg"); */
+    background-image: url("../images/UI/Signup92.jpg");
+    background-repeat: no-repeat;
+    /* background-size:cover; */
+    background-size: 100%;
+}
+
+.loginBody {
+    background-image: url("../images/UI/Login.jpg");
+    background-repeat: no-repeat;
+    background-size: 100%;
+}
+
+.pHomeBody {
+    background-image: url("../images/UI/steth.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100vh;
+}
+
+
+/************************************************************** classes **************************************************/
+
+.logo {
+    /*logo orientation at signup page*/
+    height: 15%;
+    width: 35%;
+    position: relative;
+    left: 63%;
+    top: 10px;
+}
+
+.logo_login {
+    height: 15%;
+    width: 35%;
+    position: absolute;
+    left: 4.5%;
+    top: 10px;
+}
+
+.welcome {
+    height: 40%;
+    width: 35%;
+    position: absolute;
+    top: 37.5%;
+    left: 57.5%;
+}
+
+
+/********************************************************** DIV classes **************************************************/
+
+.signup {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    font-family: 'Montserrat', sans-serif;
+    padding: 1% 2.5%;
+    height: auto;
+    width: auto;
+    /* border-radius: 0.8em; */
+    position: absolute;
+    background-color: #bce6eb;
+    color: black;
+    opacity: 0.8;
+    left: 10%;
+    top: 2.5%;
+    /* box-shadow: 1px 1px 2px 2px #888888; */
+}
+
+.login_ {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    font-family: 'Montserrat', sans-serif;
+    padding: 2% 2.5%;
+    height: auto;
+    width: auto;
+    /* border-radius: 0.8em; */
+    position: absolute;
+    background-color: #bce6eb;
+    color: black;
+    opacity: 0.8;
+    left: 69%;
+    top: 27%;
+    /* box-shadow: 1px 1px 2px 2px #888888; */
+}
+
+.animate {
+    display: block;
+    letter-spacing: 1px;
+    padding-top: 2px;
+    text-align: left;
+}
+
+
+/* animation for the text to float up */
+
+.animate .label-text {
+    color: #00303f;
+    cursor: text;
+    font-size: 15px;
+    line-height: 5px;
+    text-transform: uppercase;
+    -moz-transform: translateY(-34px);
+    -ms-transform: translateY(-34px);
+    -webkit-transform: translateY(-34px);
+    transform: translateY(-34px);
+    transition: all 0.2s;
+}
+
+
+/* remove the input box styling */
+
+.animate input {
+    background-color: transparent;
+    border: 0;
+    border-bottom: 2px solid #4A4A4A;
+    color: #00303f;
+    font-size: 15px;
+    letter-spacing: 1px;
+    outline: 0;
+    padding: 10px 20px;
+    text-align: center;
+    transition: all 0.2s;
+    width: 200px;
+}
+
+
+/* once you click in the input the input width box animates */
+
+.animate input:focus {
+    max-width: 100%;
+    width: 200px;
+}
+
+
+/* the text floats up and turns white */
+
+.animate input:focus+.label-text {
+    /* color: #F0F0F0; */
+    font-size: 15px;
+    -moz-transform: translateY(-74px);
+    -ms-transform: translateY(-74px);
+    -webkit-transform: translateY(-74px);
+    transform: translateY(-46px);
+}
+
+
+/* the text floats up during form validation */
+
+.animate input:valid+.label-text {
+    font-size: 13px;
+    -moz-transform: translateY(-74px);
+    -ms-transform: translateY(-74px);
+    -webkit-transform: translateY(-74px);
+    transform: translateY(-48px);
+}
+
+.signUp-btn {
+    background: transparent;
+    color: #00303f;
+    border: 2px solid #00303f;
+    font-size: 15px;
+    letter-spacing: 2px;
+    padding: 20px 75px;
+    text-transform: uppercase;
+    cursor: pointer;
+    display: inline-block;
+    margin: 20px 30px;
+    -webkit-transition: all 0.4s;
+    -moz-transition: all 0.4s;
+    transition: all 0.4s;
+}
+
+.signUp-btn:hover,
+.signUp-btn:focus {
+    background-color: #00303f;
+    color: white;
+}
+
+.file-btn {
+    font-family: 'Montserrat', sans-serif;
+    background: transparent;
+    color: #00303f;
+    border: 2px solid #00303f;
+    font-size: 15px;
+    letter-spacing: 2px;
+    padding: 20px 10px;
+    -webkit-transition: all 0.4s;
+    -moz-transition: all 0.4s;
+    transition: all 0.4s;
+    text-transform: uppercase;
+}
+
+.file-btn:hover,
+.file-btn:focus {
+    background-color: #00303f;
+    color: white;
+}

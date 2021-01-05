@@ -103,7 +103,10 @@ def logoutUser(request):
 def register(request):
     if request.method == 'POST':
         group = request.user.groups.all()
-        group = str(group[0])
+        try:
+            group = str(group[0])
+        except:
+            group = 'Patient'
         if group == 'Patient':
             verification = False
         else:
@@ -142,4 +145,4 @@ def register(request):
                 request, "Already a patient found with same CNIC")
             return redirect('register')
     else:
-        return render(request, 'BackEndApp/register.html')
+        return render(request, 'BackEndApp/register1.html')
