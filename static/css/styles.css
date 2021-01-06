@@ -1,26 +1,48 @@
 .signUpBody {
-    /* background-image: url("images/login.jpg"); */
-    background-image: url("../images/UI/Signup92.jpg");
+    background-image: url("/images/UI/Signup92.jpg");
     background-repeat: no-repeat;
-    /* background-size:cover; */
     background-size: 100%;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .loginBody {
-    background-image: url("../images/UI/Login.jpg");
+    background-image: url("/images/UI/Login.jpg");
+    background-repeat: no-repeat;
+    background-size: 100%;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.pHomeBody {
+    background-image: url("/images/UI/spotted-bg.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100vh;
+    background-size: 100%;
+    /* background-color: rgb(82, 82, 107); */
+    font-family: 'Montserrat', sans-serif;
+}
+
+.dHomeBody {
+    background-image: url("/images/UI/spotted-bg.jpg");
     background-repeat: no-repeat;
     background-size: 100%;
 }
 
-.pHomeBody {
-    background-image: url("../images/UI/steth.jpg");
+.reportsBody {
+    background-image: url("/images/UI/spotted-bg.jpg");
     background-repeat: no-repeat;
-    background-size: cover;
-    height: 100vh;
+    background-size: 100%;
+}
+
+.MediHome {
+    background-color: burlywood;
 }
 
 
-/************************************************************** classes **************************************************/
+/************************************************************** original classes **************************************************/
+
+
+/**************************************************** classes **************************************************/
 
 .logo {
     /*logo orientation at signup page*/
@@ -47,6 +69,10 @@
     left: 57.5%;
 }
 
+.useableBody {
+    margin-left: 15%;
+}
+
 
 /********************************************************** DIV classes **************************************************/
 
@@ -54,7 +80,6 @@
     text-align: center;
     display: flex;
     justify-content: center;
-    font-family: 'Montserrat', sans-serif;
     padding: 1% 2.5%;
     height: auto;
     width: auto;
@@ -197,4 +222,258 @@
 .file-btn:focus {
     background-color: #00303f;
     color: white;
+}
+
+
+/************************************************************** SIDE BAR CSS ****************************************************/
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    list-style: none;
+    text-decoration: none;
+}
+
+.wrapper {
+    display: flex;
+    position: static;
+}
+
+.wrapper .sidebar {
+    width: 13%;
+    height: 100%;
+    background: rgba(227, 254, 255, 0.9);
+    padding: 40px 0px;
+    position: fixed;
+    margin-top: 2.6px;
+    box-shadow: 2px 2px rgba(134, 133, 133, 0.1);
+}
+
+.wrapper .sidebar h2 {
+    color: #00303f;
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.wrapper .sidebar ul li {
+    padding: 15px;
+    border-bottom: 1px solid #00303f;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.wrapper .sidebar ul li a {
+    color: #00303f;
+    display: block;
+}
+
+.wrapper .sidebar ul li a .fas {
+    width: 25px;
+}
+
+.wrapper .sidebar ul li:hover {
+    background-color: #00303f;
+}
+
+.wrapper .sidebar ul li:hover a {
+    color: rgb(227, 254, 255);
+}
+
+
+/* .wrapper .sidebar .social_media{
+  position: absolute;
+  bottom: 120px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+}
+.wrapper .sidebar .social_media a{
+  display: block;
+  width: 40px;
+  background: #00303f;
+  height: 40px;
+  line-height: 45px;
+  text-align: center;
+  margin: 0 5px;
+  color: rgb(227,254,255);
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+} */
+
+.main_content {
+    display: inline;
+    width: 100%;
+    margin-left: 13%;
+}
+
+.wrapper .main_content .header {
+    padding: 20px;
+    background: #fff;
+    color: #717171;
+    border-right: 3px solid #717171;
+    /* border-bottom: 5px solid #e0e4e8; */
+    border-bottom: 5px solid black;
+}
+
+
+/*
+.wrapper .main_content .info{
+  margin: 20px;
+  color: #717171;
+  line-height: 25px;
+}
+.wrapper .main_content .info div{
+  margin-bottom: 20px;
+} */
+
+
+/******************************************************************** CSS for internal segments ****************************************/
+
+.lastAappointment {
+    background-color: rgba(255, 255, 255, 0.27);
+    color: black;
+    padding-left: 2%;
+    height: 25%;
+    width: 23%;
+    position: absolute;
+    top: 12%;
+    left: 16.25%;
+    border-radius: 25px;
+    box-shadow: 1.5px 1.5px 5px 5px rgba(102, 102, 102, 0.2);
+}
+
+.lastAappointment:hover,
+.lastAappointment:focus {
+    background-color: rgba(199, 199, 199, 0.1);
+}
+
+.lastAppointmentTitle {
+    padding-left: 2%;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.lastAppointmentInfo {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    padding-top: 0.6%;
+}
+
+.lastTest {
+    background-color: rgba(255, 255, 255, 0.27);
+    color: black;
+    padding-left: 2%;
+    height: 25%;
+    width: 23%;
+    position: absolute;
+    top: 12%;
+    left: 44.25%;
+    border-radius: 25px;
+    box-shadow: 1.5px 1.5px 5px 5px rgba(102, 102, 102, 0.2);
+}
+
+.lastTest:hover,
+.lastTest:focus {
+    background-color: rgba(199, 199, 199, 0.1);
+}
+
+.lastTestTitle {
+    padding-left: 21%;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.lastTestInfo {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    padding-top: 0.6%;
+}
+
+.lastScan {
+    background-color: rgba(255, 255, 255, 0.27);
+    color: black;
+    padding-left: 2%;
+    height: 25%;
+    width: 23%;
+    position: absolute;
+    top: 12%;
+    left: 72.25%;
+    border-radius: 25px;
+    box-shadow: 1.5px 1.5px 5px 5px rgba(102, 102, 102, 0.2);
+}
+
+.lastScan:hover,
+.lastScan:focus {
+    background-color: rgba(199, 199, 199, 0.1);
+}
+
+.lastScanTitle {
+    padding-left: 21%;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.lastScanInfo {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    padding-top: 0.6%;
+}
+
+.reportsTitle {
+    position: absolute;
+    top: 45%;
+    left: 17.5%;
+}
+
+.listPresStyle {
+    position: absolute;
+    top: 40%;
+    left: 14.5%;
+    width: 22%;
+}
+
+.listRepStyle {
+    position: absolute;
+    top: 40%;
+    left: 36.8%;
+    width: 22%;
+}
+
+.listBar:hover {
+    background-color: rgba(199, 199, 199, 0.2);
+}
+
+
+/**************************************************************** END CSS for internal segments ****************************************/
+
+.has-search .form-control-feedback {
+    position: absolute;
+    top: 5em;
+    /* z-index: 2; */
+    display: block;
+    width: 2.375rem;
+    height: 2.375rem;
+    line-height: 2.375rem;
+    text-align: center;
+    pointer-events: none;
+    color: #aaa;
+}
+
+.sBar {
+    display: inline;
+    position: relative;
+    left: 30%;
+    top: 5em;
+    width: 40em;
+}
+
+.sBtn {
+    position: relative;
+    top: 5em;
+    left: 30%;
+}
+
+
+/********************************************* Table search *********************************/
+
+tfoot input {
+    width: 100%;
+    padding: 3px;
+    box-sizing: border-box;
 }

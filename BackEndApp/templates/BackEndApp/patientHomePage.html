@@ -1,0 +1,173 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Home Page</title>
+
+    <link rel="JavaScript" href="{% static '/js/index.js' %}" />
+    <link rel="stylesheet" href="{% static '/css/styles.css' %}" />
+    <link rel="icon" href="{% static 'images/UI/favicon1.ico' %}" />
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script type="" src="{% static 'js/index.js' %}" charset="utf-8"></script>
+    <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+
+
+</head>
+
+<body class="pHomeBody">
+    {%load static%}
+    <!-- rgb(227, 254, 255); -->
+    <nav class="navbar navbar-light" style="background-color: rgba(227, 254, 255, 0.9); padding: 5px 0px; margin: 0px 0px; box-shadow: 2px 2px rgba(134, 133, 133, 0.1);">
+        <div class="container-fluid">
+
+            <div class="navbar-header">
+                <a href="#" class="navbar-left">
+                    <!--<span class="glyphicon glyphicon-search"></span>-->
+                    <img src="{% static 'images/UI/logo.png' %}" width="auto" height="50px"></a>
+            </div>
+
+            <div class="collapse navbar-collapse navbar-right" id="navbarSupportedContent">
+
+                <ul class="nav navbar-nav float-left ml-auto">
+                    <li><a href="{% url 'logout' %}">Logout</span></a></li>
+                </ul>
+            </div>
+
+        </div>
+    </nav>
+
+    <div class="wrapper">
+        <div class="sidebar">
+            <ul class="ul1">
+                <li class="li1"><a href="{% url 'feed' %}"><i class="fas fa-home"></i>Home</a></li>
+                <li class="li1"><a href="#"><i class="fas fa-user"></i>Profile</a></li>
+                <li class="li1"><a href="#"><i class="glyphicon glyphicon-ok" style="padding-right: 9px;"></i>Trusted Contact</a></li>
+                <li class="li1"><a href="#"><i class="fas fa-users"></i>View Connections</a></li>
+                <li class="li1"><a href="#"><i class="fas fa-address-book"></i>Contact Us</a></li>
+            </ul>
+            <!-- <div class="social_media">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+      </div> -->
+        </div>
+
+        {%block content%}
+        <div class="main_content">
+            <div class="lastAappointment">
+                <h3>LAST APPOINTMENT</h3>
+
+                <div class="lastAppointmentInfo">
+                    <h4>Doctor : {{doctor}}</h4>
+                    <h4>Description : {{desc}}</h4>
+                    <h4>Date : {{date}}</h4>
+                </div>
+            </div>
+
+            <div class="lastTest">
+                <h3>LAST TEST</h3>
+
+                <div class="lastTestInfo">
+                    <h4>CHUGTAI Lahore Lab</h4>
+                    <h4>Description: HIV Test</h4>
+                    <h4>Date: 01-01-2021</h4>
+                </div>
+            </div>
+
+            <div class="lastScan">
+                <h3>LAST SCAN</h3>
+                <div class="lastScanInfo">
+                    <h4>CHUGHTAI Lahore Lab</h4>
+                    <h4>Description: CT Scan</h4>
+                    <h4>Date: 01-01-2021</h4>
+                </div>
+            </div>
+
+
+            <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+            <script type="text/javascript">
+                google.charts.load('current', {
+                    'packages': ['corechart']
+                });
+                google.charts.setOnLoadCallback(drawChart);
+
+                function drawChart() {
+                    var djangodata = JSON.parse('{{vis | safe}}');
+                    var data = google.visualization.arrayToDataTable(djangodata);
+                    var options = {
+                        title: 'Medical History',
+                        curveType: 'function',
+                        legend: {
+                            position: 'bottom'
+                        },
+                    };
+                    var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+                    chart.draw(data, options);
+                }
+            </script>
+
+            <div id="curve_chart" style="width: 37%; 
+                                                  height: 49%; 
+                                                  position:absolute; 
+                                                  left: 60%; 
+                                                  top:44%; 
+                                                  opacity: 0.8; 
+                                                  box-shadow: 1.5px 1.5px 5px 5px rgba(102, 102, 102, 0.2);">
+            </div>
+
+            <div>
+
+            </div>
+
+            <title>W3.CSS</title>
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+            <div class="w3-container listPresStyle">
+                <a href="{url 'details'}" "><h2>Prescriptions</h2></a>
+                <ul class="w3-ul w3-card-4 ">
+                    {% for prescription in prescriptions %}
+                    <li class="w3-bar listBar ">
+                        <img src="{% static 'images/UI/Doctor.jpg' %} " class="w3-bar-item w3-circle w3-hide-small " style="width:85px; height: 70px ">
+                        <div class="w3-bar-item ">
+                            <span class="w3-large ">{{prescription.description}}</span><br>
+                            <span class="w3-small ">{{prescription.doctor}}</span>
+                        </div>
+                    </li>
+                    {% endfor %}
+
+                </ul>
+            </div>
+
+
+            <title>W3.CSS</title>
+            <meta name="viewport " content="width=device-width, initial-scale=1 ">
+            <link rel="stylesheet " href="https://www.w3schools.com/w3css/4/w3.css ">
+
+            <div class="w3-container listRepStyle ">
+                <h2>Reports</h2>
+                <ul class="w3-ul w3-card-4 ">
+
+                    <li class="w3-bar listBar ">
+                        <img src="{% static 'images/UI/lab.jpg' %} " class="w3-bar-item w3-circle w3-hide-small " style="width:85px; height: 70px ">
+                        <div class="w3-bar-item ">
+                            <span class="w3-large ">HIV Test</span><br>
+                            <span class="w3-small ">CHUGTAI lahore Lab</span>
+                        </div>
+                    </li>
+
+
+
+                </ul>
+            </div>
+            {%endblock%}
+        </div>
+    </div>
+
+
+
+</body>
+
+</html>

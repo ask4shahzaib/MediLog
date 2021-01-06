@@ -4,18 +4,17 @@
 
 <head>
     <title>Log in</title>
-    <link rel="JavaScript" href="{% static '/js/index.js' %}">
-    <link rel="stylesheet" href="{% static '/css/styles.css' %}">
-    <link rel="icon" href="{% static 'images/UI/favicon1.ico' %}">
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <script type="" src="{% static 'js/index.js' %}" charset="utf-8"> </script>
+    <link rel="JavaScript" href="{% static '/js/index.js' %}" />
+    <link rel="stylesheet" href="{% static '/css/styles.css' %}" />
+    <link rel="icon" href="{% static 'images/UI/favicon1.ico' %}" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" />
+    <script type="" src="{% static 'js/index.js' %}" charset="utf-8"></script>
 </head>
 
 <body class="loginBody">
     <div class="login_">
-
         <div id="error"></div>
         <form id="form" action="" enctype="multipart/form-data" method="POST">
             {%csrf_token%}
@@ -24,33 +23,27 @@
                 <h1 text-align: center>Log in</h1>
             </div>
 
-
             <label class="animate">
-        <input name="username" id="cnic" type="text" required />
-        <div class="label-text">CNIC</div>
-      </label>
-
+          <input name="username" id="cnic" type="text" required />
+          <div class="label-text">CNIC</div>
+        </label>
 
             <div>
                 <label class="animate">
-          <input name="password" id="password" type="password" required />
-          <div class="label-text">Password</div>
-        </label>
-                <!-- <input class="file-btn" type="checkbox" onclick="myFunction()"> -->
-
+            <input name="password" id="password" type="password" required />
+            <div class="label-text">Password</div>
+          </label>
             </div>
-
-            <!-- <input type="image" src="{% static 'images/UI/logo.png' %}" name="" value=""> -->
             <button class="signUp-btn" type="" value="">Login</button>
 
-            <div class="label-text">Don't have an account? <a href="{% url 'register' %}">Sign up</a> </div>
+            <div class="label-text">
+                Don't have an account? <a href="{% url 'register' %}">Sign up</a>
+            </div>
         </form>
-
-
     </div>
 
-    <img class="logo_login" src="{% static 'images/UI/logo.png' %}" alt="MediLog-logo"> {{form.errors}} {% for message in messages %}
-    <p id="messages"> {{message}} </p>
+    <img class="logo_login" src="{% static 'images/UI/logo.png' %}" alt="MediLog-logo" /> {{form.errors}} {% for message in messages %}
+    <p id="messages">{{message}}</p>
     {% endfor %}
 </body>
 

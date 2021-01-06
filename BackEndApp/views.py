@@ -1,5 +1,6 @@
+from datetime import timedelta, datetime
 from django.core.exceptions import ObjectDoesNotExist
-from django.core.files.storage import FileSystemStorage
+from django.http.response import json
 from BackEndApp.models import Patient, Doctor, Laboratory, Hospital, Prescription
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -15,6 +16,16 @@ def home(request):
     return redirect('login')
 
 
+def doctorName(license):
+    try:
+        doctor = Doctor.objects.filter(license_No=license)
+        doctor = doctor[0]
+        doctor = doctor.fName+" "+doctor.lName
+    except:
+        doctor = "N/A"
+    return doctor
+
+
 @login_required(login_url='login')
 @allowed_users(allowed=['Patient', 'Laboratory', 'Management', 'Doctor', 'Hospital'])
 def feed(request):
@@ -23,11 +34,38 @@ def feed(request):
     id = request.user.username
     if (group == 'Patient'):
         prescriptions = Prescription.objects.filter(
-            patient=request.user.username)
+            patient=request.user.username).order_by('-date')
+        license = prescriptions[0].doctor
+        doctor = doctorName(license)
+        desc = prescriptions[0].description
+        date = prescriptions[0].date
         patient = Patient.objects.get(CNIC=id)
+
+        prescriptions = prescriptions[0:3]
+        for prescription in prescriptions:
+            prescription.doctor = doctorName(prescription.doctor)
+        start_date = datetime.datetime.today()
+        start_date = str(start_date).split(' ')[0]
+        start_date = str(start_date)
+        start_date = datetime.datetime.strptime(
+            start_date, '%Y-%m-%d').date()
+        delta = timedelta(days=1)
+        i = 4
+        visits = 0
+        visitcount = [['Date', 'Visits to Doctor', 'Tests']]
+        while i > 0:
+            for prescription in prescriptions.iterator():
+                if(prescription.date == start_date):
+                    visits += 1
+            start = str(start_date)
+            temp = datetime.datetime.strptime(
+                start, '%Y-%m-%d').strftime("%d/%m/%Y")
+            visitcount.append([str(temp), visits, 0])
+            start_date -= delta
+            i -= 1
         context = {'patient': patient,
-                   'prescriptions': prescriptions}
-        return render(request, 'BackEndApp/patient_home.html', context)
+                   'prescriptions': prescriptions, 'doctor': doctor, 'desc': desc, 'date': date, 'vis': json.dumps(visitcount)}
+        return render(request, 'BackEndApp/patientHomePage.html', context)
 
     if (group == 'Laboratory'):
         lab = Laboratory.objects.get(id=id)
@@ -154,4 +192,4 @@ def register(request):
                 request, "Already a patient found with same CNIC")
             return redirect('register')
     else:
-        return render(request, 'BackEndApp/register1.html')
+        return render(request, 'BackEndApp/register.html')
