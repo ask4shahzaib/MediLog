@@ -52,7 +52,7 @@ def feed(request):
         delta = timedelta(days=1)
         i = 4
         visits = 0
-        visitcount = [['Date', 'Visits to Doctor', 'Tests']]
+        visitcount = []
         while i > 0:
             for prescription in prescriptions.iterator():
                 if(prescription.date == start_date):
@@ -63,6 +63,12 @@ def feed(request):
             visitcount.append([str(temp), visits, 0])
             start_date -= delta
             i -= 1
+
+        def first(obj):
+            return obj[0]
+        visitcount.sort(key=first)
+        visitcount = [['Date', 'Visits to Doctor', 'Tests']] + visitcount
+        print(visitcount)
         context = {'patient': patient,
                    'prescriptions': prescriptions, 'doctor': doctor, 'desc': desc, 'date': date, 'vis': json.dumps(visitcount)}
         return render(request, 'BackEndApp/patientHomePage.html', context)
