@@ -26,13 +26,8 @@ def doctorName(license):
     return doctor
 
 
-@login_required(login_url='login')
-@allowed_users(allowed=['Patient', 'Laboratory', 'Management', 'Doctor', 'Hospital'])
-def feed(request):
-    group = request.user.groups.all()
-    group = str(group[0])
-    id = request.user.username
-    if (group == 'Patient'):
+def patientLogin(request):
+    try:
         prescriptions = Prescription.objects.filter(
             patient=request.user.username).order_by('-date')
         license = prescriptions[0].doctor
@@ -40,7 +35,6 @@ def feed(request):
         desc = prescriptions[0].description
         date = prescriptions[0].date
         patient = Patient.objects.get(CNIC=id)
-
         prescriptions = prescriptions[0:3]
         for prescription in prescriptions:
             prescription.doctor = doctorName(prescription.doctor)
@@ -72,6 +66,16 @@ def feed(request):
         context = {'patient': patient,
                    'prescriptions': prescriptions, 'doctor': doctor, 'desc': desc, 'date': date, 'vis': json.dumps(visitcount)}
         return render(request, 'BackEndApp/patientHomePage.html', context)
+
+
+@login_required(login_url='login')
+@allowed_users(allowed=['Patient', 'Laboratory', 'Management', 'Doctor', 'Hospital'])
+def feed(request):
+    group = request.user.groups.all()
+    group = str(group[0])
+    id = request.user.username
+    if (group == 'Patient'):
+        return patientLogin(request)
 
     if (group == 'Laboratory'):
         lab = Laboratory.objects.get(id=id)

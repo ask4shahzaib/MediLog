@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Patient Profile</title>
+
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="icon" href="images/favicon1.ico">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet">
+    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css"> -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script type="" src='index.js' charset="utf-8"> </script>
+    <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+
+
+</head>
+
+<body class="bBody">
+
+    <!-- rgb(227, 254, 255); -->
+    <nav class="navbar"
+        style="background-color: rgba(227, 254, 255, 0.9); padding: 5px 0px; margin: 0px 0px; box-shadow: 2px 2px rgba(134, 133, 133, 0.1);">
+        <div class="container-fluid">
+
+            <div class="navbar-header">
+                <a href="#" class="navbar-left">
+                    <img src="images/logo.png" width="auto" height="50px">
+                </a>
+            </div>
+
+            <div class="collapse navbar-collapse navbar-right" id="navbarSupportedContent">
+
+                <ul class="nav navbar-nav float-left ml-auto">
+                    <li><a href="register.html">Logout</span></a></li>
+                </ul>
+            </div>
+
+        </div>
+    </nav>
+
+    <div class="wrapper">
+
+        <div class="sidebar">
+            <ul class="ul1">
+                <li class="li1"><a href="patientHomePage.html"><i class="fas fa-home"></i>Home</a></li>
+                <li class="li1"><a href="patientProfile.html"><i class="fas fa-user"></i>Profile</a></li>
+                <li class="li1"><a href="#"><i class="glyphicon glyphicon-ok" style="padding-right: 9px;"></i>Trusted
+                        Contact</a></li>
+                <li class="li1"><a href="#"><i class="fas fa-users"></i>View Connections</a></li>
+                <li class="li1"><a href="#"><i class="fas fa-address-book"></i>Contact Us</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="usableBody">
+        
+        <img name="img" src="images/doctor.jpg" alt="profile-img" class="prof-img">
+        <form>
+            <div class="form-group" style="padding-top: 25px;">
+              <label for="name">First Name</label>
+              <input type="text" name="fname" class="form-control" aria-describedby="emailHelp" value="" placeholder="First Name">
+              <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
+            </div>
+
+              <div class="form-group" >
+                <label for="name">Last Name</label>
+                <input type="text" name="lname" class="form-control" aria-describedby="emailHelp" value="" placeholder="Last Name">
+                <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
+              </div>
+  
+            <div class="form-group">
+              <label for="exampleInputPassword1">Phone#</label>
+              <input type="phone" name="phone" class="form-control" value="" placeholder="03xx-xxxxxxx">
+            </div>
+            
+            
+            <div class="form-group">
+                <label for="exampleInputEmail1">Email address</label>
+                <input type="email" name="email" class="form-control" aria-describedby="emailHelp" placeholder="Enter email" value="">
+                <small class="form-text text-muted">We'll never share your email with anyone else.</small>
+            </div>
+
+
+            <div class="form-group">
+                <label for="exampleInputEmail1">Address</label>
+                <input type="text" class="form-control" aria-describedby="emailHelp" name="address" placeholder="House xy, ABC block, Faisal Town, Lahore" value="">
+                  </div>
+
+
+
+            <button type="submit" class="btn btn-primary">Update</button>
+          </form>
+
+
+
+    </div>
+
+
+</body>
+
+</html>

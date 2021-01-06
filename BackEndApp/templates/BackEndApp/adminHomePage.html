@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Home Page</title>
+
+    <link rel="JavaScript" href="login.js">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="icon" href="images/favicon1.ico">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script type="" src='index.js' charset="utf-8"> </script>
+    <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+
+
+</head>
+
+<body class="bBody">
+
+    <!-- rgb(227, 254, 255); -->
+    <nav class="navbar navbar-light"
+        style="background-color: rgba(227, 254, 255, 0.9); padding: 5px 0px; margin: 0px 0px; box-shadow: 2px 2px rgba(134, 133, 133, 0.1);">
+        <div class="container-fluid">
+
+            <div class="navbar-header">
+                <a href="#" class="navbar-left">
+                    <!--<span class="glyphicon glyphicon-search"></span>-->
+                    <img src="images/logo.png" width="auto" height="50px">
+                </a>
+            </div>
+
+            <div class="collapse navbar-collapse navbar-right" id="navbarSupportedContent">
+
+                <ul class="nav navbar-nav float-left ml-auto">
+                    <li><a href="register.html">Logout</span></a></li>
+                </ul>
+            </div>
+
+        </div>
+    </nav>
+
+
+
+    <div class="wrapper">
+        <div class="sidebar">
+            <ul>
+                <li><a href="hospitalHomePage.html"><i class="fas fa-home"></i>Home</a></li>
+                <li><a href="#"><i class="fas fa-user"></i>Profile</a></li>
+                <li><a href="#"><i class="fas fa-address-card"></i>About</a></li>
+                <li><a href="#"><i class="fas fa-address-book"></i>Contact</a></li>
+            </ul>
+
+        </div>
+
+    </div>
+
+    <div class="usableBody" style="box-shadow: 0px 0px 0px 0px rgba(199, 199, 199, 0.2); border-radius: 0px; background-color:transparent;">
+        <div class="createAccount" style="left: 4%;">
+            <div>
+                <form id="form" action="" enctype="multipart/form-data" method="POST">
+
+                    <div class="label-text" style="padding-left: 6%;">
+                        <h2 text-align: center>Create Patient's Account</h2>
+                    </div>
+
+
+                    <label class="animate">
+                        <input name="cnic" id="cnic" type="text" required />
+                        <div class="label-text">CNIC</div>
+                    </label>
+
+
+                    <div>
+                        <label class="animate">
+                            <input name="password" id="password" type="password" required />
+                            <div class="label-text">Password</div>
+                        </label>
+
+                    </div>
+
+                    <label class="animate">
+                        <input name="fname" id="fname" type="text" required />
+                        <div class="label-text">First Name</div>
+                    </label>
+
+                    <label class="animate">
+                        <input name="lname" id="lname" type="text" required />
+                        <div class="label-text">Last Name</div>
+                    </label>
+
+                    <label class="animate">
+                        <input name="phone" id="phone" type="phone" required />
+                        <div class="label-text">Phone</div>
+                    </label>
+
+                    <label class="animate">
+                        <input name="email" id="email" type="email" required />
+                        <div class="label-text">E-mail</div>
+                    </label>
+
+                    <label class="animate">
+                        <input name="age" id="age" type="number" required />
+                        <div class="label-text">Age</div>
+                    </label>
+
+                    <label class="animate">
+                        <input name="address" id="address" type="text" required />
+                        <div class="label-text">Address</div>
+                    </label>
+
+                    <label class="">
+                        <div style="padding-left: 33.4%;">
+                            <input type="file" id="prescription" name="file" style="padding-left: 2%; padding-top: 3%;"
+                                accept="image/*">
+                        </div>
+                    </label><br>
+
+                    <button class="signUp-btn" type="" value="">Create</button>
+                </form>
+
+            </div>
+        </div>
+        <div class="createAccount" style="left: 36%;">
+            hello
+        </div>
+        <div class="createAccount" style="left: 68%;">
+            hello
+        </div>
+
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Home Page</title>
+
+    <link rel="JavaScript" href="login.js">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="icon" href="images/favicon1.ico">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script type="" src='index.js' charset="utf-8"> </script>
+    <script src="https://kit.fontawesome.com/b99e675b6e.js"></script> 
+
+
+</head>
+
+<body class="bBody">
+
+    <!-- rgb(227, 254, 255); -->
+    <nav class="navbar navbar-light" style="background-color: rgba(227, 254, 255, 0.9); padding: 5px 0px; margin: 0px 0px; box-shadow: 2px 2px rgba(134, 133, 133, 0.1);">
+        <div class="container-fluid">
+
+            <div class="navbar-header">
+                <a href="#" class="navbar-left"> 
+                    <!--<span class="glyphicon glyphicon-search"></span>-->
+                    <img src="images/logo.png" width="auto" height="50px"></a>
+            </div>
+
+            <div class="collapse navbar-collapse navbar-right" id="navbarSupportedContent">
+                
+                <ul class="nav navbar-nav float-left ml-auto">
+                    <li><a href="register.html">Logout</span></a></li>
+                </ul>
+            </div>
+
+        </div>
+    </nav>
+
+
+    
+    <div class="wrapper">
+        <div class="sidebar">
+            <ul>
+                <li><a href="hospitalHomePage.html"><i class="fas fa-home"></i>Home</a></li>
+                <li><a href="#"><i class="fas fa-user"></i>Profile</a></li>
+                <li><a href="#"><i class="fas fa-address-card"></i>About</a></li>
+                <li><a href="#"><i class="fas fa-address-book"></i>Contact</a></li>
+            </ul> 
+           
+        </div>
+
+    </div>
+
+    <div class="hospAddRecord">
+        <form >
+            <label class="animateCnicOnHosp">
+                <input type="text" id="cnic" name="patient">
+                <div class="label-text">Patient's CNIC</div>
+            </label>
+            <label class="animateCnicOnHosp" style="padding-top: 10%;">
+                <input type="text" id="licNum" name="doctor">
+                <div class="label-text">Doctor's License Number</div>
+            </label>
+            <label class="animateCnicOnHosp" style="padding-top: 10%;">
+                <input type="text" id="licNum" name="description">
+                <div class="label-text">Description</div>
+            </label>
+            <label class="animateCnicOnHosp" style="padding-top: 10%;">
+                <input type="date" id="licNum" name="description">
+                <div class="label-text">Date</div>
+            </label>
+            <input type="file" id="prescription" name="file" style="padding-left: 30%; padding-top: 3%;" accept=".pdf image/*">
+            <button type="submit" value="submit" class="addButtonHosp">Add</button> 
+        </form>
+    </div>
+  
+
+
+    </body>
+
+</html>
