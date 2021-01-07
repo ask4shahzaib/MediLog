@@ -42,43 +42,52 @@ def hospitalName(id):
     return hospital
 
 
+def graphData(prescriptions):
+    start_date = datetime.datetime.today()
+    start_date = str(start_date).split(' ')[0]
+    start_date = str(start_date)
+    start_date = datetime.datetime.strptime(
+        start_date, '%Y-%m-%d').date()
+    delta = timedelta(days=1)
+    visits = 0
+    visitcount = []
+    for i in range(7):
+        for prescription in prescriptions.iterator():
+            if(prescription.date == start_date):
+                visits += 1
+        start = str(start_date)
+        temp = datetime.datetime.strptime(
+            start, '%Y-%m-%d').strftime("%d/%m/%Y")
+        visitcount.append([str(temp), visits, 0])
+        start_date -= delta
+
+    def first(obj):
+        return obj[0]
+    visitcount.sort(key=first)
+    visitcount = [['Date', 'Visits to Doctor', 'Tests']] + visitcount
+    return visitcount
+
+
 def patientFeed(request, id):
     patient = Patient.objects.get(CNIC=id)
     try:
         prescriptions = Prescription.objects.filter(
             patient=request.user.username).order_by('-date')
+
+        visitcount = graphData(prescriptions)
+
         license = prescriptions[0].doctor
         doctor = doctorName(license)
+
         hospital = prescriptions[0].hospital
         hospital = hospitalName(hospital)
+
         date = prescriptions[0].date
+
         prescriptions = prescriptions[0:3]
         for prescription in prescriptions:
             prescription.doctor = doctorName(prescription.doctor)
-        start_date = datetime.datetime.today()
-        start_date = str(start_date).split(' ')[0]
-        start_date = str(start_date)
-        start_date = datetime.datetime.strptime(
-            start_date, '%Y-%m-%d').date()
-        delta = timedelta(days=1)
-        i = 7
-        visits = 0
-        visitcount = []
-        while i > 0:
-            for prescription in prescriptions.iterator():
-                if(prescription.date == start_date):
-                    visits += 1
-            start = str(start_date)
-            temp = datetime.datetime.strptime(
-                start, '%Y-%m-%d').strftime("%d/%m/%Y")
-            visitcount.append([str(temp), visits, 0])
-            start_date -= delta
-            i -= 1
 
-        def first(obj):
-            return obj[0]
-        visitcount.sort(key=first)
-        visitcount = [['Date', 'Visits to Doctor', 'Tests']] + visitcount
     except:
         visitcount = [['Date', 'Visits to Doctor',
                        'Tests'], ['2020', 0, 0], ['2019', 0, 0]]
@@ -86,8 +95,10 @@ def patientFeed(request, id):
         date = 'N/A'
         hospital = hospitalName(doctor)
         prescriptions = None
+
     context = {'patient': patient,
                'prescriptions': prescriptions, 'doctor': doctor, 'hospital': hospital, 'date': date, 'vis': json.dumps(visitcount)}
+
     return render(request, 'BackEndApp/patientHomePage.html', context)
 
 
