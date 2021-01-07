@@ -26,7 +26,7 @@
 <body class="bBody">
 
     <!-- rgb(227, 254, 255); -->
-    <nav class="navbar navbar-fixed-top" style="background-color: rgba(227, 254, 255, 0.9); padding: 5px 0px; margin: 0px 0px; box-shadow: 2px 2px rgba(134, 133, 133, 0.1);">
+    <nav class="navbar  navbar-fixed-top" style="background-color: rgb(227, 254, 255); padding: 5px 0px; margin: 0px 0px; box-shadow: 2px 2px rgba(134, 133, 133, 0.1);">
         <div class="container-fluid">
 
             <div class="navbar-header">
@@ -37,10 +37,17 @@
             </div>
 
             <div class="collapse navbar-collapse navbar-right" id="navbarSupportedContent">
-
+                {% block content%} {%if check%}
                 <ul class="nav navbar-nav float-left ml-auto">
-                    <li><a href="{% url 'logout' %}">Logout</span></a></li>
+                    <li style="margin-top: 15px;">Hello, {{patient}}</li>
+                    <li><a href="{% url 'logout' %}">Logout <i class="fas fa-sign-out-alt"></i></span></a></li>
                 </ul>
+                {%endif%} {%if not check%}
+                <ul class="nav navbar-nav float-left ml-auto">
+                    <li style="margin-top: 15px;">Hello, {{doctor}}</li>
+                    <li><a href="{% url 'logout' %}">Logout <i class="fas fa-sign-out-alt"></i></span></a></li>
+                </ul>
+                {%endif%}
             </div>
 
         </div>
@@ -74,7 +81,6 @@
 
 
     <div class="usableBody">
-        {% block content%}
         <h1 style="padding-left: 2%;">{{patient}}</h1>
         <h4 style="padding-left: 2%;">D.O.B: {{patient.dob}}</h4>
 

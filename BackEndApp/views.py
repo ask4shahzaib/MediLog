@@ -17,15 +17,21 @@ def viewPrescription(request):
     group = request.user.groups.all()
     group = str(group[0])
     check = False
+    doctor = ""
 
     if group == 'Patient':
         check = True
         person = Patient.objects.filter(CNIC=request.user.username)
         person = person[0]
     else:
-        cnic = request.POST['cnic']
-        person = Patient.objects.filter(CNIC=cnic)
-        person = person[0]
+        try:
+            cnic = request.POST['cnic']
+            person = Patient.objects.filter(CNIC=cnic)
+            person = person[0]
+        except:
+            return redirect('feed')
+        doctor = Doctor.objects.filter(license_No=request.user.username)
+        doctor = doctor[0]
 
     prescriptions = ""
     try:
@@ -37,7 +43,8 @@ def viewPrescription(request):
             prescription.doctor = doctorName(prescription.doctor)
             prescription.hospital = hospitalName(prescription.hospital)
 
-    context = {'prescriptions': prescriptions, 'check': check}
+    context = {'prescriptions': prescriptions,
+               'person': person, 'check': check, 'doctor': doctor}
     return render(request, "BackEndApp/prescriptions.html", context)
 
 
@@ -65,7 +72,9 @@ def summary(request):
         except:
             messages.error(request, "Patient not found")
             return redirect('feed')
-        context = {'patient': patient, 'check': check}
+        doctor = Doctor.objects.filter(license_No=request.user.username)
+        doctor = doctor[0]
+        context = {'patient': patient, 'doctor': doctor, 'check': check}
         return render(request, "BackEndApp/summary.html", context)
     else:
         return redirect('feed')
@@ -296,7 +305,7 @@ def register(request):
         dob = request.POST['dob']
         address = request.POST['address']
         try:
-            photo = request.FILES['photo']
+            photo = request.FILES['file']
         except:
             photo = None
         try:

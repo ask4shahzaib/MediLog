@@ -92,7 +92,7 @@
     text-align: center;
     display: flex;
     justify-content: center;
-    padding: 1% 2.5%;
+    /* padding: 2% 2.5%; */
     height: auto;
     width: auto;
     position: absolute;
@@ -100,7 +100,7 @@
     color: black;
     opacity: 0.8;
     left: 10%;
-    top: 2.5%;
+    top: 0%;
 }
 
 .login_ {
@@ -198,11 +198,11 @@
     border: 2px solid #00303f;
     font-size: 15px;
     letter-spacing: 2px;
-    padding: 20px 110px;
+    padding: 15px 110px;
     text-transform: uppercase;
     cursor: pointer;
     display: inline-block;
-    margin: 20px 30px;
+    margin: 15px 30px;
     -webkit-transition: all 0.4s;
     -moz-transition: all 0.4s;
     transition: all 0.4s;
