@@ -431,11 +431,19 @@
     color: #aaa;
 }
 
+.log {
+    position: absolute;
+    top: 30%;
+    left: 39%;
+    height: 15%;
+    width: 30%;
+}
+
 .sBar {
     display: inline;
     position: absolute;
-    left: 30%;
-    top: 5em;
+    left: 35%;
+    top: 45%;
     width: 40%;
 }
 
@@ -444,9 +452,9 @@
 
 .sBtn {
     display: inline;
-    position: relative;
-    top: 3.5em;
-    left: 68%;
+    position: absolute;
+    left: 72%;
+    top: 45%;
 }
 
 .addButtonHosp {
@@ -494,53 +502,53 @@
     opacity: 0.8;
     left: 35%;
     right: 35%;
-    top: 25%;
+    top: 12%;
     border-radius: 10px;
     box-shadow: 1.5px 1.5px 5px 5px rgba(102, 102, 102, 0.2);
 }
 
 .animateCnicOnHosp {
     display: block;
-    letter-spacing: 4px;
-    padding-top: 30px;
+    letter-spacing: 1px;
+    padding-top: 20px;
     text-align: center;
 }
 
 .animateCnicOnHosp .label-text {
-    color: #9B9B9B;
+    color: #00303f;
     cursor: text;
-    font-size: 20px;
-    line-height: 0.5px;
+    font-size: 15px;
+    line-height: 0px;
     text-transform: uppercase;
     -moz-transform: translateY(-34px);
     -ms-transform: translateY(-34px);
     -webkit-transform: translateY(-34px);
     transform: translateY(-34px);
-    transition: all 0.3s;
+    transition: all 0.2s;
 }
 
 .animateCnicOnHosp input {
     background-color: transparent;
     border: 0;
     border-bottom: 2px solid #4A4A4A;
-    color: rgb(15, 15, 15);
-    font-size: 17px;
+    color: #00303f;
+    font-size: 15px;
     letter-spacing: 1px;
     outline: 0;
-    padding: 5px 20px;
+    padding: 10px 20px;
     text-align: center;
-    transition: all 0.3s;
-    width: 300px;
+    transition: all 0.2s;
+    width: 200px;
 }
 
 .animateCnicOnHosp input:focus {
     max-width: 100%;
-    width: 400px;
+    width: 200px;
 }
 
 .animateCnicOnHosp input:focus+.label-text {
-    /* color: rgba(199, 199, 199, 0.1); */
-    font-size: 20px;
+    /* color: #F0F0F0; */
+    font-size: 15px;
     -moz-transform: translateY(-74px);
     -ms-transform: translateY(-74px);
     -webkit-transform: translateY(-74px);
@@ -548,7 +556,7 @@
 }
 
 .animateCnicOnHosp input:valid+.label-text {
-    font-size: 20px;
+    font-size: 13px;
     -moz-transform: translateY(-74px);
     -ms-transform: translateY(-74px);
     -webkit-transform: translateY(-74px);

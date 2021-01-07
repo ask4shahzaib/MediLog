@@ -20,8 +20,13 @@ def viewPrescription(request):
 
     if group == 'Patient':
         check = True
-    person = Patient.objects.filter(CNIC=request.user.username)
-    person = person[0]
+        person = Patient.objects.filter(CNIC=request.user.username)
+        person = person[0]
+    else:
+        cnic = request.POST['cnic']
+        person = Patient.objects.filter(CNIC=cnic)
+        person = person[0]
+
     prescriptions = ""
     try:
         prescriptions = Prescription.objects.filter(patient=person.CNIC)
@@ -32,7 +37,7 @@ def viewPrescription(request):
             prescription.doctor = doctorName(prescription.doctor)
             prescription.hospital = hospitalName(prescription.hospital)
 
-    context = {'prescriptions': prescriptions}
+    context = {'prescriptions': prescriptions, 'check': check}
     return render(request, "BackEndApp/prescriptions.html", context)
 
 
