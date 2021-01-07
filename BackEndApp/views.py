@@ -21,9 +21,25 @@ def doctorName(license):
         doctor = Doctor.objects.filter(license_No=license)
         doctor = doctor[0]
         doctor = doctor.fName+" "+doctor.lName
+        if len(doctor) > 19:
+            doctor = doctor[0:19]
+            doctor = doctor+' ...'
     except:
         doctor = "N/A"
     return doctor
+
+
+def hospitalName(id):
+    try:
+        hospital = Hospital.objects.filter(id=id)
+        hospital = hospital[0]
+        hospital = hospital.name
+        if len(hospital) > 18:
+            hospital = hospital[0:18]
+            hospital = hospital+'...'
+    except:
+        hospital = "N/A"
+    return hospital
 
 
 def patientFeed(request, id):
@@ -33,9 +49,9 @@ def patientFeed(request, id):
             patient=request.user.username).order_by('-date')
         license = prescriptions[0].doctor
         doctor = doctorName(license)
-        label = prescriptions[0].label
+        hospital = prescriptions[0].hospital
+        hospital = hospitalName(hospital)
         date = prescriptions[0].date
-
         prescriptions = prescriptions[0:3]
         for prescription in prescriptions:
             prescription.doctor = doctorName(prescription.doctor)
@@ -68,10 +84,10 @@ def patientFeed(request, id):
                        'Tests'], ['2020', 0, 0], ['2019', 0, 0]]
         doctor = 'N/A'
         date = 'N/A'
-        label = 'N/A'
+        hospital = hospitalName(doctor)
         prescriptions = None
     context = {'patient': patient,
-               'prescriptions': prescriptions, 'doctor': doctor, 'label': label, 'date': date, 'vis': json.dumps(visitcount)}
+               'prescriptions': prescriptions, 'doctor': doctor, 'hospital': hospital, 'date': date, 'vis': json.dumps(visitcount)}
     return render(request, 'BackEndApp/patientHomePage.html', context)
 
 
@@ -97,7 +113,7 @@ def feed(request):
     if (group == 'Hospital'):
         hospital = Hospital.objects.get(id=id)
         context = {'hospital': hospital}
-        return render(request, 'BackEndApp/hospital_home.html', context)
+        return render(request, 'BackEndApp/hospitalHomePage.html', context)
 
     if (group == 'Management'):
         context = {'user': request.user}
@@ -132,6 +148,7 @@ def prescription(request):
             messages.error(request, "Incorrect Patient CNIC")
             return redirect('prescription')
         doctor = request.POST.get('doctor')
+        label = request.POST.get('label')
         try:
             Doctor.objects.get(license_No=doctor)
         except:
@@ -143,11 +160,11 @@ def prescription(request):
         date = datetime.datetime.strptime(
             date, '%Y-%m-%d').strftime("%Y-%m-%d")
         x = Prescription(file=file, date=date, description=description,
-                         patient=patient, doctor=doctor, hospital=hospital)
+                         patient=patient, label=label, doctor=doctor, hospital=hospital)
         x.save()
     hospital = Hospital.objects.get(id=request.user.username)
     context = {'hospital': hospital}
-    return render(request, 'BackEndApp/prescription.html', context)
+    return render(request, 'BackEndApp/hospitalHomePage.html', context)
 
 
 def logoutUser(request):

@@ -17,10 +17,10 @@
 
 </head>
 
-<body class="pHomeBody">
+<body class="bBody">
     {%load static%}
     <!-- rgb(227, 254, 255); -->
-    <nav class="navbar navbar-light" style="background-color: rgba(227, 254, 255, 0.9); padding: 5px 0px; margin: 0px 0px; box-shadow: 2px 2px rgba(134, 133, 133, 0.1);">
+    <nav class="navbar navbar-fixed-top" style="background-color: rgba(227, 254, 255, 0.9); padding: 5px 0px; margin: 0px 0px; box-shadow: 2px 2px rgba(134, 133, 133, 0.1);">
         <div class="container-fluid">
 
             <div class="navbar-header">
@@ -60,30 +60,23 @@
             <div class="lastAappointment">
                 <h3>LAST APPOINTMENT</h3>
 
-                <div class="lastAppointmentInfo">
-                    <h4>Doctor : {{doctor}}</h4>
-                    <h4>Label : {{label}}</h4>
-                    <h4>Date : {{date}}</h4>
-                </div>
+                <h4>Doctor : {{doctor}}</h4>
+                <h4>Hospital : {{hospital}}</h4>
+                <h4>Date : {{date}}</h4>
             </div>
 
             <div class="lastTest">
                 <h3>LAST TEST</h3>
-
-                <div class="lastTestInfo">
-                    <h4>CHUGTAI Lahore Lab</h4>
-                    <h4>Description: HIV Test</h4>
-                    <h4>Date: 01-01-2021</h4>
-                </div>
+                <h4>Lab : N/A</h4>
+                <h4>Label : N/A</h4>
+                <h4>Date : N/A</h4>
             </div>
 
             <div class="lastScan">
                 <h3>LAST SCAN</h3>
-                <div class="lastScanInfo">
-                    <h4>CHUGHTAI Lahore Lab</h4>
-                    <h4>Description: CT Scan</h4>
-                    <h4>Date: 01-01-2021</h4>
-                </div>
+                <h4>Lab : N/A</h4>
+                <h4>Label : N/A</h4>
+                <h4>Date : N/A</h4>
             </div>
 
 
@@ -131,7 +124,7 @@
                     <h2>Prescriptions</h2>
                 </a>
                 <ul class="w3-ul w3-card-4 ">
-                    {% for prescription in prescriptions %}
+                    {% if prescriptions%} {% for prescription in prescriptions %}
                     <li class="w3-bar listBar ">
                         <img src="{% static 'images/UI/Doctor.jpg' %} " class="w3-bar-item w3-circle w3-hide-small " style="width:85px; height: 70px ">
                         <div class="w3-bar-item ">
@@ -139,8 +132,18 @@
                             <span class="w3-small ">{{prescription.doctor}}</span>
                         </div>
                     </li>
-                    {% endfor %}
-
+                    {% endfor %} {% endif %}
+                </ul>
+                <ul class="w3-ul w3-card-4 ">
+                    {% if not prescriptions%}
+                    <li class="w3-bar listBar ">
+                        <img src="{% static 'images/UI/Doctor.jpg' %} " class="w3-bar-item w3-circle w3-hide-small " style="width:85px; height: 70px ">
+                        <div class="w3-bar-item ">
+                            <span class="w3-large ">N/A</span><br>
+                            <span class="w3-small ">N/A</span>
+                        </div>
+                    </li>
+                    {% endif %}
                 </ul>
             </div>
 
@@ -156,8 +159,8 @@
                     <li class="w3-bar listBar ">
                         <img src="{% static 'images/UI/lab.jpg' %} " class="w3-bar-item w3-circle w3-hide-small " style="width:85px; height: 70px ">
                         <div class="w3-bar-item ">
-                            <span class="w3-large ">HIV Test</span><br>
-                            <span class="w3-small ">CHUGTAI lahore Lab</span>
+                            <span class="w3-large ">N/A</span><br>
+                            <span class="w3-small ">N/A</span>
                         </div>
                     </li>
 
