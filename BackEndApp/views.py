@@ -12,6 +12,35 @@ import datetime
 from django.contrib.auth.models import Group, User
 
 
+def summary(request):
+    group = request.user.groups.all()
+    group = str(group[0])
+    check = False
+
+    if group == 'Patient':
+        check = True
+
+    if check == True:
+        patient = Patient.objects.filter(CNIC=request.user.username)
+        patient = patient[0]
+        context = {'patient': patient, 'check': check}
+        return render(request, "BackEndApp/summary.html", context)
+
+    if request.method == 'POST':
+        id = request.POST['cnic']
+        patient = ""
+        try:
+            patient = Patient.objects.filter(CNIC=id)
+            patient = patient[0]
+        except:
+            messages.error(request, "Patient not found")
+            return redirect('feed')
+        context = {'patient': patient, 'check': check}
+        return render(request, "BackEndApp/summary.html", context)
+    else:
+        return redirect('feed')
+
+
 def profile(request):
     group = request.user.groups.all()
     group = str(group[0])

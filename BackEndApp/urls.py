@@ -9,7 +9,7 @@ urlpatterns = [
     path('logout/', views.logoutUser, name='logout'),
     path('prescription/', views.prescription, name='prescription'),
     path('profile/', views.profile, name='profile'),
-
+    path('summary/', views.summary, name='summary'),
     path('reset_password/',
          auth_views.PasswordResetView.as_view(
              template_name="BackEndApp/password_reset.html"),
