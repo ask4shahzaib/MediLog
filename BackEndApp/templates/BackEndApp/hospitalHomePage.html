@@ -55,29 +55,29 @@
 
 
         <div class="hospAddRecord">
-            <form action="/prescription/" enctype="multipart/form-data" method="POST">
+            <form action="/addPrescription/" enctype="multipart/form-data" method="POST">
                 {%csrf_token%}
                 <label class="animateCnicOnHosp">
-                <input type="text" id="cnic" name="patient">
+                <input type="text" id="cnic" name="patient" required>
                 <div class="label-text">Patient's CNIC</div>
             </label>
                 <label class="animateCnicOnHosp" style="padding-top: 10%;">
-                <input type="text" id="licNum" name="doctor">
+                <input type="text" id="licNum" name="doctor" required>
                 <div class="label-text">Doctor's License Number</div>
             </label>
                 <label class="animateCnicOnHosp" style="padding-top: 10%;">
-                <input type="text" id="licNum" name="label">
+                <input type="text" id="licNum" name="label" required>
                 <div class="label-text">Label</div>
             </label>
                 <label class="animateCnicOnHosp" style="padding-top: 10%;">
-                <input type="text" id="licNum" name="description">
+                <input type="text" id="licNum" name="description" required>
                 <div class="label-text">Description</div>
             </label>
                 <label class="animateCnicOnHosp" style="padding-top: 10%;">
-                <input type="date" id="licNum" name="date">
+                <input type="date" id="licNum" name="date" required>
                 <div class="label-text">Date</div>
             </label>
-                <input type="file" id="prescription" name="file" style="padding-left: 2%; padding-top: 3%;" accept="Application/pdf, image/*">
+                <input type="file" id="prescription" name="file" style="padding-left: 2%; padding-top: 3%;" accept="Application/pdf, image/*" required>
                 <button type="submit" value="submit" class="addButtonHosp">Add</button>
             </form>
         </div>

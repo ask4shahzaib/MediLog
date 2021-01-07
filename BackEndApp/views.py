@@ -1,7 +1,7 @@
 from datetime import timedelta, datetime
 from django.core.exceptions import ObjectDoesNotExist
 from django.http.response import json
-from BackEndApp.models import Patient, Doctor, Laboratory, Hospital, Prescription
+from BackEndApp.models import Patient, Doctor, Laboratory, Hospital, Prescription, prescriptions
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from .forms import *
@@ -12,6 +12,31 @@ import datetime
 from django.contrib.auth.models import Group, User
 
 
+@login_required(login_url='login')
+def viewPrescription(request):
+    group = request.user.groups.all()
+    group = str(group[0])
+    check = False
+
+    if group == 'Patient':
+        check = True
+    person = Patient.objects.filter(CNIC=request.user.username)
+    person = person[0]
+    prescriptions = ""
+    try:
+        prescriptions = Prescription.objects.filter(patient=person.CNIC)
+    except:
+        prescriptions = None
+    if prescriptions is not None:
+        for prescription in prescriptions:
+            prescription.doctor = doctorName(prescription.doctor)
+            prescription.hospital = hospitalName(prescription.hospital)
+
+    context = {'prescriptions': prescriptions}
+    return render(request, "BackEndApp/prescriptions.html", context)
+
+
+@login_required(login_url='login')
 def summary(request):
     group = request.user.groups.all()
     group = str(group[0])
@@ -41,6 +66,7 @@ def summary(request):
         return redirect('feed')
 
 
+@login_required(login_url='login')
 def profile(request):
     group = request.user.groups.all()
     group = str(group[0])
@@ -127,6 +153,7 @@ def graphData(prescriptions):
     return visitcount
 
 
+@login_required(login_url='login')
 def patientFeed(request, id):
     patient = Patient.objects.get(CNIC=id)
     try:
@@ -208,7 +235,7 @@ def loginPage(request):
 
 
 @allowed_users(allowed=['Hospital'])
-def prescription(request):
+def addPrescription(request):
     if request.method == "POST" and request.FILES['file']:
         file = request.FILES['file']
         patient = request.POST.get('patient')
@@ -216,14 +243,14 @@ def prescription(request):
             Patient.objects.get(CNIC=patient)
         except:
             messages.error(request, "Incorrect Patient CNIC")
-            return redirect('prescription')
+            return redirect('addPrescription')
         doctor = request.POST.get('doctor')
         label = request.POST.get('label')
         try:
             Doctor.objects.get(license_No=doctor)
         except:
             messages.error(request, "Incorrect Doctor License Number")
-            return redirect('prescription')
+            return redirect('addPrescription')
         hospital = request.user.username
         description = request.POST.get('description')
         date = request.POST.get('date')
@@ -237,6 +264,7 @@ def prescription(request):
     return render(request, 'BackEndApp/hospitalHomePage.html', context)
 
 
+@login_required(login_url='login')
 def logoutUser(request):
     logout(request)
     return redirect('login')

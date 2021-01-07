@@ -7,9 +7,10 @@ urlpatterns = [
     path('register/', views.register, name='register'),
     path('feed/', views.feed, name='feed'),
     path('logout/', views.logoutUser, name='logout'),
-    path('prescription/', views.prescription, name='prescription'),
+    path('addPrescription/', views.addPrescription, name='addPrescription'),
     path('profile/', views.profile, name='profile'),
     path('summary/', views.summary, name='summary'),
+    path('viewPrescription/', views.viewPrescription, name='viewPrescription'),
     path('reset_password/',
          auth_views.PasswordResetView.as_view(
              template_name="BackEndApp/password_reset.html"),

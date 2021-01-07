@@ -3,16 +3,15 @@
 <html>
 
 <head>
-    <title>Summary</title>
+    <title>Prescription</title>
 
     <link rel="JavaScript" href="{% static '/js/index.js' %}" />
     <link rel="stylesheet" href="{% static '/css/styles.css' %}" />
     <link rel="icon" href="{% static 'images/UI/favicon1.ico' %}" />
-    <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <link rel="JavaScript" href="{% static '/js/index.js' %}" />
-    <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+
+
     <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
     <link rel="stylesheet" href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css">
@@ -21,17 +20,22 @@
     <script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 
 
+
+    <script type="" src="{% static 'js/index.js' %}" charset="utf-8"></script>
+
+    <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+
+
 </head>
 
 <body class="bBody">
 
     <!-- rgb(227, 254, 255); -->
-    <nav class="navbar navbar-fixed-top" style="background-color: rgba(227, 254, 255, 0.9); padding: 5px 0px; margin: 0px 0px; box-shadow: 2px 2px rgba(134, 133, 133, 0.1);">
+    <nav class="navbar navbar-fixed-top" style="background-color: rgb(227, 254, 255); padding: 5px 0px; margin: 0px 0px; box-shadow: 2px 2px rgba(134, 133, 133, 0.1);">
         <div class="container-fluid">
 
             <div class="navbar-header">
                 <a href="#" class="navbar-left">
-                    <!--<span class="glyphicon glyphicon-search"></span>-->
                     <img src="{% static 'images/UI/logo.png' %}" width="auto" height="50px">
                 </a>
             </div>
@@ -46,50 +50,61 @@
         </div>
     </nav>
 
-
-
     <div class="wrapper">
+
         <div class="sidebar">
             <ul class="ul1">
-                {% if check%}
+
+                <!-- Patient's sidebar -->
                 <li class="li1"><a href="{% url 'feed' %}"><i class="fas fa-home"></i>Home</a></li>
                 <li class="li1"><a href="{% url 'profile' %}"><i class="fas fa-user"></i>Profile</a></li>
                 <li><a href="{% url 'summary' %}"><i class="fas fa-laptop-medical"></i>Summary</a></li>
-                <li class="li1"><a href="#"><i class="glyphicon glyphicon-ok" style="padding-right: 9px;"></i>Trusted
-                        Contact</a></li>
+                <li class="li1"><a href="#"><i class="glyphicon glyphicon-ok" style="padding-right: 9px;"></i>Trusted Contact</a></li>
                 <li class="li1"><a href="#"><i class="fas fa-users"></i>View Connections</a></li>
                 <li class="li1"><a href="#"><i class="fas fa-address-book"></i>Contact Us</a></li>
-                {%endif%} {%if not check%}
+
+
                 <!-- Doctor's Sidebar  -->
                 <li class="li1"><a href="{% url 'feed' %}"><i class="fas fa-home"></i>Home</a></li>
                 <li class="li1"><a href="{% url 'profile' %}"><i class="fas fa-user"></i>Profile</a></li>
                 <li class="li1"><a href="#"><i class="fas fa-address-card"></i>About</a></li>
                 <li class="li1"><a href="#"><i class="fas fa-address-book"></i>Contact</a></li>
-                {%endif%}
             </ul>
-
         </div>
+    </div>
 
+    <!-- <div style="height: 500px;"></div> -->
+    {%block content%}
+    <div class="usableBody2">
+        <h2>Prescriptions:</h2>
+        <table class="table" id="prescriptions" style="background-color: rgba(227, 254, 255, 0.9);">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Doctor</th>
+                    <th scope="col">Hospital</th>
+                    <th scope="col">Label</th>
+                    <th scope="col">Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for prescription in prescriptions%}
+                <tr>
+                    <td scope="row">{{prescription.doctor}}</td>
+                    <td>{{prescription.hospital}}</td>
+                    <td>{{prescription.label}}</td>
+                    <td>{{prescription.date}}</td>
+                </tr>
+                {%endfor%} {%endblock%}
+            </tbody>
     </div>
 
 
-    <div class="usableBody">
-        {% block content%}
-        <h1 style="padding-left: 2%;">{{patient}}</h1>
-        <h4 style="padding-left: 2%;">D.O.B: {{patient.dob}}</h4>
+    <script>
+        $(document).ready(function() {
+            $('#prescriptions').dataTable();
+        });
+    </script>
 
-        <h1 style="padding-left: 38.6%; font-weight:600; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #00303f;">MEDICAL HISTORY</h1>
-        <img src="{% static 'images/UI/summary.png' %}" alt=" " class="summaryOfPatient">
-        <form id="form" action="/viewPrescription/" enctype="multipart/form-data" method="POST">
-            {%csrf_token%}
-            <button type="text" value="" style="margin-left: 35%;" class="viewButton">View Presciptions</button>
-        </form>
-        {%endblock%}
-
-        <!-- <form id="form" action="" enctype="multipart/form-data" method="POST">
-            <button name="report" type="text" value="report" class="viewButton" style="margin-left: 4%;">View Reports</button> 
-        </form> -->
-    </div>
 </body>
 
 </html>
