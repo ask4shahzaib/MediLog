@@ -245,7 +245,7 @@
 }
 
 .wrapper .sidebar {
-    width: 13%;
+    width: fit-content;
     height: 100%;
     background: rgba(227, 254, 255, 0.9);
     padding: 40px 0px;

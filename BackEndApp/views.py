@@ -4,11 +4,41 @@ from django.http.response import json
 from BackEndApp.models import Patient, Doctor, Laboratory, Hospital, Prescription
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from .forms import *
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .decorators import *
 import datetime
 from django.contrib.auth.models import Group, User
+
+
+def profile(request):
+    group = request.user.groups.all()
+    group = str(group[0])
+    id = request.user.username
+    person = ""
+    patient = False
+    if group == 'Patient':
+        patient = True
+        person = Patient.objects.filter(CNIC=id)
+        person = person[0]
+
+    if group == 'Doctor':
+        person = Doctor.objects.filter(license_No=id)
+        person = person[0]
+
+    if request.method == 'GET':
+        context = {'person': person, 'patient': patient}
+        return render(request, "BackEndApp/Profile.html", context)
+
+    elif request.method == 'POST':
+        form = PatientProfileForm(request.POST)
+        if form.is_valid():
+            form .save()
+        person = Patient.objects.filter(CNIC=id)
+        person = person[0]
+        context = {'person': person, 'patient': patient}
+        return render(request, "BackEndApp/Profile.html", context)
 
 
 @login_required(login_url='login')
@@ -119,7 +149,7 @@ def feed(request):
     if (group == 'Doctor'):
         doctor = Doctor.objects.get(license_No=id)
         context = {'doctor': doctor}
-        return render(request, 'BackEndApp/patient_home.html', context)
+        return render(request, 'BackEndApp/doctorHomePage.html', context)
 
     if (group == 'Hospital'):
         hospital = Hospital.objects.get(id=id)

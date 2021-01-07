@@ -8,7 +8,7 @@ urlpatterns = [
     path('feed/', views.feed, name='feed'),
     path('logout/', views.logoutUser, name='logout'),
     path('prescription/', views.prescription, name='prescription'),
-    # path('/profile', name='profile'),
+    path('profile/', views.profile, name='profile'),
 
     path('reset_password/',
          auth_views.PasswordResetView.as_view(

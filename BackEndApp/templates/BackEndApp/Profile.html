@@ -1,0 +1,119 @@
+{%load static%}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Patient Profile</title>
+
+    <link rel="stylesheet" href="{% static '/css/styles.css' %}" />
+    <link rel="icon" href="{% static 'images/UI/favicon1.ico' %}" />
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script type="" src="{% static 'js/index.js' %}" charset="utf-8"></script>
+    <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+
+
+</head>
+
+<body class="bBody">
+
+    <!-- rgb(227, 254, 255); -->
+    <nav class="navbar  navbar-fixed-top" style="background-color: rgb(227, 254, 255); padding: 5px 0px; margin: 0px 0px; box-shadow: 2px 2px rgba(134, 133, 133, 0.1);">
+        <div class="container-fluid">
+
+            <div class="navbar-header">
+                <a href="#" class="navbar-left">
+                    <img src="{% static 'images/UI/logo.png' %}" width="auto" height="50px">
+                </a>
+            </div>
+
+            <div class="collapse navbar-collapse navbar-right" id="navbarSupportedContent">
+
+                <ul class="nav navbar-nav float-left ml-auto">
+                    <li><a href="{% url 'logout' %}">Logout</span></a></li>
+                </ul>
+            </div>
+
+        </div>
+    </nav>
+    {%block content%}
+    <div class="wrapper">
+
+        <div class="sidebar">
+            <ul class="ul1">
+                {% if patient%}
+                <li class="li1"><a href="{% url 'feed' %}"><i class="fas fa-home"></i>Home</a></li>
+                <li class="li1"><a href="{% url 'profile' %}"><i class="fas fa-user"></i>Profile</a></li>
+                <li class="li1"><a href="#"><i class="glyphicon glyphicon-ok" style="padding-right: 9px;"></i>Trusted
+                        Contact</a></li>
+                <li class="li1"><a href="#"><i class="fas fa-users"></i>View Connections</a></li>
+                <li class="li1"><a href="#"><i class="fas fa-address-book"></i>Contact Us</a></li>
+                {%endif%} {%if not patient%}
+                <!-- Doctor's Sidebar  -->
+                <li class="li1"><a href="{% url 'feed' %}"><i class="fas fa-home"></i>Home</a></li>
+                <li class="li1"><a href="{% url 'profile' %}"><i class="fas fa-user"></i>Profile</a></li>
+                <li class="li1"><a href="#"><i class="fas fa-address-card"></i>About</a></li>
+                <li class="li1"><a href="#"><i class="fas fa-address-book"></i>Contact</a></li>
+                {%endif%}
+            </ul>
+        </div>
+    </div>
+
+    <div class="usableBody">
+
+        <img name="img" src={{person.photo.url}} alt="profile-img" class="prof-img">
+        <form action="/profile/" enctype="multipart/form-data" method="POST">
+            {%csrf_token%}
+            <div class="form-group" style="padding-top: 25px;">
+                <label for="name">First Name </label>
+                <input type="text" name="fName" class="form-control" value="{{person.fName}}" placeholder="First Name">
+                <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
+            </div>
+
+            <div class="form-group">
+                <label for="name">Last Name</label>
+                <input type="text" name="lName" class="form-control" value="{{person.lName}}" placeholder="Last Name">
+                <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
+            </div>
+
+            <div class="form-group">
+                <label for="exampleInputPassword1">Phone#</label>
+                <input type="phone" name="phone" class="form-control" value="{{person.phone}}" placeholder="03xx-xxxxxxx">
+            </div>
+
+
+            <div class="form-group">
+                <label for="exampleInputEmail1">Email address</label>
+                <input type="email" name="email" class="form-control" placeholder="Enter email" value={{person.email}}>
+                <small class="form-text text-muted">We'll never share your email with anyone else.</small>
+            </div>
+
+
+            <div class="form-group">
+                <label for="exampleInputEmail1">Address</label>
+                <input type="text" class="form-control" name="address" placeholder="House xy, ABC block, Faisal Town, Lahore" value="{{person.address}}">
+            </div>
+
+            <label class="form-label" for="customFile">Profile Picture</label>
+            <input type="file" name="photo" class="form-control" id="customFile" /><br>
+
+            <button type="submit" class="btn btn-primary">Update</button> {%endblock%}
+        </form>
+
+
+
+    </div>
+
+
+</body>
+
+</html>

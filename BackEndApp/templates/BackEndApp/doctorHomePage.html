@@ -1,100 +1,66 @@
+{%load static%}
 <!DOCTYPE html>
 <html>
 
 <head>
-  <title>Home Page - Doctor</title>
+    <title>Home Page - Doctor</title>
 
-  <link rel="JavaScript" href="login.js">
-  <link rel="stylesheet" href="css/styles.css">
-  <link rel="icon" href="images/favicon1.ico">
-  <link rel="preconnect" href="https://fonts.gstatic.com">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  <script type="" src='index.js' charset="utf-8"> </script>
-  <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+    <link rel="JavaScript" href="{% static '/js/index.js' %}" />
+    <link rel="stylesheet" href="{% static '/css/styles.css' %}" />
+    <link rel="icon" href="{% static 'images/UI/favicon1.ico' %}" />
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="JavaScript" href="{% static '/js/index.js' %}" />
+    <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
 
 
 </head>
 
 <body class="dHomeBody">
 
-  <!-- rgb(227, 254, 255); -->
-  <nav class="navbar navbar-light"
-    style="background-color: rgba(227, 254, 255, 0.9); padding: 5px 0px; margin: 0px 0px; box-shadow: 2px 2px rgba(134, 133, 133, 0.1);">
-    <div class="container-fluid">
+    <!-- rgb(227, 254, 255); -->
+    <nav class="navbar navbar-fixed-top" style="background-color: rgba(227, 254, 255, 0.9); padding: 5px 0px; margin: 0px 0px; box-shadow: 2px 2px rgba(134, 133, 133, 0.1);">
+        <div class="container-fluid">
 
-      <div class="navbar-header">
-        <a href="#" class="navbar-left">
-          <img src="images/logo.png" width="auto" height="50px"></a>
-      </div>
+            <div class="navbar-header">
+                <a href="#" class="navbar-left">
+                    <img src="{% static 'images/UI/logo.png' %}" width="auto" height="50px"></a>
+            </div>
 
-      <div class="collapse navbar-collapse navbar-right" id="navbarSupportedContent">
+            <div class="collapse navbar-collapse navbar-right" id="navbarSupportedContent">
 
-        <ul class="nav navbar-nav float-left ml-auto">
-          <li><a href="register.html">Logout</span></a></li>
-        </ul>
-      </div>
+                <ul class="nav navbar-nav float-left ml-auto">
+                    <li><a href="{% url 'logout' %}">Logout</span></a></li>
+                </ul>
+            </div>
 
-    </div>
-  </nav>
+        </div>
+    </nav>
 
-  <div class="wrapper">
-    <div class="sidebar">
-      <ul class="ul1">
-        <li class="li1"><a href="doctorHomePage.html"><i class="fas fa-home"></i>Home</a></li>
-        <li class="li1"><a href="#"><i class="fas fa-user"></i>Profile</a></li>
-        <li class="li1"><a href="#"><i class="fas fa-address-card"></i>About</a></li>
-        <li class="li1"><a href="#"><i class="fas fa-address-book"></i>Contact</a></li>
-      </ul>
-    </div>
+    <div class="wrapper">
+        <div class="sidebar">
+            <ul class="ul1">
+                <li class="li1"><a href="{% url 'feed' %}"><i class="fas fa-home"></i>Home</a></li>
+                <li class="li1"><a href="{% url 'profile' %}"><i class="fas fa-user"></i>Profile</a></li>
+                <li class="li1"><a href="#"><i class="fas fa-address-card"></i>About</a></li>
+                <li class="li1"><a href="#"><i class="fas fa-address-book"></i>Contact</a></li>
+            </ul>
+        </div>
 
-    <!-- Search  bar of doctor to search patient by CNIC -->
-    <div class="sBar">
-      <form action="">
-        <input type="text" class="form-control" placeholder="Search Patient - by CNIC">
-      </form>
-    </div>
+        <!-- Search  bar of doctor to search patient by CNIC -->
+        <div class="sBar">
+            <form action="">
+                <input type="text" class="form-control" placeholder="Search Patient - by CNIC">
+            </form>
+        </div>
 
-    <div class="sBtn">
-      <button class="btn" type="button">
+        <div class="sBtn">
+            <button class="btn" type="button">
         <i class="fa fa-search"></i>
       </button>
+        </div>
     </div>
-
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript">
-      google.charts.load('current', { 'packages': ['corechart'] });
-      google.charts.setOnLoadCallback(drawChart);
-
-      function drawChart() {
-        var data = google.visualization.arrayToDataTable([
-          ['Date', 'Visits to Doctor', 'Tests'],
-          ['01/01/2021', 2, 0],
-          ['02/01/2021', 1, 0],
-          ['02/01/2021', 0, 1],
-          ['04/01/2021', 1, 0]
-        ]);
-
-        var options = {
-          title: 'Medical History',
-          curveType: 'function',
-          legend: { position: 'bottom' },
-        };
-        var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
-        chart.draw(data, options);
-      }
-    </script>
-
-    <div id="curve_chart" style="width: 37%; 
-                                                  height: 49%; 
-                                                  position:absolute; 
-                                                  left: 60%; 
-                                                  top:44%; 
-                                                  opacity: 0.8; 
-                                                  box-shadow: 1.5px 1.5px 5px 5px rgba(102, 102, 102, 0.2);">
-    </div>
-
-  </div>
 
 </body>
 

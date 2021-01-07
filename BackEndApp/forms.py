@@ -11,4 +11,4 @@ from django.core.exceptions import ValidationError
 class PatientProfileForm(ModelForm):
     class Meta:
         model = Patient
-        fields = ['fName', 'lName', 'phone', 'address', 'email', 'photo']
+        fields = ['fName', 'lName', 'phone', 'address', 'email']
