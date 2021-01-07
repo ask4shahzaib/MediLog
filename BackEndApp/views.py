@@ -26,15 +26,16 @@ def doctorName(license):
     return doctor
 
 
-def patientLogin(request):
+def patientFeed(request, id):
+    patient = Patient.objects.get(CNIC=id)
     try:
         prescriptions = Prescription.objects.filter(
             patient=request.user.username).order_by('-date')
         license = prescriptions[0].doctor
         doctor = doctorName(license)
-        desc = prescriptions[0].description
+        label = prescriptions[0].label
         date = prescriptions[0].date
-        patient = Patient.objects.get(CNIC=id)
+
         prescriptions = prescriptions[0:3]
         for prescription in prescriptions:
             prescription.doctor = doctorName(prescription.doctor)
@@ -44,7 +45,7 @@ def patientLogin(request):
         start_date = datetime.datetime.strptime(
             start_date, '%Y-%m-%d').date()
         delta = timedelta(days=1)
-        i = 4
+        i = 7
         visits = 0
         visitcount = []
         while i > 0:
@@ -62,10 +63,16 @@ def patientLogin(request):
             return obj[0]
         visitcount.sort(key=first)
         visitcount = [['Date', 'Visits to Doctor', 'Tests']] + visitcount
-        print(visitcount)
-        context = {'patient': patient,
-                   'prescriptions': prescriptions, 'doctor': doctor, 'desc': desc, 'date': date, 'vis': json.dumps(visitcount)}
-        return render(request, 'BackEndApp/patientHomePage.html', context)
+    except:
+        visitcount = [['Date', 'Visits to Doctor',
+                       'Tests'], ['2020', 0, 0], ['2019', 0, 0]]
+        doctor = 'N/A'
+        date = 'N/A'
+        label = 'N/A'
+        prescriptions = None
+    context = {'patient': patient,
+               'prescriptions': prescriptions, 'doctor': doctor, 'label': label, 'date': date, 'vis': json.dumps(visitcount)}
+    return render(request, 'BackEndApp/patientHomePage.html', context)
 
 
 @login_required(login_url='login')
@@ -75,7 +82,7 @@ def feed(request):
     group = str(group[0])
     id = request.user.username
     if (group == 'Patient'):
-        return patientLogin(request)
+        return patientFeed(request, id)
 
     if (group == 'Laboratory'):
         lab = Laboratory.objects.get(id=id)

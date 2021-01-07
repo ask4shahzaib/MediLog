@@ -102,6 +102,7 @@ class Hospital(models.Model):
 
 class Prescription(models.Model):
     file = models.FileField(upload_to=prescriptions)
+    label = models.CharField(max_length=30, null=False)
     date = models.DateField()
     description = models.CharField(max_length=99999)
     patient = models.CharField(max_length=99)

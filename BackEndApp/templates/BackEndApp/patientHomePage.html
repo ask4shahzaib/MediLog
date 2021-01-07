@@ -62,7 +62,7 @@
 
                 <div class="lastAppointmentInfo">
                     <h4>Doctor : {{doctor}}</h4>
-                    <h4>Description : {{desc}}</h4>
+                    <h4>Label : {{label}}</h4>
                     <h4>Date : {{date}}</h4>
                 </div>
             </div>
@@ -97,6 +97,7 @@
                 function drawChart() {
                     var djangodata = JSON.parse('{{vis | safe}}');
                     var data = google.visualization.arrayToDataTable(djangodata);
+                    console.log(data)
                     var options = {
                         title: 'Medical History',
                         curveType: 'function',
@@ -126,7 +127,9 @@
             <meta name="viewport" content="width=device-width, initial-scale=1">
             <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
             <div class="w3-container listPresStyle">
-                <a href="{url 'details'}" "><h2>Prescriptions</h2></a>
+                <a href="{url 'details'}">
+                    <h2>Prescriptions</h2>
+                </a>
                 <ul class="w3-ul w3-card-4 ">
                     {% for prescription in prescriptions %}
                     <li class="w3-bar listBar ">
