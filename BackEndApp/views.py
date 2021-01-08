@@ -42,6 +42,8 @@ def viewPrescription(request):
         for prescription in prescriptions:
             prescription.doctor = doctorName(prescription.doctor)
             prescription.hospital = hospitalName(prescription.hospital)
+            if len(prescription.description) > 40:
+                prescription.description = prescription.description[0:40] + ' ...'
 
     context = {'prescriptions': prescriptions,
                'person': person, 'check': check, 'doctor': doctor}
@@ -149,8 +151,10 @@ def graphData(prescriptions):
         start_date, '%Y-%m-%d').date()
     delta = timedelta(days=1)
     visits = 0
+    i = 7
     visitcount = []
-    for i in range(7):
+    while i > 0:
+        visits = 0
         for prescription in prescriptions.iterator():
             if(prescription.date == start_date):
                 visits += 1
@@ -159,6 +163,8 @@ def graphData(prescriptions):
             start, '%Y-%m-%d').strftime("%d/%m/%Y")
         visitcount.append([str(temp), visits, 0])
         start_date -= delta
+        i -= 1
+    print(visitcount)
 
     def first(obj):
         return obj[0]
@@ -190,7 +196,7 @@ def patientFeed(request, id):
 
     except:
         visitcount = [['Date', 'Visits to Doctor',
-                       'Tests'], ['2020', 0, 0], ['2019', 0, 0]]
+                       'Tests'], ['2019', 0, 0], ['2020', 0, 0]]
         doctor = 'N/A'
         date = 'N/A'
         hospital = hospitalName(doctor)

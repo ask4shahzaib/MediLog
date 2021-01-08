@@ -91,7 +91,9 @@
                     <th scope="col">Doctor</th>
                     <th scope="col">Hospital</th>
                     <th scope="col">Label</th>
+                    <th scope="col">Description</th>
                     <th scope="col">Date</th>
+                    <th scope="col">Details</th>
                 </tr>
             </thead>
             <tbody>
@@ -100,7 +102,10 @@
                     <td scope="row">{{prescription.doctor}}</td>
                     <td>{{prescription.hospital}}</td>
                     <td>{{prescription.label}}</td>
+                    <td>{{prescription.description}}</td>
                     <td>{{prescription.date}}</td>
+                    <td>
+                        <button class="btn"><a href="{{prescription.file.url}}">View</a></button></td>
                 </tr>
                 {%endfor%} {%endblock%}
             </tbody>

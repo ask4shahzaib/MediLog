@@ -1,22 +1,18 @@
-const cnic = document.getElementById('cnic');
-const signUp = document.getElementById('form');
+function stringlength(inputtxt, minlength, maxlength) {
+  var field = inputtxt.value;
+  var mnlen = minlength;
+  var mxlen = maxlength;
 
-
-function myFunction() {
-  var x = document.getElementById("password");
-  if (x.type === "password") {
-    x.type = "text";
+  if (field.length < mnlen || field.length > mxlen) {
+    alert(
+      "Please input the userid between " +
+        mnlen +
+        " and " +
+        mxlen +
+        " characters"
+    );
+    return false;
   } else {
-    x.type = "password";
+    return true;
   }
 }
-
-form.addEventListener('transform', (e) => {
-  let messages = [];
-  e.presentDefault();
-  if(cnic.value.length != 13)
-  {
-    messages.push('CNIC must be 13 characters long');
-  }
-
-})
