@@ -13,6 +13,7 @@ from django.contrib.auth.models import Group, User
 
 
 @login_required(login_url='login')
+@allowed_users(allowed=['Patient', 'Doctor'])
 def viewPrescription(request):
     group = request.user.groups.all()
     group = str(group[0])
@@ -51,6 +52,7 @@ def viewPrescription(request):
 
 
 @login_required(login_url='login')
+@allowed_users(allowed=['Patient', 'Doctor'])
 def summary(request):
     group = request.user.groups.all()
     group = str(group[0])
@@ -164,7 +166,6 @@ def graphData(prescriptions):
         visitcount.append([str(temp), visits, 0])
         start_date -= delta
         i -= 1
-    print(visitcount)
 
     def first(obj):
         return obj[0]
