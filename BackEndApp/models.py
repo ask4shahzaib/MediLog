@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from MediLog.settings import BASE_DIR
 from django.db import models
 from django.core.validators import MinLengthValidator
-from django.db.models.deletion import CASCADE, DO_NOTHING
+from django.db.models.deletion import CASCADE
 
 
 # Create your models here.
