@@ -83,11 +83,14 @@ DATABASES = {
     }
 }
 '''
+
+
 DATABASES = {
     'default': {
         'ENGINE': 'djongo',
         'NAME': 'MediLogDB',
         'Enforce_Schema': True,
+        # 'USER': 'root',
     }
 }
 
