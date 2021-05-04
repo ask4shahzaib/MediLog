@@ -1,7 +1,7 @@
 from datetime import timedelta, datetime
 from django.core.exceptions import ObjectDoesNotExist
 from django.http.response import json
-from BackEndApp.models import LabReport, Patient, Doctor, Laboratory, Hospital, Prescription, prescriptions
+from BackEndApp.models import LabReport, Patient, Doctor, Laboratory, Hospital, Prescription, prescriptions, reports
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from .forms import *
@@ -14,7 +14,7 @@ from django.contrib.auth.models import Group, User
 
 @login_required(login_url='login')
 @allowed_users(allowed=['Patient', 'Doctor'])
-def viewPrescription(request):
+def viewAllRecords(request):
     group = request.user.groups.all()
     group = str(group[0])
     check = False
@@ -39,16 +39,26 @@ def viewPrescription(request):
         prescriptions = Prescription.objects.filter(patient=person.CNIC)
     except:
         prescriptions = None
+    try:
+        reports = LabReport.objects.filter(patient=person.CNIC)
+    except:
+        reports = None
     if prescriptions is not None:
         for prescription in prescriptions:
             prescription.doctor = doctorName(prescription.doctor)
             prescription.hospital = hospitalName(prescription.hospital)
             if len(prescription.description) > 40:
                 prescription.description = prescription.description[0:40] + ' ...'
+    if reports is not None:
+        for report in reports:
+            if report.doctor is not None:
+                report.doctor = doctorName(report.doctor)
+            if len(report.description) > 40:
+                report.description = report.description[0:40]+' ...'
 
-    context = {'prescriptions': prescriptions,
+    context = {'prescriptions': prescriptions, 'reports': reports,
                'person': person, 'check': check, 'doctor': doctor}
-    return render(request, "BackEndApp/prescriptions.html", context)
+    return render(request, "BackEndApp/allRecords.html", context)
 
 
 @login_required(login_url='login')
@@ -145,19 +155,6 @@ def hospitalName(id):
     return hospital
 
 
-def labName(id):
-    try:
-        laboratory = Laboratory.objects.filter(license_No=id)
-        laboratory = laboratory[0]
-        laboratory = laboratory.name
-        if len(laboratory) > 18:
-            laboratory = laboratory[0:18]
-            laboratory = laboratory + '...'
-    except:
-        laboratory = "N/A"
-    return laboratory
-
-
 def graphData(prescriptions, reports):
     start_date = datetime.datetime.today()
     start_date = str(start_date).split(' ')[0]
@@ -222,9 +219,14 @@ def patientFeed(request, id):
     if prescriptions:
         prescriptions = prescriptions[0:3]
         for prescription in prescriptions:
-            prescription.doctor = doctorName(prescription.doctor)
-    else:
-        prescriptions = None
+            prescription.label = prescription.label[0:12]
+            prescription.doctor = doctorName(prescription.doctor)[0:15]
+
+    if reports:
+        reports = reports[0:3]
+        for report in reports:
+            report.label = report.label[0:12]
+            report.laboratory = report.laboratory[0:15]
 
     context = {'patient': patient,
                'prescriptions': prescriptions, 'reports': reports, 'doctor': doctor, 'hospital': hospital,
@@ -316,17 +318,22 @@ def addLabReport(request):
     if request.method == "POST" and request.FILES['file']:
         file = request.FILES['file']
         patient = request.POST.get('patient')
+        doctor = None
         try:
             Patient.objects.get(CNIC=patient)
         except:
             messages.error(request, "Incorrect Patient CNIC")
             return redirect('addLabReport')
+        try:
+            doctor = request.POST.get('doctor')
+        except:
+            doctor = "Self"
         label = request.POST.get('label')
         description = request.POST.get('description')
         date = request.POST.get('date')
         date = datetime.datetime.strptime(
             date, '%Y-%m-%d').strftime("%Y-%m-%d")
-        x = LabReport(file=file, date=date, description=description,
+        x = LabReport(file=file, date=date, doctor=doctor, description=description,
                       patient=patient, label=label, laboratory=laboratory.name)
         x.save()
     context = {'laboratory': laboratory}

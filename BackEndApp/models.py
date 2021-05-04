@@ -122,6 +122,7 @@ class LabReport(models.Model):
     file = models.FileField(upload_to=reports)
     label = models.CharField(max_length=30, null=False)
     date = models.DateField()
+    doctor = models.CharField(max_length=99)
     description = models.CharField(max_length=99999)
     patient = models.CharField(max_length=99)
     laboratory = models.CharField(max_length=99)
