@@ -4,3 +4,9 @@ static/images/patient_profile
 static/images/prescriptions
 static/images/reports
 static/images/profile
+static/images/profile
+.idea/
+.mypy_cache/
+.vscode/
+mydatabase/
+mysite/
