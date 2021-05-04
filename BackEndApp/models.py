@@ -25,6 +25,10 @@ def prescriptions(instance, filename):
     return os.path.join(BASE_DIR, 'static/images/prescriptions', filename)
 
 
+def reports(instance, filename):
+    return os.path.join(BASE_DIR, 'static/images/reports', filename)
+
+
 class Patient(models.Model):
     user = models.ForeignKey(User, null=False, on_delete=CASCADE)
     CNIC = models.CharField(max_length=13, primary_key=True)
@@ -76,9 +80,9 @@ class Doctor(models.Model):
 
 class Laboratory(models.Model):
     user = models.ForeignKey(User, null=False, on_delete=CASCADE)
-    id = models.CharField(max_length=20, primary_key=True)
+    id = models.CharField(max_length=20)
     name = models.CharField(max_length=999)
-    license_No = models.CharField(max_length=10)
+    license_No = models.CharField(max_length=10, primary_key=True)
     branch_code = models.IntegerField()
     verification = True
     objects = models.Manager()
@@ -89,9 +93,9 @@ class Laboratory(models.Model):
 
 class Hospital(models.Model):
     user = models.ForeignKey(User, null=False, on_delete=CASCADE)
-    id = models.CharField(max_length=20, primary_key=True)
+    id = models.CharField(max_length=20)
     name = models.CharField(max_length=999)
-    license_No = models.CharField(max_length=10)
+    license_No = models.CharField(max_length=10, primary_key=True)
     branch_code = models.IntegerField()
     verification = True
     objects = models.Manager()
@@ -108,6 +112,19 @@ class Prescription(models.Model):
     patient = models.CharField(max_length=99)
     doctor = models.CharField(max_length=99)
     hospital = models.CharField(max_length=99)
+    objects = models.Manager()
+
+    def __str__(self):
+        return self.description
+
+
+class LabReport(models.Model):
+    file = models.FileField(upload_to=reports)
+    label = models.CharField(max_length=30, null=False)
+    date = models.DateField()
+    description = models.CharField(max_length=99999)
+    patient = models.CharField(max_length=99)
+    laboratory = models.CharField(max_length=99)
     objects = models.Manager()
 
     def __str__(self):

@@ -1,7 +1,7 @@
 from datetime import timedelta, datetime
 from django.core.exceptions import ObjectDoesNotExist
 from django.http.response import json
-from BackEndApp.models import Patient, Doctor, Laboratory, Hospital, Prescription, prescriptions
+from BackEndApp.models import LabReport, Patient, Doctor, Laboratory, Hospital, Prescription, prescriptions
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from .forms import *
@@ -10,9 +10,6 @@ from django.contrib.auth.decorators import login_required
 from .decorators import *
 import datetime
 from django.contrib.auth.models import Group, User
-
-# lkjhgfdsdfghjkl;
-# hello usama i am testing
 
 
 @login_required(login_url='login')
@@ -110,7 +107,7 @@ def profile(request):
     elif request.method == 'POST':
         form = PatientProfileForm(request.POST)
         if form.is_valid():
-            form .save()
+            form.save()
         person = Patient.objects.filter(CNIC=id)
         person = person[0]
         context = {'person': person, 'patient': patient}
@@ -126,10 +123,10 @@ def doctorName(license):
     try:
         doctor = Doctor.objects.filter(license_No=license)
         doctor = doctor[0]
-        doctor = doctor.fName+" "+doctor.lName
+        doctor = doctor.fName + " " + doctor.lName
         if len(doctor) > 19:
             doctor = doctor[0:19]
-            doctor = doctor+' ...'
+            doctor = doctor + ' ...'
     except:
         doctor = "N/A"
     return doctor
@@ -142,36 +139,54 @@ def hospitalName(id):
         hospital = hospital.name
         if len(hospital) > 18:
             hospital = hospital[0:18]
-            hospital = hospital+'...'
+            hospital = hospital + '...'
     except:
         hospital = "N/A"
     return hospital
 
 
-def graphData(prescriptions):
+def labName(id):
+    try:
+        laboratory = Laboratory.objects.filter(license_No=id)
+        laboratory = laboratory[0]
+        laboratory = laboratory.name
+        if len(laboratory) > 18:
+            laboratory = laboratory[0:18]
+            laboratory = laboratory + '...'
+    except:
+        laboratory = "N/A"
+    return laboratory
+
+
+def graphData(prescriptions, reports):
     start_date = datetime.datetime.today()
     start_date = str(start_date).split(' ')[0]
     start_date = str(start_date)
     start_date = datetime.datetime.strptime(
         start_date, '%Y-%m-%d').date()
     delta = timedelta(days=1)
-    visits = 0
     i = 7
     visitcount = []
     while i > 0:
-        visits = 0
-        for prescription in prescriptions.iterator():
-            if(prescription.date == start_date):
-                visits += 1
+        doctor, lab = 0, 0
+        if prescriptions:
+            for prescription in prescriptions.iterator():
+                if prescription.date == start_date:
+                    doctor += 1
+        if reports:
+            for report in reports.iterator():
+                if report.date == start_date:
+                    lab += 1
         start = str(start_date)
         temp = datetime.datetime.strptime(
             start, '%Y-%m-%d').strftime("%d/%m/%Y")
-        visitcount.append([str(temp), visits, 0])
+        visitcount.append([str(temp), doctor, lab])
         start_date -= delta
         i -= 1
 
     def first(obj):
         return obj[0]
+
     visitcount.sort(key=first)
     visitcount = [['Date', 'Visits to Doctor', 'Tests']] + visitcount
     return visitcount
@@ -180,34 +195,45 @@ def graphData(prescriptions):
 @login_required(login_url='login')
 def patientFeed(request, id):
     patient = Patient.objects.get(CNIC=id)
+    prescriptions, reports = [], []
     try:
         prescriptions = Prescription.objects.filter(
             patient=request.user.username).order_by('-date')
-
-        visitcount = graphData(prescriptions)
-
-        license = prescriptions[0].doctor
-        doctor = doctorName(license)
-
-        hospital = prescriptions[0].hospital
-        hospital = hospitalName(hospital)
-
+        doctor = doctorName(prescriptions[0].doctor)
+        hospital = hospitalName(prescriptions[0].hospital)
         date = prescriptions[0].date
+    except:
+        prescriptions = None
+        doctor = 'N/A'
+        hospital = 'N/A'
+        date = 'N/A'
 
+    try:
+        reports = LabReport.objects.filter(
+            patient=request.user.username).order_by('-date')
+        laboratory = reports[0].laboratory
+        label = reports[0].label
+        labDate = reports[0].date
+
+    except:
+        reports = None
+        laboratory = 'N/A'
+        label = 'N/A'
+        labDate = 'N/A'
+
+    visitcount = graphData(prescriptions, reports)
+
+    if prescriptions:
         prescriptions = prescriptions[0:3]
         for prescription in prescriptions:
             prescription.doctor = doctorName(prescription.doctor)
-
-    except:
-        visitcount = [['Date', 'Visits to Doctor',
-                       'Tests'], ['2019', 0, 0], ['2020', 0, 0]]
-        doctor = 'N/A'
-        date = 'N/A'
-        hospital = hospitalName(doctor)
+    else:
         prescriptions = None
 
     context = {'patient': patient,
-               'prescriptions': prescriptions, 'doctor': doctor, 'hospital': hospital, 'date': date, 'vis': json.dumps(visitcount)}
+               'prescriptions': prescriptions, 'reports': reports, 'doctor': doctor, 'hospital': hospital,
+               'date': date, 'laboratory': laboratory, 'label': label,
+               'labDate': labDate, 'vis': json.dumps(visitcount)}
 
     return render(request, 'BackEndApp/patientHomePage.html', context)
 
@@ -218,25 +244,25 @@ def feed(request):
     group = request.user.groups.all()
     group = str(group[0])
     id = request.user.username
-    if (group == 'Patient'):
+    if group == 'Patient':
         return patientFeed(request, id)
 
-    if (group == 'Laboratory'):
-        lab = Laboratory.objects.get(id=id)
-        context = {'lab': lab}
-        return render(request, 'BackEndApp/lab_home.html', context)
+    if group == 'Laboratory':
+        laboratory = Laboratory.objects.get(id=id)
+        context = {'laboratory': laboratory}
+        return render(request, 'BackEndApp/labHomePage.html', context)
 
-    if (group == 'Doctor'):
+    if group == 'Doctor':
         doctor = Doctor.objects.get(license_No=id)
         context = {'doctor': doctor}
         return render(request, 'BackEndApp/doctorHomePage.html', context)
 
-    if (group == 'Hospital'):
+    if group == 'Hospital':
         hospital = Hospital.objects.get(id=id)
         context = {'hospital': hospital}
         return render(request, 'BackEndApp/hospitalHomePage.html', context)
 
-    if (group == 'Management'):
+    if group == 'Management':
         context = {'user': request.user}
         return render(request, 'BackEndApp/management_home.html', context)
 
@@ -288,6 +314,29 @@ def addPrescription(request):
     return render(request, 'BackEndApp/hospitalHomePage.html', context)
 
 
+@allowed_users(allowed=['Laboratory'])
+def addLabReport(request):
+    laboratory = Laboratory.objects.get(id=request.user.username)
+    if request.method == "POST" and request.FILES['file']:
+        file = request.FILES['file']
+        patient = request.POST.get('patient')
+        try:
+            Patient.objects.get(CNIC=patient)
+        except:
+            messages.error(request, "Incorrect Patient CNIC")
+            return redirect('addLabReport')
+        label = request.POST.get('label')
+        description = request.POST.get('description')
+        date = request.POST.get('date')
+        date = datetime.datetime.strptime(
+            date, '%Y-%m-%d').strftime("%Y-%m-%d")
+        x = LabReport(file=file, date=date, description=description,
+                      patient=patient, label=label, laboratory=laboratory.name)
+        x.save()
+    context = {'laboratory': laboratory}
+    return render(request, 'BackEndApp/labHomePage.html', context)
+
+
 @login_required(login_url='login')
 def logoutUser(request):
     logout(request)
@@ -296,16 +345,17 @@ def logoutUser(request):
 
 @unauthenticated_user
 def register(request):
+    verification = False
     if request.method == 'POST':
         group = request.user.groups.all()
         try:
             group = str(group[0])
         except:
             group = 'Patient'
-        if group == 'Patient':
-            verification = False
-        else:
+
+        if group == 'Admin':
             verification = True
+
         cnic = request.POST['cnic']
         password = request.POST['password']
         fname = request.POST['fname']
@@ -335,7 +385,8 @@ def register(request):
             x.groups.add(group)
             if photo != None:
                 z = Patient(CNIC=cnic, fName=fname, lName=lname,
-                            dob=dob, phone=phone, address=address, email=email, photo=photo, user=x, verification=verification)
+                            dob=dob, phone=phone, address=address, email=email, photo=photo, user=x,
+                            verification=verification)
                 z.save()
             else:
                 z = Patient(CNIC=cnic, fName=fname, lName=lname,
