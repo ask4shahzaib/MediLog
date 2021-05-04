@@ -180,14 +180,10 @@ def graphData(prescriptions, reports):
         start = str(start_date)
         temp = datetime.datetime.strptime(
             start, '%Y-%m-%d').strftime("%d/%m/%Y")
-        visitcount.append([str(temp), doctor, lab])
+        visitcount.insert(len(visitcount), [str(temp), doctor, lab])
         start_date -= delta
         i -= 1
 
-    def first(obj):
-        return obj[0]
-
-    visitcount.sort(key=first)
     visitcount = [['Date', 'Visits to Doctor', 'Tests']] + visitcount
     return visitcount
 
