@@ -93,8 +93,8 @@
         <!--  <form id="form" action="/viewReport/" enctype="multipart/form-data" method="POST">
             {%csrf_token%}
             <button type="text" name="cnic" value="{{patient.CNIC}}" style="margin-left: 4%; margin-top:27%;" class="addButtonHosp">View Reports</button>
-        </form>
-        {%endif%}-->{%if not check%}
+        </form>   -->
+        {%endif%}{%if not check%}
         <form id="form" action="/viewAllRecords/" enctype="multipart/form-data" method="POST">
             {%csrf_token%}
             <button type="text" name="cnic" value="{{patient.CNIC}}" style="margin-left: 37%; margin-top:27%;" class="addButtonHosp">View All Records</button>

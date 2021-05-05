@@ -66,34 +66,43 @@ def viewAllRecords(request):
 @login_required(login_url='login')
 @allowed_users(allowed=['Patient', 'Doctor'])
 def summary(request):
-    group = request.user.groups.all()
-    group = str(group[0])
-    check = False
-
-    if group == 'Patient':
-        check = True
-
-    if check == True:
-        patient = Patient.objects.filter(CNIC=request.user.username)
-        patient = patient[0]
-        context = {'patient': patient, 'check': check}
+    if request.method == "GET":
+        patient = Patient.objects.get(CNIC=request.user.username)
+        context = {'patient': patient, 'check': True}
         return render(request, "BackEndApp/summary.html", context)
 
-    if request.method == 'POST':
+    else:
         id = request.POST['cnic']
-        patient = ""
+        patient = None
         try:
-            patient = Patient.objects.filter(CNIC=id)
-            patient = patient[0]
+            patient = Patient.objects.get(CNIC=id)
         except:
             messages.error(request, "Patient not found")
             return redirect('feed')
-        doctor = Doctor.objects.filter(license_No=request.user.username)
-        doctor = doctor[0]
-        context = {'patient': patient, 'doctor': doctor, 'check': check}
+        doctor = Doctor.objects.get(license_No=request.user.username)
+        context = {'patient': patient, 'doctor': doctor, 'check': False}
         return render(request, "BackEndApp/summary.html", context)
+
+
+@login_required(login_url='login')
+@allowed_users(allowed=['Patient', 'Doctor'])
+def timeline(request):
+    if request.method == "GET":
+        patient = Patient.objects.get(CNIC=request.user.username)
+        context = {'patient': patient, 'check': True}
+        return render(request, "BackEndApp/summary.html", context)
+
     else:
-        return redirect('feed')
+        id = request.POST['cnic']
+        patient = None
+        try:
+            patient = Patient.objects.get(CNIC=id)
+        except:
+            messages.error(request, "Patient not found")
+            return redirect('feed')
+        doctor = Doctor.objects.get(license_No=request.user.username)
+        context = {'patient': patient, 'doctor': doctor, 'check': False}
+        return render(request, "BackEndApp/summary.html", context)
 
 
 @login_required(login_url='login')
@@ -218,10 +227,10 @@ def patientFeed(request, id):
     try:
         patient = Patient.objects.get(CNIC=id)
     except:
-        u = User.objects.get(username = request.user.username)
+        u = User.objects.get(username=request.user.username)
         u.delete()
-        messages.error(request,"No User Found")
-        return redirect ('login')
+        messages.error(request, "No User Found")
+        return redirect('login')
     prescriptions, reports = [], []
     try:
         prescriptions = Prescription.objects.filter(
