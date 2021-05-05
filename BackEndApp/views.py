@@ -215,7 +215,13 @@ def graphData(prescriptions, reports):
 
 @login_required(login_url='login')
 def patientFeed(request, id):
-    patient = Patient.objects.get(CNIC=id)
+    try:
+        patient = Patient.objects.get(CNIC=id)
+    except:
+        u = User.objects.get(username = request.user.username)
+        u.delete()
+        messages.error(request,"No User Found")
+        return redirect ('login')
     prescriptions, reports = [], []
     try:
         prescriptions = Prescription.objects.filter(
@@ -387,7 +393,7 @@ def register(request):
             verification = True
         else:
             if request.user.is_authenticated:
-                redirect('feed')
+                return redirect('feed')
 
         cnic = request.POST['cnic']
         password = request.POST['password']
@@ -416,7 +422,6 @@ def register(request):
                 group.save()
                 group = Group.objects.get(name='Patient')
             x.groups.add(group)
-            # if photo != None:
             z = Patient(CNIC=cnic, fName=fname, lName=lname,
                         dob=dob, phone=phone, address=address, email=email, photo=photo, user=x,
                         verification=verification)
@@ -428,4 +433,6 @@ def register(request):
                 request, "Already a patient found with same CNIC")
             return redirect('register')
     else:
+        if request.user.is_authenticated:
+            return redirect('feed')
         return render(request, 'BackEndApp/register.html')
