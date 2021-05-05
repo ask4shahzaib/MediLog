@@ -129,7 +129,7 @@ def profile(request):
             address = person.address
         try:
             photo = request.FILES['photo']
-            os.remove(person.photo.name)
+            path = person.photo.name
         except:
             photo = person.photo
         if group == 'Patient':
@@ -139,6 +139,7 @@ def profile(request):
             person.email = email
             person.address = address
             person.save()
+            os.remove(path)
         elif group == 'Doctor':
             person = Doctor.objects.get(CNIC=id)
             person.phone = phone
@@ -146,11 +147,8 @@ def profile(request):
             person.email = email
             person.address = address
             person.save()
-        '''
-        form = PatientProfileForm(request.POST)
-        if form.is_valid():
-            form.save()
-            '''
+            os.remove(path)
+
         context = {'person': person, 'patient': patient}
         return render(request, "BackEndApp/Profile.html", context)
 
