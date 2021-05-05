@@ -1,0 +1,87 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Home Page</title>
+
+    <link rel="JavaScript" href="{% static '/js/index.js' %}" />
+    <link rel="stylesheet" href="{% static '/css/styles.css' %}" />
+    <link rel="icon" href="{% static 'images/UI/favicon1.ico' %}" />
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script type="text/script" src="{% static '/js/index.js' %}" charset="utf-8"></script>
+    <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+
+
+</head>
+
+<body class="bBody">
+
+    <!-- rgb(227, 254, 255); -->
+    <nav class="navbar  navbar-fixed-top" style="background-color: rgb(227, 254, 255); padding: 5px 0px; margin: 0px 0px; box-shadow: 2px 2px rgba(134, 133, 133, 0.1);">
+        <div class="container-fluid">
+
+            <div class="navbar-header">
+                <a href="#" class="navbar-left">
+                    <!--<span class="glyphicon glyphicon-search"></span>-->
+                    <img src="{% static 'images/UI/logo.png' %}" width="auto" height="50px">
+                </a>
+            </div>
+
+            <div class="collapse navbar-collapse navbar-right" id="navbarSupportedContent">
+
+                <ul class="nav navbar-nav float-left ml-auto">
+                    {%block content%}
+                    <li style="margin-top: 15px;">Hello, {{laboratory}}</li>
+                    <li><a href="{% url 'logout' %}">Logout <i class="fas fa-sign-out-alt"></i></span></a></li>
+                    {%endblock%}
+                </ul>
+            </div>
+
+        </div>
+    </nav>
+
+
+
+    <div class="wrapper">
+        <div class="sidebar">
+            <ul>
+                <li><a href="{% url 'feed' %}"><i class="fas fa-home"></i>Home</a></li>
+                <li><a href="#"><i class="fas fa-address-card"></i>About</a></li>
+                <li><a href="#"><i class="fas fa-address-book"></i>Contact</a></li>
+            </ul>
+
+        </div>
+
+        <div class="hospAddRecord">
+            <form action="/addLabReport/" enctype="multipart/form-data" method="POST">
+                {%csrf_token%}
+                <label class="animateCnicOnHosp">
+                    <input type="text" name="patient" required>
+                    <div class="label-text">Patient's CNIC</div>
+                </label>
+                <label class="animateCnicOnHosp">
+                    <input type="text" name="doctor" >
+                    <div class="label-text">Doctor's License</div>
+                </label>
+                <label class="animateCnicOnHosp" style="padding-top: 10%;">
+                    <input type="text" name="label" required>
+                    <div class="label-text">Label</div>
+                </label>
+                <label class="animateCnicOnHosp" style="padding-top: 10%;">
+                    <input type="text" name="description" required>
+                    <div class="label-text">Description</div>
+                </label>
+                <label class="animateCnicOnHosp" style="padding-top: 10%;">
+                    <input name="date" type="text" onfocus="(this.type='date')" onfocusout="(this.type='text')" />
+                    <div class="label-text">Date</div>
+                </label>
+                <input type="file" id="prescription" name="file" style="padding-left: 25%; padding-top: 3%;" accept="Application/pdf, image/*" multiple required>
+                <button type="submit" value="submit" class="addButtonHosp">Add</button>
+            </form>
+        </div>
+</body>
+
+</html>
