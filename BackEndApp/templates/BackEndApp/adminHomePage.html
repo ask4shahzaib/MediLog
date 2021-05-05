@@ -58,7 +58,7 @@
     <div class="usableBody" style="box-shadow: 0px 0px 0px 0px rgba(199, 199, 199, 0.2); border-radius: 0px; background-color:transparent;">
         <div class="createAccount" style="left: 4%;">
             <div>
-                <form id="form" action="/register/" enctype="multipart/form-data" method="POST">
+                <form action="/register/" enctype="multipart/form-data" method="POST">
                     {%csrf_token%}
                     <div class="label-text" style="padding-left: 6%;">
                         <h2 text-align: center>Create Patient's Account</h2>
@@ -126,7 +126,7 @@
                           />
                         </div> </label<br>
 
-                    <button class="signUp-btn" type="" value="">Create Account</button>
+                    <button class="signUp-btn" type="submit" value="submit">Create Account</button>
                 </form>
 
             </div>

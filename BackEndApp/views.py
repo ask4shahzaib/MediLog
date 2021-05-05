@@ -372,7 +372,6 @@ def logoutUser(request):
     return redirect('login')
 
 
-@unauthenticated_user
 def register(request):
     verification = False
     if request.method == 'POST':
@@ -384,6 +383,9 @@ def register(request):
 
         if group == 'Admin':
             verification = True
+        else:
+            if request.user.is_authenticated:
+                logout(request)
 
         cnic = request.POST['cnic']
         password = request.POST['password']
