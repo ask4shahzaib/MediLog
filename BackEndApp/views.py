@@ -387,7 +387,7 @@ def register(request):
             verification = True
         else:
             if request.user.is_authenticated:
-                logout(request)
+                redirect('feed')
 
         cnic = request.POST['cnic']
         password = request.POST['password']
