@@ -1,6 +1,5 @@
 import os
-from collections import namedtuple
-from datetime import timedelta, datetime
+from datetime import timedelta
 from django.core.exceptions import ObjectDoesNotExist
 from django.http.response import json
 from BackEndApp.models import LabReport, Patient, Doctor, Laboratory, Hospital, Prescription, prescriptions, reports
