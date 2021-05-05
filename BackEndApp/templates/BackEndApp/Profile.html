@@ -76,25 +76,25 @@
             {%csrf_token%}
             <div class="form-group" style="padding-top: 25px;">
                 <label for="name">First Name </label>
-                <input type="text" name="fName" class="form-control" value="{{person.fName}}" placeholder="First Name">
+                <input type="text" name="fName" class="form-control" value="{{person.fName}}" placeholder="First Name" readonly>
                 <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
             </div>
 
             <div class="form-group">
                 <label for="name">Last Name</label>
-                <input type="text" name="lName" class="form-control" value="{{person.lName}}" placeholder="Last Name">
+                <input type="text" name="lName" class="form-control" value="{{person.lName}}" placeholder="Last Name" readonly>
                 <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
             </div>
 
             <div class="form-group">
                 <label for="exampleInputPassword1">Phone#</label>
-                <input type="phone" name="phone" class="form-control" value="{{person.phone}}" placeholder="03xx-xxxxxxx">
+                <input type="text" name="phone" class="form-control" value="{{person.phone}}" placeholder="03xx-xxxxxxx">
             </div>
 
 
             <div class="form-group">
                 <label for="exampleInputEmail1">Email address</label>
-                <input type="email" name="email" class="form-control" placeholder="Enter email" value={{person.email}}>
+                <input type="text" name="email" class="form-control" placeholder="Enter email" value={{person.email}}>
                 <small class="form-text text-muted">We'll never share your email with anyone else.</small>
             </div>
 
@@ -105,7 +105,7 @@
             </div>
 
             <label class="form-label" for="customFile">Profile Picture</label>
-            <input type="file" name="photo" class="form-control" id="customFile" /><br>
+            <input type="file" name="photo" class="form-control" accept="Application/pdf, image/*" id="customFile" /><br>
 
             <button type="submit" class="btn btn-primary">Update</button> {%endblock%}
         </form>

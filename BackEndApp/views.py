@@ -1,3 +1,5 @@
+import os
+from collections import namedtuple
 from datetime import timedelta, datetime
 from django.core.exceptions import ObjectDoesNotExist
 from django.http.response import json
@@ -103,23 +105,52 @@ def profile(request):
     patient = False
     if group == 'Patient':
         patient = True
-        person = Patient.objects.filter(CNIC=id)
-        person = person[0]
+        person = Patient.objects.get(CNIC=id)
 
     if group == 'Doctor':
-        person = Doctor.objects.filter(license_No=id)
-        person = person[0]
+        person = Doctor.objects.get(license_No=id)
 
     if request.method == 'GET':
         context = {'person': person, 'patient': patient}
         return render(request, "BackEndApp/Profile.html", context)
 
     elif request.method == 'POST':
+        try:
+            phone = request.POST.get('phone')
+        except:
+            phone = patient.phone
+        try:
+            email = request.POST.get('email')
+        except:
+            email = person.email
+        try:
+            address = request.POST.get('address')
+        except:
+            address = person.address
+        try:
+            photo = request.FILES['photo']
+            os.remove(person.photo.name)
+        except:
+            photo = person.photo
+        if group == 'Patient':
+            person = Patient.objects.get(CNIC=id)
+            person.phone = phone
+            person.photo = photo
+            person.email = email
+            person.address = address
+            person.save()
+        elif group == 'Doctor':
+            person = Doctor.objects.get(CNIC=id)
+            person.phone = phone
+            person.photo = photo
+            person.email = email
+            person.address = address
+            person.save()
+        '''
         form = PatientProfileForm(request.POST)
         if form.is_valid():
             form.save()
-        person = Patient.objects.filter(CNIC=id)
-        person = person[0]
+            '''
         context = {'person': person, 'patient': patient}
         return render(request, "BackEndApp/Profile.html", context)
 
