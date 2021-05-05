@@ -1,4 +1,5 @@
 import os
+from collections import namedtuple
 from datetime import timedelta
 from django.core.exceptions import ObjectDoesNotExist
 from django.http.response import json
@@ -138,7 +139,6 @@ def profile(request):
             person.email = email
             person.address = address
             person.save()
-            os.remove(path)
         elif group == 'Doctor':
             person = Doctor.objects.get(CNIC=id)
             person.phone = phone
@@ -146,8 +146,8 @@ def profile(request):
             person.email = email
             person.address = address
             person.save()
-            os.remove(path)
 
+        os.remove(path)
         context = {'person': person, 'patient': patient}
         return render(request, "BackEndApp/Profile.html", context)
 
@@ -265,7 +265,7 @@ def patientFeed(request, id):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed=['Patient', 'Laboratory', 'Management', 'Doctor', 'Hospital'])
+@allowed_users(allowed=['Patient', 'Laboratory', 'Admin', 'Doctor', 'Hospital'])
 def feed(request):
     group = request.user.groups.all()
     group = str(group[0])
@@ -288,9 +288,9 @@ def feed(request):
         context = {'hospital': hospital}
         return render(request, 'BackEndApp/hospitalHomePage.html', context)
 
-    if group == 'Management':
+    if group == 'Admin':
         context = {'user': request.user}
-        return render(request, 'BackEndApp/management_home.html', context)
+        return render(request, 'BackEndApp/adminHomePage.html', context)
 
 
 @unauthenticated_user
@@ -374,7 +374,6 @@ def logoutUser(request):
     return redirect('login')
 
 
-@unauthenticated_user
 def register(request):
     verification = False
     if request.method == 'POST':
@@ -386,6 +385,9 @@ def register(request):
 
         if group == 'Admin':
             verification = True
+        else:
+            if request.user.is_authenticated:
+                logout(request)
 
         cnic = request.POST['cnic']
         password = request.POST['password']
@@ -414,15 +416,11 @@ def register(request):
                 group.save()
                 group = Group.objects.get(name='Patient')
             x.groups.add(group)
-            if photo != None:
-                z = Patient(CNIC=cnic, fName=fname, lName=lname,
-                            dob=dob, phone=phone, address=address, email=email, photo=photo, user=x,
-                            verification=verification)
-                z.save()
-            else:
-                z = Patient(CNIC=cnic, fName=fname, lName=lname,
-                            dob=dob, phone=phone, address=address, email=email, user=x, verification=verification)
-                z.save()
+            # if photo != None:
+            z = Patient(CNIC=cnic, fName=fname, lName=lname,
+                        dob=dob, phone=phone, address=address, email=email, photo=photo, user=x,
+                        verification=verification)
+            z.save()
             messages.success(request, 'Account Created Successfully')
             return redirect('login')
         else:
