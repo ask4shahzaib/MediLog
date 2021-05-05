@@ -11,6 +11,11 @@ urlpatterns = [
     path('addLabReport/', views.addLabReport, name='addLabReport'),
     path('profile/', views.profile, name='profile'),
     path('summary/', views.summary, name='summary'),
+
+
+    path('timeLine/', views.timeLine, name='timeLine'),
+    
+    
     path('viewAllRecords/', views.viewAllRecords, name='viewAllRecords'),
     #path('viewReport/', views.viewReport, name='viewReport'),
     path('reset_password/',

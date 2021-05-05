@@ -588,3 +588,30 @@
     background-color: #00303f;
     color: white;
 }
+
+
+
+.headerOfTimeline{
+    position: absolute;
+    margin-left: 14%;
+    margin-top: 5%;
+    height: 15%;
+    width: 80%;
+    box-shadow: 1.5px 1.5px 5px 5px rgba(199, 199, 199, 0.8);
+    border-radius: 20px;
+  }
+  
+
+  .buttonTimeLine {
+    background-color: #e9f1ee; /* Green */
+    border: none;
+    color: rgb(10, 8, 8);
+    padding: 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 50%;
+  }
