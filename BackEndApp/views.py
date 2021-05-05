@@ -14,6 +14,15 @@ import datetime
 from django.contrib.auth.models import Group, User
 
 
+def timeLine(request):
+    data = range(2021, 2028)
+    data2 = range(1021, 1030)
+    context = {
+        'data':data,
+        'data2':data2
+        }
+    return render(request, "BackEndApp/timeLine.html", context)
+
 @login_required(login_url='login')
 @allowed_users(allowed=['Patient', 'Doctor'])
 def viewAllRecords(request):
