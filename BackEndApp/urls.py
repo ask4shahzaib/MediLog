@@ -8,9 +8,11 @@ urlpatterns = [
     path('feed/', views.feed, name='feed'),
     path('logout/', views.logoutUser, name='logout'),
     path('addPrescription/', views.addPrescription, name='addPrescription'),
+    path('addLabReport/', views.addLabReport, name='addLabReport'),
     path('profile/', views.profile, name='profile'),
     path('summary/', views.summary, name='summary'),
-    path('viewPrescription/', views.viewPrescription, name='viewPrescription'),
+    path('viewAllRecords/', views.viewAllRecords, name='viewAllRecords'),
+    #path('viewReport/', views.viewReport, name='viewReport'),
     path('reset_password/',
          auth_views.PasswordResetView.as_view(
              template_name="BackEndApp/password_reset.html"),

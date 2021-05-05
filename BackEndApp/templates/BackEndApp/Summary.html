@@ -86,20 +86,24 @@
 
         <h1 style="padding-left: 38.6%; font-weight:600; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #00303f;">MEDICAL HISTORY</h1>
         <img src="{% static 'images/UI/summary.png' %}" alt=" " class="summaryOfPatient"> {%if check%}
-        <form id="form" action="/viewPrescription/" enctype="multipart/form-data" method="POST">
+        <form id="form" action="/viewAllRecords/" enctype="multipart/form-data" method="POST">
             {%csrf_token%}
-            <button type="text" value="" style="margin-left: 37%; margin-top:27%;" class="addButtonHosp">View Presciptions</button>
+            <button type="text" value="" style="margin-left: 37%; margin-top:27%;" class="addButtonHosp">View All Records</button>
         </form>
-        {%endif%} {%if not check%}
-        <form id="form" action="/viewPrescription/" enctype="multipart/form-data" method="POST">
+        <!--  <form id="form" action="/viewReport/" enctype="multipart/form-data" method="POST">
             {%csrf_token%}
-            <button type="text" name="cnic" value="{{patient.CNIC}}" style="margin-left: 37%; margin-top:27%;" class="addButtonHosp">View Presciptions</button>
+            <button type="text" name="cnic" value="{{patient.CNIC}}" style="margin-left: 4%; margin-top:27%;" class="addButtonHosp">View Reports</button>
         </form>
-        {%endif%} {%endblock%}
-
-        <!-- <form id="form" action="" enctype="multipart/form-data" method="POST">
-            <button name="report" type="text" value="report" class="viewButton" style="margin-left: 4%;">View Reports</button> 
-        </form> -->
+        {%endif%}-->{%if not check%}
+        <form id="form" action="/viewAllRecords/" enctype="multipart/form-data" method="POST">
+            {%csrf_token%}
+            <button type="text" name="cnic" value="{{patient.CNIC}}" style="margin-left: 37%; margin-top:27%;" class="addButtonHosp">View All Records</button>
+        </form>
+        <!--  <form id="form" action="/viewReport/" enctype="multipart/form-data" method="POST">
+            {%csrf_token%}
+            <button type="text" name="cnic" value="{{patient.CNIC}}" style="margin-left: 4%; margin-top:27%;" class="addButtonHosp">View Reports</button>
+        </form>
+        {%endif%}-->{%endblock%}
     </div>
 </body>
 
