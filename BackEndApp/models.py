@@ -70,7 +70,8 @@ class Doctor(models.Model):
                              validators=[MinLengthValidator(11)])
     address = models.CharField(max_length=999, null=True)
     email = models.CharField(max_length=100, null=True)
-    photo = models.ImageField(upload_to=doctor_profile, null=True, blank=True)
+    photo = models.ImageField(upload_to=doctor_profile,
+                              default="profile.jpg", null=True, blank=True)
     verification = True
     objects = models.Manager()
 

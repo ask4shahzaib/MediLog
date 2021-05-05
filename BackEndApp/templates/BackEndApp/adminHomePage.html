@@ -1,16 +1,17 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 
 <head>
     <title>Home Page</title>
 
-    <link rel="JavaScript" href="login.js">
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="icon" href="images/favicon1.ico">
+    <link rel="JavaScript" href="{% static '/js/index.js' %}" />
+    <link rel="stylesheet" href="{% static '/css/styles.css' %}" />
+    <link rel="icon" href="{% static 'images/UI/favicon1.ico' %}" />
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <script type="" src='index.js' charset="utf-8"> </script>
+    <script type="" src="{% static '/js/index.js' %}" charset="utf-8"></script>
     <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
 
 
@@ -25,14 +26,14 @@
             <div class="navbar-header">
                 <a href="#" class="navbar-left">
                     <!--<span class="glyphicon glyphicon-search"></span>-->
-                    <img src="images/logo.png" width="auto" height="50px">
+                    <img src="{% static 'images/UI/logo.png' %}" width="auto" height="50px">
                 </a>
             </div>
 
             <div class="collapse navbar-collapse navbar-right" id="navbarSupportedContent">
 
                 <ul class="nav navbar-nav float-left ml-auto">
-                    <li><a href="register.html">Logout</span></a></li>
+                    <li><a href="{% url 'logout' %}">Logout</span></a></li>
                 </ul>
             </div>
 
@@ -44,7 +45,7 @@
     <div class="wrapper">
         <div class="sidebar">
             <ul>
-                <li><a href="hospitalHomePage.html"><i class="fas fa-home"></i>Home</a></li>
+                <li><a href="{% url 'feed' %}"><i class="fas fa-home"></i>Home</a></li>
                 <li><a href="#"><i class="fas fa-user"></i>Profile</a></li>
                 <li><a href="#"><i class="fas fa-address-card"></i>About</a></li>
                 <li><a href="#"><i class="fas fa-address-book"></i>Contact</a></li>
@@ -57,8 +58,8 @@
     <div class="usableBody" style="box-shadow: 0px 0px 0px 0px rgba(199, 199, 199, 0.2); border-radius: 0px; background-color:transparent;">
         <div class="createAccount" style="left: 4%;">
             <div>
-                <form id="form" action="" enctype="multipart/form-data" method="POST">
-
+                <form action="/register/" enctype="multipart/form-data" method="POST">
+                    {%csrf_token%}
                     <div class="label-text" style="padding-left: 6%;">
                         <h2 text-align: center>Create Patient's Account</h2>
                     </div>
@@ -99,9 +100,15 @@
                     </label>
 
                     <label class="animate">
-                        <input name="age" id="age" type="number" required />
-                        <div class="label-text">Age</div>
-                    </label>
+                        <input
+                          name="dob"
+                          type="text"
+                          onfocus="(this.type='date')"
+                          onfocusout="(this.type='text')"
+                          required
+                        />
+                        <div class="label-text">Date of Birth</div>
+                      </label>
 
                     <label class="animate">
                         <input name="address" id="address" type="text" required />
@@ -109,17 +116,22 @@
                     </label>
 
                     <label class="">
-                        <div style="padding-left: 33.4%;">
-                            <input type="file" id="prescription" name="file" style="padding-left: 2%; padding-top: 3%;"
-                                accept="image/*">
-                        </div>
-                    </label><br>
+                        <div>
+                          <input
+                            type="file"
+                            id="prescription"
+                            name="file"
+                            style="padding-left: 12%; padding-top: 3%"
+                            accept="image/*"
+                          />
+                        </div> </label<br>
 
-                    <button class="signUp-btn" type="" value="">Create</button>
+                    <button class="signUp-btn" type="submit" value="submit">Create Account</button>
                 </form>
 
             </div>
         </div>
+
         <div class="createAccount" style="left: 36%;">
             hello
         </div>

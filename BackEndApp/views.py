@@ -1,4 +1,6 @@
-from datetime import timedelta, datetime
+import os
+from collections import namedtuple
+from datetime import timedelta
 from django.core.exceptions import ObjectDoesNotExist
 from django.http.response import json
 from BackEndApp.models import LabReport, Patient, Doctor, Laboratory, Hospital, Prescription, prescriptions, reports
@@ -64,34 +66,43 @@ def viewAllRecords(request):
 @login_required(login_url='login')
 @allowed_users(allowed=['Patient', 'Doctor'])
 def summary(request):
-    group = request.user.groups.all()
-    group = str(group[0])
-    check = False
-
-    if group == 'Patient':
-        check = True
-
-    if check == True:
-        patient = Patient.objects.filter(CNIC=request.user.username)
-        patient = patient[0]
-        context = {'patient': patient, 'check': check}
+    if request.method == "GET":
+        patient = Patient.objects.get(CNIC=request.user.username)
+        context = {'patient': patient, 'check': True}
         return render(request, "BackEndApp/summary.html", context)
 
-    if request.method == 'POST':
+    else:
         id = request.POST['cnic']
-        patient = ""
+        patient = None
         try:
-            patient = Patient.objects.filter(CNIC=id)
-            patient = patient[0]
+            patient = Patient.objects.get(CNIC=id)
         except:
             messages.error(request, "Patient not found")
             return redirect('feed')
-        doctor = Doctor.objects.filter(license_No=request.user.username)
-        doctor = doctor[0]
-        context = {'patient': patient, 'doctor': doctor, 'check': check}
+        doctor = Doctor.objects.get(license_No=request.user.username)
+        context = {'patient': patient, 'doctor': doctor, 'check': False}
         return render(request, "BackEndApp/summary.html", context)
+
+
+@login_required(login_url='login')
+@allowed_users(allowed=['Patient', 'Doctor'])
+def timeline(request):
+    if request.method == "GET":
+        patient = Patient.objects.get(CNIC=request.user.username)
+        context = {'patient': patient, 'check': True}
+        return render(request, "BackEndApp/summary.html", context)
+
     else:
-        return redirect('feed')
+        id = request.POST['cnic']
+        patient = None
+        try:
+            patient = Patient.objects.get(CNIC=id)
+        except:
+            messages.error(request, "Patient not found")
+            return redirect('feed')
+        doctor = Doctor.objects.get(license_No=request.user.username)
+        context = {'patient': patient, 'doctor': doctor, 'check': False}
+        return render(request, "BackEndApp/summary.html", context)
 
 
 @login_required(login_url='login')
@@ -103,23 +114,49 @@ def profile(request):
     patient = False
     if group == 'Patient':
         patient = True
-        person = Patient.objects.filter(CNIC=id)
-        person = person[0]
+        person = Patient.objects.get(CNIC=id)
 
     if group == 'Doctor':
-        person = Doctor.objects.filter(license_No=id)
-        person = person[0]
+        person = Doctor.objects.get(license_No=id)
 
     if request.method == 'GET':
         context = {'person': person, 'patient': patient}
         return render(request, "BackEndApp/Profile.html", context)
 
     elif request.method == 'POST':
-        form = PatientProfileForm(request.POST)
-        if form.is_valid():
-            form.save()
-        person = Patient.objects.filter(CNIC=id)
-        person = person[0]
+        try:
+            phone = request.POST.get('phone')
+        except:
+            phone = patient.phone
+        try:
+            email = request.POST.get('email')
+        except:
+            email = person.email
+        try:
+            address = request.POST.get('address')
+        except:
+            address = person.address
+        try:
+            photo = request.FILES['photo']
+            path = person.photo.name
+        except:
+            photo = person.photo
+        if group == 'Patient':
+            person = Patient.objects.get(CNIC=id)
+            person.phone = phone
+            person.photo = photo
+            person.email = email
+            person.address = address
+            person.save()
+        elif group == 'Doctor':
+            person = Doctor.objects.get(CNIC=id)
+            person.phone = phone
+            person.photo = photo
+            person.email = email
+            person.address = address
+            person.save()
+
+        os.remove(path)
         context = {'person': person, 'patient': patient}
         return render(request, "BackEndApp/Profile.html", context)
 
@@ -187,7 +224,13 @@ def graphData(prescriptions, reports):
 
 @login_required(login_url='login')
 def patientFeed(request, id):
-    patient = Patient.objects.get(CNIC=id)
+    try:
+        patient = Patient.objects.get(CNIC=id)
+    except:
+        u = User.objects.get(username=request.user.username)
+        u.delete()
+        messages.error(request, "No User Found")
+        return redirect('login')
     prescriptions, reports = [], []
     try:
         prescriptions = Prescription.objects.filter(
@@ -237,7 +280,7 @@ def patientFeed(request, id):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed=['Patient', 'Laboratory', 'Management', 'Doctor', 'Hospital'])
+@allowed_users(allowed=['Patient', 'Laboratory', 'Admin', 'Doctor', 'Hospital'])
 def feed(request):
     group = request.user.groups.all()
     group = str(group[0])
@@ -260,9 +303,9 @@ def feed(request):
         context = {'hospital': hospital}
         return render(request, 'BackEndApp/hospitalHomePage.html', context)
 
-    if group == 'Management':
+    if group == 'Admin':
         context = {'user': request.user}
-        return render(request, 'BackEndApp/management_home.html', context)
+        return render(request, 'BackEndApp/adminHomePage.html', context)
 
 
 @unauthenticated_user
@@ -346,7 +389,6 @@ def logoutUser(request):
     return redirect('login')
 
 
-@unauthenticated_user
 def register(request):
     verification = False
     if request.method == 'POST':
@@ -358,6 +400,9 @@ def register(request):
 
         if group == 'Admin':
             verification = True
+        else:
+            if request.user.is_authenticated:
+                return redirect('feed')
 
         cnic = request.POST['cnic']
         password = request.POST['password']
@@ -386,15 +431,10 @@ def register(request):
                 group.save()
                 group = Group.objects.get(name='Patient')
             x.groups.add(group)
-            if photo != None:
-                z = Patient(CNIC=cnic, fName=fname, lName=lname,
-                            dob=dob, phone=phone, address=address, email=email, photo=photo, user=x,
-                            verification=verification)
-                z.save()
-            else:
-                z = Patient(CNIC=cnic, fName=fname, lName=lname,
-                            dob=dob, phone=phone, address=address, email=email, user=x, verification=verification)
-                z.save()
+            z = Patient(CNIC=cnic, fName=fname, lName=lname,
+                        dob=dob, phone=phone, address=address, email=email, photo=photo, user=x,
+                        verification=verification)
+            z.save()
             messages.success(request, 'Account Created Successfully')
             return redirect('login')
         else:
@@ -402,4 +442,6 @@ def register(request):
                 request, "Already a patient found with same CNIC")
             return redirect('register')
     else:
+        if request.user.is_authenticated:
+            return redirect('feed')
         return render(request, 'BackEndApp/register.html')
