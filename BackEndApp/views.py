@@ -14,14 +14,15 @@ import datetime
 from django.contrib.auth.models import Group, User
 
 
-def timeLine(request):
+def timeline(request):
     data = range(2021, 2028)
     data2 = range(1021, 1030)
     context = {
-        'data':data,
-        'data2':data2
-        }
-    return render(request, "BackEndApp/timeLine.html", context)
+        'data': data,
+        'data2': data2
+    }
+    return render(request, "BackEndApp/timeline.html", context)
+
 
 @login_required(login_url='login')
 @allowed_users(allowed=['Patient', 'Doctor'])
@@ -95,7 +96,7 @@ def summary(request):
 
 @login_required(login_url='login')
 @allowed_users(allowed=['Patient', 'Doctor'])
-def timeline(request):
+def timeline1(request):
     if request.method == "GET":
         patient = Patient.objects.get(CNIC=request.user.username)
         context = {'patient': patient, 'check': True}
@@ -112,6 +113,75 @@ def timeline(request):
         doctor = Doctor.objects.get(license_No=request.user.username)
         context = {'patient': patient, 'doctor': doctor, 'check': False}
         return render(request, "BackEndApp/summary.html", context)
+
+
+@login_required(login_url='login')
+def timeline2(request):
+    id = None
+    try:
+        if request.user.group.all()[0] == "Patient":
+            id = request.user.username
+        else:
+            id = request.POST['cnic']
+    except:
+        None
+    try:
+        patient = Patient.objects.get(CNIC=id)
+    except:
+        if request.user.group.all()[0] == "Patient":
+            u = User.objects.get(username=request.user.username)
+            u.delete()
+            messages.error(request, "No Patient Found")
+            return redirect('login')
+        else:
+            messages.error(request, "No Patient Found")
+            return redirect('feed')
+    prescriptions, reports = [], []
+    try:
+        prescriptions = Prescription.objects.filter(
+            patient=request.user.username).order_by('-date')
+        doctor = doctorName(prescriptions[0].doctor)
+        hospital = hospitalName(prescriptions[0].hospital)
+        date = prescriptions[0].date
+    except:
+        prescriptions = None
+        doctor = 'N/A'
+        hospital = 'N/A'
+        date = 'N/A'
+
+    try:
+        reports = LabReport.objects.filter(
+            patient=request.user.username).order_by('-date')
+        laboratory = reports[0].laboratory
+        label = reports[0].label
+        labDate = reports[0].date
+
+    except:
+        reports = None
+        laboratory = 'N/A'
+        label = 'N/A'
+        labDate = 'N/A'
+
+    visitcount = graphData(prescriptions, reports)
+
+    if prescriptions:
+        prescriptions = prescriptions[0:3]
+        for prescription in prescriptions:
+            prescription.label = prescription.label[0:12]
+            prescription.doctor = doctorName(prescription.doctor)[0:15]
+
+    if reports:
+        reports = reports[0:3]
+        for report in reports:
+            report.label = report.label[0:12]
+            report.laboratory = report.laboratory[0:15]
+
+    context = {'patient': patient,
+               'prescriptions': prescriptions, 'reports': reports, 'doctor': doctor, 'hospital': hospital,
+               'date': date, 'laboratory': laboratory, 'label': label,
+               'labDate': labDate, 'vis': json.dumps(visitcount)}
+
+    return render(request, 'BackEndApp/patientHomePage.html', context)
 
 
 @login_required(login_url='login')
