@@ -15,13 +15,16 @@ from django.contrib.auth.models import Group, User
 
 
 def timeline(request):
-    data = range(2021, 2028)
-    data2 = range(1021, 1030)
+    if request.method=='POST':
+        print(request.POST['q'])
+
+    data =[ [2021, 'March', 'April'],[ 2022,  'May', 'June'],[ 2023,  'May'],[ 2024,  'May', 'June', 'September']] 
+
+
     context = {
-        'data': data,
-        'data2': data2
-    }
-    return render(request, "BackEndApp/timeline.html", context)
+        'data':data
+        }
+    return render(request, "BackEndApp/timeLine.html", context)
 
 
 @login_required(login_url='login')
