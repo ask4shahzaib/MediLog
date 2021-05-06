@@ -14,26 +14,49 @@ from .decorators import *
 import datetime
 from django.contrib.auth.models import Group, User
 
+thirty = ['02', '04', '06', '09', '11']
+thirtyOne = ['01', '03', '05', '07', '08', '10', '12']
+
 
 def timeline(request):
     if request.method == 'POST':
-        date = request.POST['q']
-        date = date.split(' ')
-        month = date[0]
-        month = strptime(month, '%B').tm_mon
-        if month < 10:
-            month = '0' + str(month)
-        start = [date[1] + "-" + str(month) + "-" + '01']
-        end = [date[1] + "-" + str(month) + "-" + '31']
-        request.session['start'] = start
-        request.session['end'] = end
-        return viewAllRecords(request)
+        try:
+            date = request.POST['q']
+            date = date.split(' ')
+            month = date[0]
+            month = strptime(month, '%B').tm_mon
+            if month < 10:
+                month = '0' + str(month)
+            if month in thirtyOne:
+                start = [date[1] + "-" + str(month) + "-" + '01']
+                end = [date[1] + "-" + str(month) + "-" + '31']
+            elif month in thirty:
+                start = [date[1] + "-" + str(month) + "-" + '01']
+                end = [date[1] + "-" + str(month) + "-" + '30']
+            else:
+                if date[1]%4 == 0:
+                    start = [date[1] + "-" + str(month) + "-" + '01']
+                    end = [date[1] + "-" + str(month) + "-" + '29']
+                else:
+                    start = [date[1] + "-" + str(month) + "-" + '01']
+                    end = [date[1] + "-" + str(month) + "-" + '28']
+            request.session['start'] = start
+            request.session['end'] = end
+            return viewAllRecords(request)
+        except:
+            cnic = request.POST['cnic']
+            request.session['cnic'] = cnic
+            data = timelineData(cnic)
+            context = {
+                'data': data
+            }
+            return render(request, "BackEndApp/timeline.html", context)
 
     data = timelineData(request.user.username)
     context = {
         'data': data
     }
-    return render(request, "BackEndApp/timeLine.html", context)
+    return render(request, "BackEndApp/timeline.html", context)
 
 
 @login_required(login_url='login')
@@ -54,7 +77,12 @@ def viewAllRecords(request):
             person = Patient.objects.filter(CNIC=cnic)
             person = person[0]
         except:
-            return redirect('feed')
+            try:
+                cnic = request.session['cnic'][0]
+                person = Patient.objects.filter(CNIC=cnic)
+                person = person[0]
+            except:
+                return redirect('feed')
         doctor = Doctor.objects.filter(license_No=request.user.username)
         doctor = doctor[0]
 
