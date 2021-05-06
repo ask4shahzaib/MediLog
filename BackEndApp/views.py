@@ -217,6 +217,7 @@ def summary(request):
 
 
 @login_required(login_url='login')
+@allowed_users(allowed=['Patient', 'Doctor'])
 def profile(request):
     group = request.user.groups.all()
     group = str(group[0])
@@ -260,14 +261,16 @@ def profile(request):
             person.address = address
             person.save()
         elif group == 'Doctor':
-            person = Doctor.objects.get(CNIC=id)
+            person = Doctor.objects.get(license_No=id)
             person.phone = phone
             person.photo = photo
             person.email = email
             person.address = address
             person.save()
-
-        os.remove(path)
+        try:
+            os.remove(path)
+        except:
+            pass
         context = {'person': person, 'patient': patient}
         return render(request, "BackEndApp/Profile.html", context)
 
