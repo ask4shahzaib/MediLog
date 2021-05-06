@@ -14,7 +14,7 @@ from .decorators import *
 import datetime
 from django.contrib.auth.models import Group, User
 
-thirty = ['02', '04', '06', '09', '11']
+thirty = ['04', '06', '09', '11']
 thirtyOne = ['01', '03', '05', '07', '08', '10', '12']
 
 
@@ -27,10 +27,10 @@ def timeline(request):
             month = strptime(month, '%B').tm_mon
             if month < 10:
                 month = '0' + str(month)
-            if month in thirtyOne:
+            if str(month) in thirtyOne:
                 start = [date[1] + "-" + str(month) + "-" + '01']
                 end = [date[1] + "-" + str(month) + "-" + '31']
-            elif month in thirty:
+            elif str(month) in thirty:
                 start = [date[1] + "-" + str(month) + "-" + '01']
                 end = [date[1] + "-" + str(month) + "-" + '30']
             else:
@@ -52,7 +52,8 @@ def timeline(request):
                 messages.error(request, "Invalid CNIC, Patient not found.")
                 return redirect('feed')
             data = timelineData(cnic)
-            print(data)
+            if data == []:
+                data = False
             person = Doctor.objects.get(license_No=request.user.username)
             context = {
                 'patient': False,
@@ -70,6 +71,8 @@ def timeline(request):
         patient = False
         person = Doctor.objects.get(license_No=request.user.username)
     data = timelineData(request.user.username)
+    if data == []:
+        data = False
     context = {
         'patient': patient,
         'data': data,
@@ -109,10 +112,8 @@ def viewAllRecords(request):
     try:
         if request.session.has_key('start') and request.session.has_key('end'):
             prescriptions = Prescription.objects.filter(patient=person.CNIC)
-            print(prescriptions[0])
             prescriptions = prescriptions.filter(
                 date__range=[request.session['start'][0], request.session['end'][0]])
-            print(prescriptions[0])
         else:
             prescriptions = Prescription.objects.filter(patient=person.CNIC)
     except:
@@ -120,10 +121,8 @@ def viewAllRecords(request):
     try:
         if request.session.has_key('start') and request.session.has_key('end'):
             reports = LabReport.objects.filter(patient=person.CNIC)
-            print(reports[0])
             reports = reports.filter(
                 date__range=[request.session['start'][0], request.session['end'][0]])
-            print(reports[0])
         else:
             reports = LabReport.objects.filter(patient=person.CNIC)
     except:
