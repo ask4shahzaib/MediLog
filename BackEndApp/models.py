@@ -81,7 +81,6 @@ class Doctor(models.Model):
 
 class Laboratory(models.Model):
     user = models.ForeignKey(User, null=False, on_delete=CASCADE)
-    id = models.CharField(max_length=20)
     name = models.CharField(max_length=999)
     license_No = models.CharField(max_length=10, primary_key=True)
     branch_code = models.IntegerField()
@@ -94,7 +93,6 @@ class Laboratory(models.Model):
 
 class Hospital(models.Model):
     user = models.ForeignKey(User, null=False, on_delete=CASCADE)
-    id = models.CharField(max_length=20)
     name = models.CharField(max_length=999)
     license_No = models.CharField(max_length=10, primary_key=True)
     branch_code = models.IntegerField()
