@@ -41,21 +41,8 @@
     </nav>
 
     <div class="wrapper">
-        <div class="sidebar">
-            <ul class="ul1">
-                <li class="li1"><a href="{% url 'feed' %}"><i class="fas fa-home"></i>Home</a></li>
-                <li class="li1"><a href="{% url 'profile' %}"><i class="fas fa-user"></i>Profile</a></li>
-                <li><a href="{% url 'timeline' %}"><i class="fas fa-laptop-medical"></i>Timeline</a></li>
-                <li class="li1"><a href="#"><i class="glyphicon glyphicon-ok" style="padding-right: 9px;"></i>Trusted Contact</a></li>
-                <li class="li1"><a href="#"><i class="fas fa-users"></i>View Connections</a></li>
-                <li class="li1"><a href="#"><i class="fas fa-address-book"></i>Contact Us</a></li>
-            </ul>
-            <!-- <div class="social_media">
-          <a href="#"><i class="fab fa-facebook-f"></i></a>
-          <a href="#"><i class="fab fa-twitter"></i></a>
-          <a href="#"><i class="fab fa-instagram"></i></a>
-      </div> -->
-        </div>
+ 
+        {% include 'BackEndApp/patientSidebar.html' %}
 
         {%block content%}
         <div class="main_content">
