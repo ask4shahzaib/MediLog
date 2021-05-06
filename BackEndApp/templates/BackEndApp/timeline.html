@@ -72,8 +72,7 @@
 
     <div class="w3-container listPresStyle" style="width: 78%; top: 30%; left: 15%; border-radius: 25px;">
         <ul class="w3-ul w3-card-4">
-
-            {% for x in data %}
+            {%if data%} {% for x in data %}
             <div class="container" style="padding-top:10px; padding-bottom: 10px;">
                 <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#{{x.0}}">{{x.0}}</button>
                 <div id="{{x.0}}" class="collapse">
@@ -96,7 +95,7 @@
 
                 </div>
             </div>
-            {% endfor %}
+            {% endfor %} {%endif%} {%if not data%} {%endif%}
 
 
         </ul>

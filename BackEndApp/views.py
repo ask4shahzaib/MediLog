@@ -46,7 +46,13 @@ def timeline(request):
         except:
             cnic = request.POST['cnic']
             request.session['cnic'] = cnic
+            try:
+                valid = Patient.objects.get(CNIC=cnic)
+            except:
+                messages.error(request, "Invalid CNIC, Patient not found.")
+                return redirect('feed')
             data = timelineData(cnic)
+            print(data)
             person = Doctor.objects.get(license_No=request.user.username)
             context = {
                 'patient': False,
