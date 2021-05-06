@@ -100,7 +100,7 @@ def viewFilterRecords(request):
             person = person[0]
         except:
             try:
-                cnic = request.session['cnic'][0]
+                cnic = request.session['cnic']
                 person = Patient.objects.filter(CNIC=cnic)
                 person = person[0]
             except:
@@ -164,7 +164,7 @@ def viewAllRecords(request):
             person = person[0]
         except:
             try:
-                cnic = request.session['cnic'][0]
+                cnic = request.session['cnic']
                 person = Patient.objects.filter(CNIC=cnic)
                 person = person[0]
             except:
