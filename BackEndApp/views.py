@@ -1,5 +1,5 @@
 import os
-from collections import namedtuple
+from calendar import month_name
 from datetime import timedelta
 from django.core.exceptions import ObjectDoesNotExist
 from django.http.response import json
@@ -15,15 +15,13 @@ from django.contrib.auth.models import Group, User
 
 
 def timeline(request):
-    if request.method=='POST':
+    if request.method == 'POST':
         print(request.POST['q'])
 
-    data =[ [2021, 'March', 'April'],[ 2022,  'May', 'June'],[ 2023,  'May'],[ 2024,  'May', 'June', 'September']] 
-
-
+    data = timelineData(request.user.username)
     context = {
-        'data':data
-        }
+        'data': data
+    }
     return render(request, "BackEndApp/timeLine.html", context)
 
 
@@ -69,11 +67,61 @@ def viewAllRecords(request):
             if report.doctor is not None:
                 report.doctor = doctorName(report.doctor)
             if len(report.description) > 40:
-                report.description = report.description[0:40]+' ...'
+                report.description = report.description[0:40] + ' ...'
 
     context = {'prescriptions': prescriptions, 'reports': reports,
                'person': person, 'check': check, 'doctor': doctor}
     return render(request, "BackEndApp/allRecords.html", context)
+
+
+def timelineData(id):
+    data = []
+    data2 = []
+    try:
+        prescriptions = Prescription.objects.filter(patient=id)
+    except:
+        prescriptions = None
+    try:
+        reports = LabReport.objects.filter(patient=id)
+    except:
+        reports = None
+    if prescriptions is not None:
+        for prescription in prescriptions:
+            date = prescription.date
+            year = date.year
+            month = date.strftime("%B")
+            found = False
+            for d in data:
+                if year == d[0]:
+                    found = True
+                    if month not in d:
+                        d.insert(len(d), month)
+            if not found:
+                data.insert(len(data), [year, month])
+
+    if reports is not None:
+        for report in reports:
+            date = report.date
+            year = date.year
+            month = date.strftime("%B")
+            found = False
+            for d in data:
+                if year == d[0]:
+                    found = True
+                    if month not in d:
+                        d.insert(len(d), month)
+            if not found:
+                data.insert(len(data), [year, month])
+    data.sort()
+    for d in data:
+        d1 = d[:1]
+        d2 = d[1:]
+        month_lookup = list(month_name)
+        d2.sort(key=month_lookup.index)
+        for enrty in d2:
+            d1.append(enrty)
+        data2.insert(0, d1)
+    return data2
 
 
 @login_required(login_url='login')
