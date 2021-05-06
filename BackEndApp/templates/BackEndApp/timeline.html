@@ -51,10 +51,21 @@
     <div class="headerOfTimeline">
         <h1 style="padding-top: 5%; padding-left: 15%; font-size: 80;">MEDICAL TIMELINE</h1>
     </div>
-
     <div class="w3-container listPresStyle" style="width: 78%; top: 30%; left: 15%; border-radius: 25px;">
+        
+        
+        {% if not patient %}
+        <a class="btn btn-success" href="{% url 'viewAllRecords' %}" >All Records</a>
+        <br><br>
+        {% endif %}
+
+
+
         <ul class="w3-ul w3-card-4">
-            {%if data%} {% for x in data %}
+          
+            {%if data%}
+          
+            {% for x in data %}
             <div class="container" style="padding-top:10px; padding-bottom: 10px;">
                 <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#{{x.0}}">{{x.0}}</button>
                 <div id="{{x.0}}" class="collapse">
@@ -87,6 +98,7 @@
             
             
         <ul class="w3-ul w3-card-4">
+              
             <div class="container" style="padding-top:10px; padding-bottom: 10px;">
                 <h3>No Record found</h3>
             </div>
