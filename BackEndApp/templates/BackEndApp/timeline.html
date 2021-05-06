@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <script type="" src='index.js' charset="utf-8"> </script>
+    <link rel="JavaScript" href="{% static '/js/index.js' %}" />
     <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -56,20 +56,16 @@
     </div>
 
     <div class="headerOfTimeline">
-        <h1 style="padding-left: 2%; font-size: 50px;">MEDICAL TIMELINE</h1>
-        <h4 style="padding-left: 2%; font-size: 80; color: Gray">Medical Breakthroughs in 2020-2045</h4>
+        <h1 style="padding-top: 5%; padding-left: 15%; font-size: 80;">MEDICAL TIMELINE</h1>
     </div>
 
     <div class="w3-container listPresStyle" style="width: 78%; top: 30%; left: 15%; border-radius: 25px;">
         <ul class="w3-ul w3-card-4">
 
-            <!-- for loop for years starts here -->
             {% for x in data %}
             <div class="container" style="padding-top:10px; padding-bottom: 10px;">
                 <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#{{x.0}}">{{x.0}}</button>
                 <div id="{{x.0}}" class="collapse">
-
-                    <!-- for loop for months starts here -->
                     <ul>
                         {% for y in x %} {% if y != x.0 %}
                         <div class="" style="margin-left: 6%; padding: 10px;  margin-top: 2%;">
@@ -78,7 +74,7 @@
                                 <form method="POST">
                                     {% csrf_token %}
                                     <div class="input-group">
-                                        <input name="q" type="submit" class='btn btn-info' placeholder="Search" value="{{y}}{{x.0}}" />
+                                        <input name="q" type="submit" class='btn btn-info' placeholder="Search" value="{{y}} {{x.0}}" />
                                     </div>
                                 </form>
 
@@ -86,12 +82,10 @@
                         </div>
                         {% endif %} {% endfor %}
                     </ul>
-                    <!-- for loop for months ends here -->
 
                 </div>
             </div>
             {% endfor %}
-            <!-- for loop for years ends here -->
 
 
         </ul>
