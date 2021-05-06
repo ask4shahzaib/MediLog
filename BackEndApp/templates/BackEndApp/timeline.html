@@ -3,7 +3,7 @@
 <html>
 
 <head>
-    <title>Home Page</title>
+    <title>Timeline</title>
 
     <!-- <link rel="JavaScript" href="login.js"> -->
     <link rel="stylesheet" href=" {% static 'css/styles.css' %}">
@@ -35,7 +35,7 @@
             <div class="collapse navbar-collapse navbar-right" id="navbarSupportedContent">
 
                 <ul class="nav navbar-nav float-left ml-auto">
-                    <li style="margin-top: 15px;">Hello, {{doctor}}</li>
+                    <li style="margin-top: 15px;">Hello, {{person}}</li>
                     <li><a href="{% url 'logout' %}">Logout <i class="fas fa-sign-out-alt"></i></span></a></li>
                 </ul>
             </div>
@@ -46,10 +46,21 @@
     <div class="wrapper">
         <div class="sidebar">
             <ul class="ul1">
+                {% if patient%}
+                <li class="li1"><a href="{% url 'feed' %}"><i class="fas fa-home"></i>Home</a></li>
+                <li class="li1"><a href="{% url 'profile' %}"><i class="fas fa-user"></i>Profile</a></li>
+                <li><a href="{% url 'timeline' %}"><i class="fas fa-laptop-medical"></i>Timrline</a></li>
+                <li class="li1"><a href="#"><i class="glyphicon glyphicon-ok" style="padding-right: 9px;"></i>Trusted
+                        Contact</a></li>
+                <li class="li1"><a href="#"><i class="fas fa-users"></i>View Connections</a></li>
+                <li class="li1"><a href="#"><i class="fas fa-address-book"></i>Contact Us</a></li>
+                {%endif%} {%if not patient%}
+                <!-- Doctor's Sidebar  -->
                 <li class="li1"><a href="{% url 'feed' %}"><i class="fas fa-home"></i>Home</a></li>
                 <li class="li1"><a href="{% url 'profile' %}"><i class="fas fa-user"></i>Profile</a></li>
                 <li class="li1"><a href="#"><i class="fas fa-address-card"></i>About</a></li>
                 <li class="li1"><a href="#"><i class="fas fa-address-book"></i>Contact</a></li>
+                {%endif%}
             </ul>
         </div>
 

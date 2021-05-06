@@ -34,7 +34,7 @@ def timeline(request):
                 start = [date[1] + "-" + str(month) + "-" + '01']
                 end = [date[1] + "-" + str(month) + "-" + '30']
             else:
-                if date[1]%4 == 0:
+                if date[1] % 4 == 0:
                     start = [date[1] + "-" + str(month) + "-" + '01']
                     end = [date[1] + "-" + str(month) + "-" + '29']
                 else:
@@ -47,14 +47,27 @@ def timeline(request):
             cnic = request.POST['cnic']
             request.session['cnic'] = cnic
             data = timelineData(cnic)
+            person = Doctor.objects.get(license_No=request.user.username)
             context = {
-                'data': data
+                'patient': False,
+                'data': data,
+                'person': person
             }
             return render(request, "BackEndApp/timeline.html", context)
 
+    group = request.user.groups.all()
+    group = str(group[0])
+    if group == 'Patient':
+        patient = True
+        person = Patient.objects.get(CNIC=request.user.username)
+    else:
+        patient = False
+        person = Doctor.objects.get(license_No=request.user.username)
     data = timelineData(request.user.username)
     context = {
-        'data': data
+        'patient': patient,
+        'data': data,
+        'person': person
     }
     return render(request, "BackEndApp/timeline.html", context)
 
