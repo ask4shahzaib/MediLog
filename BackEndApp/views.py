@@ -42,7 +42,7 @@ def timeline(request):
                     end = [date[1] + "-" + str(month) + "-" + '28']
             request.session['start'] = start
             request.session['end'] = end
-            return viewAllRecords(request)
+            return viewFilterRecords(request)
         except:
             cnic = request.POST['cnic']
             request.session['cnic'] = cnic
@@ -83,7 +83,7 @@ def timeline(request):
 
 @login_required(login_url='login')
 @allowed_users(allowed=['Patient', 'Doctor'])
-def viewAllRecords(request):
+def viewFilterRecords(request):
     group = request.user.groups.all()
     group = str(group[0])
     check = False
@@ -125,6 +125,60 @@ def viewAllRecords(request):
                 date__range=[request.session['start'][0], request.session['end'][0]])
         else:
             reports = LabReport.objects.filter(patient=person.CNIC)
+    except:
+        reports = None
+    if prescriptions is not None:
+        for prescription in prescriptions:
+            prescription.doctor = doctorName(prescription.doctor)
+            prescription.hospital = hospitalName(prescription.hospital)
+            if len(prescription.description) > 40:
+                prescription.description = prescription.description[0:40] + ' ...'
+    if reports is not None:
+        for report in reports:
+            if report.doctor is not None:
+                report.doctor = doctorName(report.doctor)
+            if len(report.description) > 40:
+                report.description = report.description[0:40] + ' ...'
+
+    context = {'prescriptions': prescriptions, 'reports': reports,
+               'person': person, 'check': check, 'doctor': doctor}
+    return render(request, "BackEndApp/allRecords.html", context)
+
+
+@login_required(login_url='login')
+@allowed_users(allowed=['Patient', 'Doctor'])
+def viewAllRecords(request):
+    group = request.user.groups.all()
+    group = str(group[0])
+    check = False
+    doctor = ""
+
+    if group == 'Patient':
+        check = True
+        person = Patient.objects.filter(CNIC=request.user.username)
+        person = person[0]
+    else:
+        try:
+            cnic = request.POST['cnic']
+            person = Patient.objects.filter(CNIC=cnic)
+            person = person[0]
+        except:
+            try:
+                cnic = request.session['cnic'][0]
+                person = Patient.objects.filter(CNIC=cnic)
+                person = person[0]
+            except:
+                return redirect('feed')
+        doctor = Doctor.objects.filter(license_No=request.user.username)
+        doctor = doctor[0]
+
+    prescriptions = ""
+    try:
+        prescriptions = Prescription.objects.filter(patient=person.CNIC)
+    except:
+        prescriptions = None
+    try:
+        reports = LabReport.objects.filter(patient=person.CNIC)
     except:
         reports = None
     if prescriptions is not None:
