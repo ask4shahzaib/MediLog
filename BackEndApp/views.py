@@ -557,6 +557,14 @@ def logoutUser(request):
     return redirect('login')
 
 
+@login_required(login_url='login')
+def trustedContact(request):
+    context = {
+        'patient' : False
+    }
+    return render(request, 'BackEndApp/trustedContact.html', context)
+
+
 def register(request):
     verification = False
     if request.method == 'POST':

@@ -1,0 +1,103 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Home Page</title>
+
+    <link rel="JavaScript" href="{% static '/js/index.js' %}" />
+    <link rel="stylesheet" href="{% static '/css/styles.css' %}" />
+    <link rel="icon" href="{% static 'images/UI/favicon1.ico' %}" />
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script type="" src="{% static 'js/index.js' %}" charset="utf-8"></script>
+    <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+
+
+</head>
+
+<body class="bBody">
+    {%load static%}
+    <!-- rgb(227, 254, 255); -->
+    <nav class="navbar  navbar-fixed-top" style="background-color: rgb(227, 254, 255); padding: 5px 0px; margin: 0px 0px; box-shadow: 2px 2px rgba(134, 133, 133, 0.1);">
+        <div class="container-fluid">
+
+            <div class="navbar-header">
+                <a href="#" class="navbar-left">
+                    <!--<span class="glyphicon glyphicon-search"></span>-->
+                    <img src="{% static 'images/UI/logo.png' %}" width="auto" height="50px"></a>
+            </div>
+
+            <div class="collapse navbar-collapse navbar-right" id="navbarSupportedContent">
+
+                <ul class="nav navbar-nav float-left ml-auto">
+                    <li style="margin-top: 14px;">Hello, {{patient}}</li>
+                    <li><a href="{% url 'logout' %}">Logout <i class="fas fa-sign-out-alt"></i></span></a></li>
+                </ul>
+            </div>
+
+        </div>
+    </nav>
+
+    <div class="wrapper">
+ 
+        {% include 'BackEndApp/patientSidebar.html' %}
+
+        {%block content%}
+            
+            {%if patient%}
+                    <div class="usableBody">
+
+                        <img name="img" src={{person.photo.url}} alt="profile-img" class="prof-img">
+                        
+                        <div class="form-group" style="padding-top: 25px;">
+                            <label for="name">Name </label>
+                            <h5>{{Person.fName}} {{person.lName}}Usama Rizwan</h5>
+                        </div>
+                        <hr>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Phone#</label>
+                            <h5>{{person.phone}}0300-8139809</h5>
+                        </div>
+
+                        <hr>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Email address</label>
+                            <h5>{{person.email}}uvirk447@gmail.com</h5>
+                            <!-- <small class="form-text text-muted">We'll never share your email with anyone else.</small> -->
+                        </div>
+                        <hr>
+
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Address</label>
+                            <h5>{{person.address}}Chikkar wali gali, Makaan number 4</h5>
+                        </div>
+                        <hr>
+                        <button type="submit" class="btn btn-primary">Change</button>
+                        <button type="submit" class="btn btn-primary">Remove</button>
+
+                    <div>
+            {% else %}
+                
+            <div class="sBar">
+                <form action="/timeline/" method="POST">
+                    {%csrf_token%}
+                    <input type="text" name="cnic" class="form-control" placeholder="Search Contact - by CNIC">
+            </div>
+    
+            <div class="sBtn">
+                <button class="btn" type="submit">
+                    <i class="glyphicon glyphicon-plus"></i>
+                </button>
+            </div>
+        </form>
+
+            {% endif %}
+            
+        {%endblock%}
+    
+    </div>
+</body>
+
+</html>
