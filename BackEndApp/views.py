@@ -4,7 +4,7 @@ from datetime import timedelta
 from time import strptime
 from django.core.exceptions import ObjectDoesNotExist
 from django.http.response import json
-from BackEndApp.models import LabReport, Patient, Doctor, Laboratory, Hospital, Prescription, prescriptions, reports
+from BackEndApp.models import Contact, LabReport, Patient, Doctor, Laboratory, Hospital, Prescription, prescriptions, reports
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from .forms import *
@@ -71,7 +71,7 @@ def timeline(request):
         patient = False
         person = Doctor.objects.get(license_No=request.user.username)
     data = timelineData(request.user.username)
-    if data == []:
+    if not data:
         data = False
     context = {
         'patient': patient,
@@ -145,6 +145,27 @@ def viewFilterRecords(request):
     return render(request, "BackEndApp/allRecords.html", context)
 
 
+def viewTrustedContact(request):
+    if request.method == 'POST':
+        try:
+            remove = request.POST['remove']
+            Contact.objects.get(person = request.user.username).delete()
+        except:
+            pass
+        person = None
+        context = {'person': person}
+        return render(request, "BackEndApp/allRecords.html", context)
+    else:
+        try:
+            person = Contact.objects.get(person=request.user.username)
+            person = person.contact
+            person = Patient.objects.get(CNIC=person.CNIC)
+        except:
+            person = None
+
+        context = {'person': person}
+        return render(request, "BackEndApp/allRecords.html", context)
+
 @login_required(login_url='login')
 @allowed_users(allowed=['Patient', 'Doctor'])
 def viewAllRecords(request):
@@ -155,22 +176,18 @@ def viewAllRecords(request):
 
     if group == 'Patient':
         check = True
-        person = Patient.objects.filter(CNIC=request.user.username)
-        person = person[0]
+        person = Patient.objects.get(CNIC=request.user.username)
     else:
         try:
             cnic = request.POST['cnic']
-            person = Patient.objects.filter(CNIC=cnic)
-            person = person[0]
+            person = Patient.objects.get(CNIC=cnic)
         except:
             try:
                 cnic = request.session['cnic']
-                person = Patient.objects.filter(CNIC=cnic)
-                person = person[0]
+                person = Patient.objects.get(CNIC=cnic)
             except:
                 return redirect('feed')
-        doctor = Doctor.objects.filter(license_No=request.user.username)
-        doctor = doctor[0]
+        doctor = Doctor.objects.get(license_No=request.user.username)
 
     prescriptions = ""
     try:
