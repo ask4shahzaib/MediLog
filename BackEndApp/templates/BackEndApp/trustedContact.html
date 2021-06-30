@@ -41,63 +41,61 @@
     </nav>
 
     <div class="wrapper">
- 
-        {% include 'BackEndApp/patientSidebar.html' %}
 
-        {%block content%}
-            
-            {%if patient%}
-                    <div class="usableBody">
+        {% include 'BackEndApp/patientSidebar.html' %} {%block content%}
+        <div class="usableBody">
+        {%if person%}
 
-                        <img name="img" src={{person.photo.url}} alt="profile-img" class="prof-img">
-                        
-                        <div class="form-group" style="padding-top: 25px;">
-                            <label for="name">Name </label>
-                            <h5>{{Person.fName}} {{person.lName}}Usama Rizwan</h5>
-                        </div>
-                        <hr>
-                        <div class="form-group">
-                            <label for="exampleInputPassword1">Phone#</label>
-                            <h5>{{person.phone}}0300-8139809</h5>
-                        </div>
+            <img name="img" src={{person.photo.url}} alt="profile-img" class="prof-img">
 
-                        <hr>
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">Email address</label>
-                            <h5>{{person.email}}uvirk447@gmail.com</h5>
-                            <!-- <small class="form-text text-muted">We'll never share your email with anyone else.</small> -->
-                        </div>
-                        <hr>
-
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">Address</label>
-                            <h5>{{person.address}}Chikkar wali gali, Makaan number 4</h5>
-                        </div>
-                        <hr>
-                        <button type="submit" class="btn btn-primary">Change</button>
-                        <button type="submit" class="btn btn-primary">Remove</button>
-
-                    <div>
-            {% else %}
-                
-            <div class="sBar">
-                <form action="/timeline/" method="POST">
-                    {%csrf_token%}
-                    <input type="text" name="cnic" class="form-control" placeholder="Search Contact - by CNIC">
+            <div class="form-group" style="padding-top: 25px;">
+                <label for="name">Name </label>
+                <h5>{{Person.fName}} {{person.lName}}</h5>
             </div>
-    
-            <div class="sBtn">
-                <button class="btn" type="submit">
+            <hr>
+            <div class="form-group">
+                <label for="exampleInputPassword1">Phone#</label>
+                <h5>{{person.phone}}</h5>
+            </div>
+
+            <hr>
+            <div class="form-group">
+                <label for="exampleInputEmail1">Email address</label>
+                <h5>{{person.email}}</h5>
+                <!-- <small class="form-text text-muted">We'll never share your email with anyone else.</small> -->
+            </div>
+            <hr>
+
+            <div class="form-group">
+                <label for="exampleInputEmail1">Address</label>
+                <h5>{{person.address}}</h5>
+            </div>
+            <hr>
+            <form action="/viewTrustedContact/" method="POST">
+                {%csrf_token%}
+                <button name="change" type="submit" class="btn btn-primary">Change</button>
+                <button name="remove" type="submit" class="btn btn-primary">Remove</button>
+            </form>
+            <div>
+                {% else %}
+
+                <form action="/viewTrustedContact/" method="POST">
+                <div class="sBar">
+                        {%csrf_token%}
+                        <input type="text" id = "CNIC" name="CNIC" class="form-control" placeholder="Enter CNIC of Contact">
+                </div>
+
+                <div class="sBtn">
+                    <button name="new" class="btn" type="submit">
                     <i class="glyphicon glyphicon-plus"></i>
                 </button>
-            </div>
-        </form>
+                </div>
+                </form>
 
-            {% endif %}
-            
-        {%endblock%}
-    
-    </div>
+                {% endif %}
+            </div>
+                {%endblock%}
+
 </body>
 
 </html>

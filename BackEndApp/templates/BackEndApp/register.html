@@ -26,7 +26,7 @@
 
             <label class="animate">
           <input name="cnic" id="cnic" type="text" required />
-          <div class="label-text" name="your-CNIC" >CNIC</div>
+          <div class="label-text" name="your-CNIC">CNIC</div>
         </label>
 
             <div>
@@ -59,6 +59,7 @@
             <label class="animate">
           <input
             name="dob"
+            id="dob"
             type="text"
             onfocus="(this.type='date')"
             onfocusout="(this.type='text')"
@@ -84,7 +85,9 @@
           </div> </label
         ><br />
 
-        <button class="signUp-btn" type="" value="">Sign Up</button>
+        <button class="signUp-btn" id="signupSubmit" type="" value="">
+          Sign Up
+        </button>
 
         <div class="label-text" style="padding-bottom: 17px">
           Already have an account? <a href="{% url 'login' %}">Login</a>
@@ -102,11 +105,18 @@
       src="{% static 'images/UI/welcome.png' %}"
       alt="welcome-img"
     />
-    <div style="position: absolute; top: 25%; left: 76%;">
-      {{form.errors}}
-        {% for message in messages %}
-          <div style="background-color: rgb(228, 58, 58); height: 30px; color: seashell;" > <h5 style="padding-top:5px ;">{{message}}</h5> </div>
-        {% endfor %}
+    <div style="position: absolute; top: 25%; left: 76%">
+      {{form.errors}} {% for message in messages %}
+      <div
+        style="
+          background-color: rgb(228, 58, 58);
+          height: 30px;
+          color: seashell;
+        "
+      >
+        <h5 style="padding-top: 5px">{{message}}</h5>
       </div>
+      {% endfor %}
+    </div>
   </body>
 </html>
