@@ -146,25 +146,32 @@ def viewFilterRecords(request):
 
 
 def viewTrustedContact(request):
+    person = None
     if request.method == 'POST':
         try:
             remove = request.POST['remove']
-            Contact.objects.get(person = request.user.username).delete()
+            Contact.objects.get(person=request.user.username).delete()
         except:
-            pass
-        person = None
-        context = {'person': person}
-        return render(request, "BackEndApp/allRecords.html", context)
+            try:
+                new = request.POST['new']
+                cnic = request.POST['CNIC']
+                temp = Contact(person=Patient.objects.get(CNIC=request.user.username),
+                               contact=Patient.objects.get(CNIC=cnic))
+                temp.save()
+                person = Patient.objects.get(CNIC=cnic)
+            except:
+                pass
     else:
         try:
             person = Contact.objects.get(person=request.user.username)
             person = person.contact
-            person = Patient.objects.get(CNIC=person.CNIC)
         except:
             person = None
 
-        context = {'person': person}
-        return render(request, "BackEndApp/allRecords.html", context)
+    context = {'patient': Patient.objects.get(
+        CNIC=request.user.username), 'person': person}
+    return render(request, "BackEndApp/trustedContact.html", context)
+
 
 @login_required(login_url='login')
 @allowed_users(allowed=['Patient', 'Doctor'])
@@ -303,6 +310,11 @@ def profile(request):
         person = Doctor.objects.get(license_No=id)
 
     if request.method == 'GET':
+        try:
+            if not person.photo:
+                person.photo = 'static\images\profile.jpg'
+        except:
+            pass
         context = {'person': person, 'patient': patient}
         return render(request, "BackEndApp/Profile.html", context)
 
@@ -340,6 +352,11 @@ def profile(request):
             person.save()
         try:
             os.remove(path)
+        except:
+            pass
+        try:
+            if not person.photo:
+                person.photo = 'static\images\profile.jpg'
         except:
             pass
         context = {'person': person, 'patient': patient}
@@ -510,6 +527,7 @@ def loginPage(request):
     return render(request, 'BackEndApp/login.html', context)
 
 
+@login_required(login_url='login')
 @allowed_users(allowed=['Hospital'])
 def addPrescription(request):
     if request.method == "POST" and request.FILES['file']:
@@ -574,14 +592,6 @@ def logoutUser(request):
     return redirect('login')
 
 
-@login_required(login_url='login')
-def trustedContact(request):
-    context = {
-        'patient' : False
-    }
-    return render(request, 'BackEndApp/trustedContact.html', context)
-
-
 def register(request):
     verification = False
     if request.method == 'POST':
@@ -608,7 +618,7 @@ def register(request):
         try:
             photo = request.FILES['file']
         except:
-            photo = None
+            photo = 'medilog\static\images\profile.jpg'
         try:
             y = User.objects.get(username=cnic)
         except ObjectDoesNotExist:

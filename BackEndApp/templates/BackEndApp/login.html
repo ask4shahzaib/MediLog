@@ -34,7 +34,9 @@
             <div class="label-text">Password</div>
           </label>
             </div>
-            <button class="signUp-btn" type="" value="">Login</button>
+            <button id="loginSubmit" class="signUp-btn" type="" value="">
+          Login
+        </button>
 
             <div class="label-text">
                 Don't have an account? <a href="{% url 'register' %}">Sign up</a>
@@ -47,15 +49,17 @@
     <p id="messages">{{message}}</p>
     {% endfor %} -->
 
-    <div style="position: absolute; top: 65%; left: 76%;">
-    {{form.errors}}
-      {% for message in messages %}
-        <div style="background-color: rgb(228, 58, 58); height: 30px; color: seashell;" > <h5 style="padding-top:5px ;">{{message}}</h5> </div>
-      {% endfor %}
+    <div style="position: absolute; top: 65%; left: 76%">
+        {{form.errors}} {% for message in messages %}
+        <div style="
+          background-color: rgb(228, 58, 58);
+          height: 30px;
+          color: seashell;
+        ">
+            <h5 style="padding-top: 5px">{{message}}</h5>
+        </div>
+        {% endfor %}
     </div>
-
-
-
 </body>
 
 </html>

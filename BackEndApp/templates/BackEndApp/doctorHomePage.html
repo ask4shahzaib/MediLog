@@ -53,11 +53,11 @@
         <div class="sBar">
             <form action="/timeline/" method="POST">
                 {%csrf_token%}
-                <input type="text" name="cnic" class="form-control" placeholder="Search Patient - by CNIC">
+                <input type="text" id="cnic" name="cnic" class="form-control" placeholder="Search Patient - by CNIC">
         </div>
 
         <div class="sBtn">
-            <button class="btn" type="submit">
+            <button id="ViewRecordSubmit" class="btn" type="submit">
                 <i class="fa fa-search"></i>
             </button>
         </div>
