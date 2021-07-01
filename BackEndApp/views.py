@@ -153,12 +153,23 @@ def viewTrustedContact(request):
             Contact.objects.get(person=request.user.username).delete()
         except:
             try:
-                new = request.POST['new']
+                #new = request.POST['new']
                 cnic = request.POST['CNIC']
-                temp = Contact(person=Patient.objects.get(CNIC=request.user.username),
-                               contact=Patient.objects.get(CNIC=cnic))
-                temp.save()
-                person = Patient.objects.get(CNIC=cnic)
+                try:
+                    Contact.delete(CNIC=request.user.username)
+                except:
+                    pass
+                try:
+                    temp = Patient.objects.get(CNIC=cnic)
+                except:
+                    temp = None
+                if temp:
+                    temp = Contact(person=Patient.objects.get(CNIC=request.user.username),
+                                   contact=Patient.objects.get(CNIC=cnic))
+                    temp.save()
+                    person = Patient.objects.get(CNIC=cnic)
+                else:
+                    messages.error(request, "Invalid CNIC, Patient not found.")
             except:
                 pass
     else:
@@ -648,3 +659,11 @@ def register(request):
         if request.user.is_authenticated:
             return redirect('feed')
         return render(request, 'BackEndApp/register.html')
+
+
+@allowed_users(allowed=['Patient'])
+def viewConnections(request):
+    cnic = request.user.username
+    contacts = Contact.objects.filter(contact=cnic)
+    for contact in contacts:
+        print(contact)
