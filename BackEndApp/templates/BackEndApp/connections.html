@@ -1,0 +1,7 @@
+<!DOCTYPE html>
+<html>
+{%block content%} {% if connections%} {% for connection in connections %}
+<input name="cnic" type="submit" value="{{connection}} CNIC {{connection.CNIC}}"></td><br>
+<br /> {% endfor %} {% endif %} {%endblock%}
+
+</html>

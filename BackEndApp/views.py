@@ -3,8 +3,9 @@ from calendar import month_name
 from datetime import timedelta
 from time import strptime
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import connection, connections
 from django.http.response import json
-from BackEndApp.models import Contact, LabReport, Patient, Doctor, Laboratory, Hospital, Prescription, prescriptions, reports
+from BackEndApp.models import *
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from .forms import *
@@ -147,40 +148,35 @@ def viewFilterRecords(request):
 
 def viewTrustedContact(request):
     person = None
+    temp = Patient.objects.get(CNIC=request.user.username)
     if request.method == 'POST':
         try:
             remove = request.POST['remove']
-            Contact.objects.get(person=request.user.username).delete()
+            if remove:
+                temp.trustedContact = None
         except:
             try:
-                #new = request.POST['new']
                 cnic = request.POST['CNIC']
-                try:
-                    Contact.delete(CNIC=request.user.username)
-                except:
-                    pass
-                try:
-                    temp = Patient.objects.get(CNIC=cnic)
-                except:
-                    temp = None
-                if temp:
-                    temp = Contact(person=Patient.objects.get(CNIC=request.user.username),
-                                   contact=Patient.objects.get(CNIC=cnic))
-                    temp.save()
-                    person = Patient.objects.get(CNIC=cnic)
+                if cnic != temp.CNIC:
+                    try:
+                        person = Patient.objects.get(CNIC=cnic)
+                        temp.trustedContact = cnic
+                        temp.save()
+                    except:
+                        messages.error(
+                            request, "Invalid CNIC, Patient not found.")
                 else:
-                    messages.error(request, "Invalid CNIC, Patient not found.")
+                    messages.error(
+                        request, "Cannot add yourself as your trusted contact.")
             except:
                 pass
     else:
         try:
-            person = Contact.objects.get(person=request.user.username)
-            person = person.contact
+            person = Patient.objects.get(CNIC=temp.trustedContact)
         except:
             person = None
-
-    context = {'patient': Patient.objects.get(
-        CNIC=request.user.username), 'person': person}
+    temp.save()
+    context = {'patient': temp, 'person': person}
     return render(request, "BackEndApp/trustedContact.html", context)
 
 
@@ -663,7 +659,6 @@ def register(request):
 
 @allowed_users(allowed=['Patient'])
 def viewConnections(request):
-    cnic = request.user.username
-    contacts = Contact.objects.filter(contact=cnic)
-    for contact in contacts:
-        print(contact)
+    connections = Patient.objects.filter(trustedContact=request.user.username)
+    context = {'connections': connections}
+    return render(request, 'BackEndApp/connections.html', context)
