@@ -84,7 +84,7 @@ DATABASES = {
         'ENGINE': 'djongo',
         'NAME': 'MediLogDB',
         # 'CLIENT': {
-        #         'host': "mongodb+srv://sadman:12abcd34@shareddb.sej6y.mongodb.net/MediLogDB?ssl=false&retryWrites=true&w=majority"
+        #         'host': "mongodb+srv://sadman:<password>@shareddb.sej6y.mongodb.net/MediLogDB?ssl=false&retryWrites=true&w=majority"
         # }
     }
 }
