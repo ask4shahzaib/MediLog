@@ -35,6 +35,7 @@ class Patient(models.Model):
     fName = models.CharField(max_length=30)
     lName = models.CharField(max_length=30)
     dob = models.DateField()
+    trustedContact = models.CharField(max_length=13)
     phone = models.CharField(max_length=11, null=True,
                              validators=[MinLengthValidator(11)])
     address = models.CharField(max_length=999, null=True)
@@ -49,15 +50,15 @@ class Patient(models.Model):
         return self.fName+' '+self.lName
 
 
-class Contact(models.Model):
-    person = models.ForeignKey(
-        "Patient", related_name="person_himself", on_delete=CASCADE, null=False)
-    contact = models.ForeignKey(
-        "Patient", related_name="trustedContact", on_delete=CASCADE, null=False)
-    objects = models.Manager()
+# class Contact(models.Model):
+#     person = models.ForeignKey(
+#         "Patient", related_name="person_himself", on_delete=CASCADE, null=False)
+#     contact = models.ForeignKey(
+#         "Patient", related_name="trustedContact", on_delete=CASCADE, null=False)
+#     objects = models.Manager()
 
-    def __str__(self):
-        return str(self.person) + "'s trusted contact is "+str(self.contact)
+#     def __str__(self):
+#         return str(self.person) + "'s trusted contact is "+str(self.contact)
 
 
 class Doctor(models.Model):
