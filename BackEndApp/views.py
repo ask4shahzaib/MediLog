@@ -260,16 +260,16 @@ def viewAllRecords(request):
 def getPrescriptionFiles(request):
     prescriptions = []
     serial = request.POST['serial']
-    prescription = Prescription.objects.get(id = serial)
+    prescription = Prescription.objects.get(id=serial)
     prescription.doctor = doctorName(prescription.doctor)
     prescription.hospital = hospitalName(prescription.hospital)
-    files = prescriptionFiles.objects.filter(serial = serial)
+    files = prescriptionFiles.objects.filter(serial=serial)
     for file in files:
-        temp = {'label': prescription.label, 'description': prescription.description,'file': file.file,
-                'doctor': prescription.doctor, 'hospital':prescription.hospital, 'date': prescription.date}
+        temp = {'label': prescription.label, 'description': prescription.description, 'file': file.file,
+                'doctor': prescription.doctor, 'hospital': prescription.hospital, 'date': prescription.date}
         prescriptions.append(temp)
-    context = {'prescriptions':prescriptions}
-    return render(request,"BackEndApp/someRecords.html",context)
+    context = {'prescriptions': prescriptions}
+    return render(request, "BackEndApp/someRecords.html", context)
 
 
 def timelineData(id):
@@ -368,7 +368,7 @@ def profile(request):
             pass
         # if person.photo != 'C:/Users/Acer/MediLog/static/images/profile.jpg':
             #image = decrypt(person.photo)
-        context = {'person': person, 'patient': patient,'image':image}
+        context = {'person': person, 'patient': patient, 'image': image}
         return render(request, "BackEndApp/Profile.html", context)
 
     elif request.method == 'POST':
@@ -604,7 +604,7 @@ def addPrescription(request):
                          patient=patient, label=label, doctor=doctor, hospital=hospital)
         x.save()
         for fil in files:
-            temp = prescriptionFiles(serial= x.id,file = fil)
+            temp = prescriptionFiles(serial=x.id, file=fil)
             temp.save()
     hospital = Hospital.objects.get(license_No=request.user.username)
     context = {'hospital': hospital}
@@ -707,13 +707,14 @@ def register(request):
 @allowed_users(allowed=['Patient'])
 def viewConnections(request):
     if request.method == 'GET':
-        connections = Patient.objects.filter(trustedContact=request.user.username)
+        connections = Patient.objects.filter(
+            trustedContact=request.user.username)
         context = {'connections': connections}
         return render(request, 'BackEndApp/connections.html', context)
     else:
         cnic = request.POST['cnic']
-        name = Patient.objects.get(CNIC = cnic)
-        name = name.fName+ " "+name.lName
+        name = Patient.objects.get(CNIC=cnic)
+        name = name.fName + " "+name.lName
         try:
             prescriptions = Prescription.objects.filter(patient=cnic)
         except:
@@ -735,7 +736,6 @@ def viewConnections(request):
                 if len(report.description) > 40:
                     report.description = report.description[0:40] + ' ...'
 
-        context = {'prescriptions': prescriptions, 'reports': reports, 'name':name,
-                   'person': Patient.objects.get(CNIC = request.user.username), 'check': True}
+        context = {'prescriptions': prescriptions, 'reports': reports, 'name': name,
+                   'person': Patient.objects.get(CNIC=request.user.username), 'check': True}
         return render(request, "BackEndApp/allRecords.html", context)
-
