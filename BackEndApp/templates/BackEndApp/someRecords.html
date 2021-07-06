@@ -83,16 +83,15 @@
         </div>
 
 
-        
+
     </div>
 
     <!-- <div style="height: 500px;"></div> -->
     <div class="usableBody2">
-    {% if name%}
-    <h2>{{name}}'s Records</h2>    {% endif %}
-    {% if not name %}
-    <h2>All Records</h2>
-    {% endif %}
+        {% if name%}
+        <h2>{{name}}'s Records</h2> {% endif %} {% if not name %}
+        <h2>All Records</h2>
+        {% endif %}
         <table class="table" id="prescriptions" style="background-color: rgba(227, 254, 255, 0.9);">
             <thead class="thead-dark">
                 <tr>
@@ -114,7 +113,7 @@
                     <td>{{prescription.label}}</td>
                     <td>{{prescription.description}}</td>
                     <td>{{prescription.date}}</td>
-                     <td>
+                    <td>
                         <button class="btn"><a href="{{prescription.file.url}}">View</a></button></td>
                 </tr>
                 </tr>

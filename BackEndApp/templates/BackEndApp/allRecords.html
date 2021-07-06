@@ -83,16 +83,15 @@
         </div>
 
 
-        
+
     </div>
 
     <!-- <div style="height: 500px;"></div> -->
     <div class="usableBody2">
-    {% if name%}
-    <h2>{{name}}'s Records</h2>    {% endif %}
-    {% if not name %}
-    <h2>All Records</h2>
-    {% endif %}
+        {% if name%}
+        <h2>{{name}}'s Records</h2> {% endif %} {% if not name %}
+        <h2>All Records</h2>
+        {% endif %}
         <table class="table" id="prescriptions" style="background-color: rgba(227, 254, 255, 0.9);">
             <thead class="thead-dark">
                 <tr>
@@ -116,21 +115,22 @@
                     <td>{{prescription.date}}</td>
                     <td>
                         <form id="form" action="/getPrescriptionFiles/" method="POST">
-            {%csrf_token%}
-            <button type="text" name="serial" value="{{prescription.id}}">View</button>
-        </form></td>
-                {%endfor%} {% for report in reports%}
-                <tr>
-                    <td scope="row">Report</td>
-                    <td> {{report.doctor}}</td>
-                    <td>{{report.laboratory}}</td>
-                    <td>{{report.label}}</td>
-                    <td>{{report.description}}</td>
-                    <td>{{report.date}}</td>
-                    <td>
-                        <button class="btn"><a href="{{report.file.url}}">View</a></button></td>
-                </tr>
-                {%endfor%} {%endblock%}
+                            {%csrf_token%}
+                            <button type="text" name="serial" value="{{prescription.id}}">View</button>
+                        </form>
+                    </td>
+                    {%endfor%} {% for report in reports%}
+                    <tr>
+                        <td scope="row">Report</td>
+                        <td> {{report.doctor}}</td>
+                        <td>{{report.laboratory}}</td>
+                        <td>{{report.label}}</td>
+                        <td>{{report.description}}</td>
+                        <td>{{report.date}}</td>
+                        <td>
+                            <button class="btn"><a href="{{report.file.url}}">View</a></button></td>
+                    </tr>
+                    {%endfor%} {%endblock%}
             </tbody>
     </div>
 
