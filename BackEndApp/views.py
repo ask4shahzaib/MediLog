@@ -257,6 +257,21 @@ def viewAllRecords(request):
     return render(request, "BackEndApp/allRecords.html", context)
 
 
+def getPrescriptionFiles(request):
+    prescriptions = []
+    serial = request.POST['serial']
+    prescription = Prescription.objects.get(id = serial)
+    prescription.doctor = doctorName(prescription.doctor)
+    prescription.hospital = hospitalName(prescription.hospital)
+    files = prescriptionFiles.objects.filter(serial = serial)
+    for file in files:
+        temp = {'label': prescription.label, 'description': prescription.description,'file': file.file,
+                'doctor': prescription.doctor, 'hospital':prescription.hospital, 'date': prescription.date}
+        prescriptions.append(temp)
+    context = {'prescriptions':prescriptions}
+    return render(request,"BackEndApp/someRecords.html",context)
+
+
 def timelineData(id):
     data = []
     data2 = []
@@ -566,7 +581,7 @@ def loginPage(request):
 @allowed_users(allowed=['Hospital'])
 def addPrescription(request):
     if request.method == "POST" and request.FILES['file']:
-        file = request.FILES['file']
+        files = request.FILES.getlist('file')
         patient = request.POST.get('patient')
         try:
             Patient.objects.get(CNIC=patient)
@@ -585,9 +600,12 @@ def addPrescription(request):
         date = request.POST.get('date')
         date = datetime.datetime.strptime(
             date, '%Y-%m-%d').strftime("%Y-%m-%d")
-        x = Prescription(file=file, date=date, description=description,
+        x = Prescription(date=date, description=description,
                          patient=patient, label=label, doctor=doctor, hospital=hospital)
         x.save()
+        for fil in files:
+            temp = prescriptionFiles(serial= x.id,file = fil)
+            temp.save()
     hospital = Hospital.objects.get(license_No=request.user.username)
     context = {'hospital': hospital}
     return render(request, 'BackEndApp/hospitalHomePage.html', context)
