@@ -41,24 +41,14 @@ class Patient(models.Model):
     address = models.CharField(max_length=999, null=True)
     email = models.CharField(max_length=100, null=True)
     photo = models.ImageField(
-        upload_to=patient_profile, default="profile.jpg", null=True, blank=True)
+        upload_to=patient_profile, default='profile.jpg', null=True, blank=True)
+    # photo = models.TextField(null=True)
     verification = models.BooleanField(
         default=False)
     objects = models.Manager()
 
     def __str__(self):
         return self.fName+' '+self.lName
-
-
-# class Contact(models.Model):
-#     person = models.ForeignKey(
-#         "Patient", related_name="person_himself", on_delete=CASCADE, null=False)
-#     contact = models.ForeignKey(
-#         "Patient", related_name="trustedContact", on_delete=CASCADE, null=False)
-#     objects = models.Manager()
-
-#     def __str__(self):
-#         return str(self.person) + "'s trusted contact is "+str(self.contact)
 
 
 class Doctor(models.Model):

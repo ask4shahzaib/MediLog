@@ -88,7 +88,11 @@
 
     <!-- <div style="height: 500px;"></div> -->
     <div class="usableBody2">
-        <h2>All Records:</h2>
+    {% if name%}
+    <h2>{{name}}'s Records</h2>    {% endif %}
+    {% if not name %}
+    <h2>All Records</h2>
+    {% endif %}
         <table class="table" id="prescriptions" style="background-color: rgba(227, 254, 255, 0.9);">
             <thead class="thead-dark">
                 <tr>

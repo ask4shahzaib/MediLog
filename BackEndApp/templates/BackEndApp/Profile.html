@@ -71,7 +71,7 @@
     </div>
 
     <div class="usableBody">
-        <img name="img" src={{person.photo.url}} alt="profile-img" class="prof-img">
+        <img name="img" src="{{person.photo.url}}" alt="profile-img" class="prof-img">
         <form action="/profile/" enctype="multipart/form-data" method="POST">
             {%csrf_token%}
             <div class="form-group" style="padding-top: 25px;">

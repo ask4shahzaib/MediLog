@@ -1,22 +1,50 @@
-import os
+import datetime
 from calendar import month_name
+import io
 from datetime import timedelta
+from base64 import b64encode
 from time import strptime
-from django.core.exceptions import ObjectDoesNotExist
-from django.db import connection, connections
-from django.http.response import json
-from BackEndApp.models import *
+from cryptography.fernet import Fernet
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
-from .forms import *
-from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import Group
+from django.core.exceptions import ObjectDoesNotExist
+from django.http.response import json
+from django.shortcuts import render
+from PIL import Image
+from BackEndApp.models import *
 from .decorators import *
-import datetime
-from django.contrib.auth.models import Group, User
+from .forms import *
 
 thirty = ['04', '06', '09', '11']
 thirtyOne = ['01', '03', '05', '07', '08', '10', '12']
+
+
+def encrypt(file):
+    filekey = open('filekey.txt', 'rb')
+    key = filekey.read()
+    fernet = Fernet(key)
+    encrypted = fernet.encrypt(file)
+    encrypted = encrypted.decode(encoding='utf-8')
+    return encrypted
+
+
+def decrypt(bytes):
+    filekey = open('filekey.txt', 'rb')
+    bytes = bytes.encode(encoding='utf-8')
+    key = filekey.read()
+    fernet = Fernet(key)
+    bytes = fernet.decrypt(bytes)
+    # imageStream = io.BytesIO(bytes)
+    # imageFile = Image.open(imageStream)
+    encoded = b64encode(bytes)
+    mime = "image/jpeg"
+    encoded = str(encoded)[3:]
+    uri = "data:%s;base64,%s" % (mime, encoded)
+    # imageFile.show()
+    # imageFile.save(imageStream,format='jpeg')
+    return uri
 
 
 def timeline(request):
@@ -203,7 +231,6 @@ def viewAllRecords(request):
                 return redirect('feed')
         doctor = Doctor.objects.get(license_No=request.user.username)
 
-    prescriptions = ""
     try:
         prescriptions = Prescription.objects.filter(patient=person.CNIC)
     except:
@@ -317,12 +344,16 @@ def profile(request):
         person = Doctor.objects.get(license_No=id)
 
     if request.method == 'GET':
+        image = None
         try:
             if not person.photo:
-                person.photo = 'static\images\profile.jpg'
+                person.photo = 'profile.jpg'
+                person.save()
         except:
             pass
-        context = {'person': person, 'patient': patient}
+        # if person.photo != 'C:/Users/Acer/MediLog/static/images/profile.jpg':
+            #image = decrypt(person.photo)
+        context = {'person': person, 'patient': patient,'image':image}
         return render(request, "BackEndApp/Profile.html", context)
 
     elif request.method == 'POST':
@@ -340,9 +371,9 @@ def profile(request):
             address = person.address
         try:
             photo = request.FILES['photo']
-            path = person.photo.name
         except:
             photo = person.photo
+        #photo = encrypt(photo.file.read())
         if group == 'Patient':
             person = Patient.objects.get(CNIC=id)
             person.phone = phone
@@ -358,12 +389,9 @@ def profile(request):
             person.address = address
             person.save()
         try:
-            os.remove(path)
-        except:
-            pass
-        try:
             if not person.photo:
-                person.photo = 'static\images\profile.jpg'
+                person.photo = 'profile.jpg'
+                person.save()
         except:
             pass
         context = {'person': person, 'patient': patient}
@@ -625,7 +653,7 @@ def register(request):
         try:
             photo = request.FILES['file']
         except:
-            photo = 'medilog\static\images\profile.jpg'
+            photo = 'C:/Users/Acer/MediLog/static/images/profile.jpg'
         try:
             y = User.objects.get(username=cnic)
         except ObjectDoesNotExist:
@@ -641,6 +669,7 @@ def register(request):
                 group.save()
                 group = Group.objects.get(name='Patient')
             x.groups.add(group)
+            photo = encrypt(photo.file.read(), photo.name)
             z = Patient(CNIC=cnic, fName=fname, lName=lname,
                         dob=dob, phone=phone, address=address, email=email, photo=photo, user=x,
                         verification=verification)
@@ -659,6 +688,36 @@ def register(request):
 
 @allowed_users(allowed=['Patient'])
 def viewConnections(request):
-    connections = Patient.objects.filter(trustedContact=request.user.username)
-    context = {'connections': connections}
-    return render(request, 'BackEndApp/connections.html', context)
+    if request.method == 'GET':
+        connections = Patient.objects.filter(trustedContact=request.user.username)
+        context = {'connections': connections}
+        return render(request, 'BackEndApp/connections.html', context)
+    else:
+        cnic = request.POST['cnic']
+        name = Patient.objects.get(CNIC = cnic)
+        name = name.fName+ " "+name.lName
+        try:
+            prescriptions = Prescription.objects.filter(patient=cnic)
+        except:
+            prescriptions = None
+        try:
+            reports = LabReport.objects.filter(patient=cnic)
+        except:
+            reports = None
+        if prescriptions is not None:
+            for prescription in prescriptions:
+                prescription.doctor = doctorName(prescription.doctor)
+                prescription.hospital = hospitalName(prescription.hospital)
+                if len(prescription.description) > 40:
+                    prescription.description = prescription.description[0:40] + ' ...'
+        if reports is not None:
+            for report in reports:
+                if report.doctor is not None:
+                    report.doctor = doctorName(report.doctor)
+                if len(report.description) > 40:
+                    report.description = report.description[0:40] + ' ...'
+
+        context = {'prescriptions': prescriptions, 'reports': reports, 'name':name,
+                   'person': Patient.objects.get(CNIC = request.user.username), 'check': True}
+        return render(request, "BackEndApp/allRecords.html", context)
+

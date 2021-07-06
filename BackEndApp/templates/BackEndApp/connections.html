@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html>
 {%block content%} {% if connections%} {% for connection in connections %}
-<input name="cnic" type="submit" value="{{connection}} CNIC {{connection.CNIC}}"></td><br>
+        <form id="form" action="" method="POST">
+            {%csrf_token%}
+            <button type="text" name="cnic" value="{{connection.CNIC}}">{{connection}}</button>
+        </form>
 <br /> {% endfor %} {% endif %} {%endblock%}
 
 </html>

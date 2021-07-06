@@ -8,5 +8,6 @@ static/images/profile
 .idea/
 .mypy_cache/
 .vscode/
+filekey.txt
 mydatabase/
 mysite/
