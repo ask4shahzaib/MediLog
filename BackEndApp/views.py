@@ -402,6 +402,11 @@ def profile(request):
             address = person.address
         try:
             photo = request.FILES['photo']
+            try:
+                if person.photo.name != 'profile.jpg':
+                    os.remove(person.photo.name)
+            except:
+                pass
         except:
             photo = person.photo
         #photo = encrypt(photo.file.read())
