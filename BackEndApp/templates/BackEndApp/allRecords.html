@@ -128,7 +128,10 @@
                         <td>{{report.description}}</td>
                         <td>{{report.date}}</td>
                         <td>
-                            <button class="btn"><a href="{{report.file.url}}">View</a></button></td>
+                            <form id="form" action="/getReportFiles/" method="POST">
+                                {%csrf_token%}
+                                <button type="text" name="serial" value="{{report.id}}">View</button>
+                            </form>
                     </tr>
                     {%endfor%} {%endblock%}
             </tbody>

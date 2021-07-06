@@ -11,6 +11,7 @@ urlpatterns = [
     path('addLabReport/', views.addLabReport, name='addLabReport'),
     path('getPrescriptionFiles/', views.getPrescriptionFiles,
          name='getPrescriptionFiles'),
+    path('getReportFiles/', views.getReportFiles, name='getReportFiles'),
     path('viewTrustedContact/', views.viewTrustedContact,
          name='viewTrustedContact'),
     path('viewConnections/', views.viewConnections, name='viewConnections'),

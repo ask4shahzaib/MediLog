@@ -272,6 +272,22 @@ def getPrescriptionFiles(request):
     return render(request, "BackEndApp/someRecords.html", context)
 
 
+def getReportFiles(request):
+    reports = []
+    serial = request.POST['serial']
+    report = Prescription.objects.get(id=serial)
+    if report.doctor is not None:
+        report.doctor = doctorName(report.doctor)
+    report.hospital = hospitalName(report.hospital)
+    files = reportFiles.objects.filter(serial=serial)
+    for file in files:
+        temp = {'label': report.label, 'description': report.description, 'file': file.file,
+                'doctor': report.doctor, 'hospital': report.hospital, 'date': report.date}
+        reports.append(temp)
+    context = {'reports': reports}
+    return render(request, "BackEndApp/someRecords.html", context)
+
+
 def timelineData(id):
     data = []
     data2 = []
@@ -615,7 +631,7 @@ def addPrescription(request):
 def addLabReport(request):
     laboratory = Laboratory.objects.get(license_No=request.user.username)
     if request.method == "POST" and request.FILES['file']:
-        file = request.FILES['file']
+        files = request.FILES.getlist('file')
         patient = request.POST.get('patient')
         doctor = None
         try:
@@ -632,9 +648,12 @@ def addLabReport(request):
         date = request.POST.get('date')
         date = datetime.datetime.strptime(
             date, '%Y-%m-%d').strftime("%Y-%m-%d")
-        x = LabReport(file=file, date=date, doctor=doctor, description=description,
+        x = LabReport(date=date, doctor=doctor, description=description,
                       patient=patient, label=label, laboratory=laboratory.name)
         x.save()
+        for fil in files:
+            temp = reportFiles(serial=x.id, file=fil)
+            temp.save()
     context = {'laboratory': laboratory}
     return render(request, 'BackEndApp/labHomePage.html', context)
 

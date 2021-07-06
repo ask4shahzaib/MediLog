@@ -112,8 +112,12 @@ class prescriptionFiles(models.Model):
     file = models.FileField(upload_to=prescriptions)
 
 
-class LabReport(models.Model):
+class reportFiles(models.Model):
+    serial = models.TextField()
     file = models.FileField(upload_to=reports)
+
+
+class LabReport(models.Model):
     label = models.CharField(max_length=30, null=False)
     date = models.DateField()
     doctor = models.CharField(max_length=99)
