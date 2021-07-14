@@ -1,0 +1,149 @@
+{%load static%}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Add Follow Up</title>
+
+    <link rel="JavaScript" href="{% static '/js/index.js' %}" />
+    <link rel="stylesheet" href="{% static '/css/styles.css' %}" />
+    <link rel="icon" href="{% static 'images/UI/favicon1.ico' %}" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+
+    <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css">
+    </style>
+    <script type="text/javascript" src="http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+
+
+    <script type="" src="{% static 'js/index.js' %}" charset="utf-8"></script>
+
+    <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+
+
+</head>
+
+<body class="bBody">
+
+    <!-- rgb(227, 254, 255); -->
+    <nav class="navbar navbar-fixed-top" style="background-color: rgb(227, 254, 255); padding: 5px 0px; margin: 0px 0px; box-shadow: 2px 2px rgba(134, 133, 133, 0.1);">
+        <div class="container-fluid">
+
+            <div class="navbar-header">
+                <a href="#" class="navbar-left">
+                    <img src="{% static 'images/UI/logo.png' %}" width="auto" height="50px">
+                </a>
+            </div>
+            {%block content%}
+            <div class="collapse navbar-collapse navbar-right" id="navbarSupportedContent">
+
+                <ul class="nav navbar-nav float-left ml-auto">
+                    <ul class="nav navbar-nav float-left ml-auto">
+                        {%if check%}
+                        <li style="margin-top: 15px;">Hello, {{person}}</li>
+                        <li><a href="{% url 'logout' %}">Logout <i class="fas fa-sign-out-alt"></i></span></a></li>
+                        {%endif%} {%if not check%}
+                        <li style="margin-top: 15px;">Hello, {{doctor}}</li>
+                        <li><a href="{% url 'logout' %}">Logout <i class="fas fa-sign-out-alt"></i></span></a></li>
+                        {%endif%}
+                    </ul>
+                </ul>
+            </div>
+
+        </div>
+    </nav>
+
+    <div class="wrapper">
+
+        <div class="sidebar">
+            <ul class="ul1">
+
+                <!-- Patient's sidebar -->
+                {% if check %}
+                <li class="li1"><a href="{% url 'feed' %}"><i class="fas fa-home"></i>Home</a></li>
+                <li class="li1"><a href="{% url 'profile' %}"><i class="fas fa-user"></i>Profile</a></li>
+                <li><a href="{% url 'timeline' %}"><i class="fas fa-laptop-medical"></i>Timeline</a></li>
+                <li><a href="{% url 'viewAllRecords' %}"><i class="glyphicon glyphicon-th-list" style="padding-right: 9px;" ></i>All Records</a></li>
+                <li class="li1"><a href="#"><i class="glyphicon glyphicon-ok" style="padding-right: 9px;"></i>Trusted Contact</a></li>
+                <li class="li1"><a href="#"><i class="fas fa-users"></i>View Connections</a></li>
+                <li class="li1"><a href="#"><i class="fas fa-address-book"></i>Contact Us</a></li>
+                {%endif%} {%if not check%}
+                <!-- Doctor's Sidebar  -->
+                <li class="li1"><a href="{% url 'feed' %}"><i class="fas fa-home"></i>Home</a></li>
+                <li class="li1"><a href="{% url 'profile' %}"><i class="fas fa-user"></i>Profile</a></li>
+                <li class="li1"><a href="#"><i class="fas fa-address-card"></i>About</a></li>
+                <li class="li1"><a href="#"><i class="fas fa-address-book"></i>Contact</a></li>
+                {%endif%}
+            </ul>
+        </div>
+
+
+
+    </div>
+
+    <!-- <div style="height: 500px;"></div> -->
+    <div class="usableBody2">
+        {% if name%}
+        <h2>{{name}}'s Records</h2> {% endif %} {% if not name %}
+        <h2>All Records</h2>
+        {% endif %}
+        <table class="table" id="prescriptions" style="background-color: rgba(227, 254, 255, 0.9);">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Type</th>
+                    <th scope="col">Doctor</th>
+                    <th scope="col">Hospital</th>
+                    <th scope="col">Label</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Date</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for prescription in prescriptions%}
+                <tr>
+                    <td scope="row">Prescription</td>
+                    <td> {{prescription.doctor}}</td>
+                    <td>{{prescription.hospital}}</td>
+                    <td>{{prescription.label}}</td>
+                    <td>{{prescription.description}}</td>
+                    <td>{{prescription.date}}</td>
+                    <td>
+                        <form id="form" action="/getPrescriptionFiles/" method="POST">
+                            {%csrf_token%}
+                            <button class="btn btn-md btn-info" type="text" name="serial" value="{{prescription.id}}">Add Follow Up</button>
+                        </form>
+                    </td>
+                    {%endfor%} {% for report in reports%}
+                    <tr>
+                        <td scope="row">Report</td>
+                        <td> {{report.doctor}}</td>
+                        <td>{{report.laboratory}}</td>
+                        <td>{{report.label}}</td>
+                        <td>{{report.description}}</td>
+                        <td>{{report.date}}</td>
+                        <td>
+                            <form id="form" action="/getReportFiles/" method="POST">
+                                {%csrf_token%}
+                                <button class="btn btn-md btn-info" type="text" name="serial" value="{{report.id}}">Add Follow Up</button>
+                            </form>
+                    </tr>
+                    {%endfor%} {%endblock%}
+            </tbody>
+    </div>
+
+
+    <script>
+        $(document).ready(function() {
+            $('#prescriptions').dataTable();
+        });
+    </script>
+
+</body>
+
+</html>

@@ -574,7 +574,7 @@ def feed(request):
     if group == 'Hospital':
         hospital = Hospital.objects.get(license_No=id)
         context = {'hospital': hospital}
-        return render(request, 'BackEndApp/hospitalHomePage.html', context)
+        return render(request, 'BackEndApp/hospitalLandingPage.html', context)
 
     if group == 'Admin':
         context = {'user': request.user}
