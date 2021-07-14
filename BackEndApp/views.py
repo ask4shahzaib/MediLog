@@ -728,6 +728,11 @@ def register(request):
         return render(request, 'BackEndApp/register.html')
 
 
+def followUp(request):
+    if request.method == 'GET':
+        return render(request, 'BackEndApp/hospitalHomePage.html')
+
+
 @allowed_users(allowed=['Patient'])
 def viewConnections(request):
     if request.method == 'GET':
