@@ -46,10 +46,10 @@
 
 
     <div class="wrapper">
-        
+
         {% include 'BackEndApp/hospitalSidebar.html' %}
 
-                <div class="hospAddRecord">
+        <div class="hospAddRecord">
             <form action="/addPrescription/" enctype="multipart/form-data" method="POST">
                 {%csrf_token%}
                 <!-- <label class="animateCnicOnHosp">
@@ -68,17 +68,24 @@
                     <input type="text" id = "description" name="description" required>
                     <div class="label-text">Description</div>
                 </label>
+
                 <label class="animateCnicOnHosp" style="padding-top: 10%;">
                     <input name="date" id = "date" type="text" onfocus="(this.type='date')" onfocusout="(this.type='text')" />
                     <div class="label-text">Date</div>
                 </label>
-                <input type="file" id="prescription" multiple name="file" style="padding-left: 25%; padding-top: 3%;" accept="Application/pdf, image/*" required>
+                <label class="animateCnicOnHosp" style="padding-top: 2%;">Severity</label>
+                <input list="Category" name="severity" id="severity">
+                <datalist id="Category">        
+                        <option value="Normal">
+                        <option value="Medium">
+                        <option value="Severe">
+                    </datalist>
+
+
+                <input type="file" id="prescription" multiple name="file" style="padding-left: 25%; padding-top: 5%;" accept="Application/pdf, image/*" required>
                 <button type="submit" id="addPrescriptionSubmit" value="submit" class="addButtonHosp">Add</button>
             </form>
         </div>
-
-
-
 </body>
 
 </html>

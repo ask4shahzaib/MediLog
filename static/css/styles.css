@@ -421,6 +421,8 @@
     top: 15%;
     left: 25%;
 }
+
+
 /**************************************************************** END CSS for internal segments ****************************************/
 
 .has-search .form-control-feedback {
@@ -607,9 +609,7 @@
     color: white;
 }
 
-
-
-.headerOfTimeline{
+.headerOfTimeline {
     position: absolute;
     margin-left: 14%;
     margin-top: 5%;
@@ -617,11 +617,11 @@
     width: 80%;
     box-shadow: 1.5px 1.5px 5px 5px rgba(199, 199, 199, 0.8);
     border-radius: 20px;
-  }
-  
+}
 
-  .buttonTimeLine {
-    background-color: #e9f1ee; /* Green */
+.buttonTimeLine {
+    background-color: #e9f1ee;
+    /* Green */
     border: none;
     color: rgb(10, 8, 8);
     padding: 20px;
@@ -632,4 +632,4 @@
     margin: 4px 2px;
     cursor: pointer;
     border-radius: 50%;
-  }
+}

@@ -229,6 +229,11 @@ def viewAllRecords(request):
     elif group == 'Hospital':
         try:
             cnic = request.POST['cnic']
+            try:
+                Patient.objects.get(CNIC=cnic)
+            except:
+                messages.error(request, 'Invalid CNIC, patient not found')
+                return redirect('feed')
             request.session['cnic'] = cnic
             try:
                 request.POST['newRecord']
@@ -243,6 +248,11 @@ def viewAllRecords(request):
     elif group == 'Laboratory':
         try:
             cnic = request.POST['cnic']
+            try:
+                Patient.objects.get(CNIC=cnic)
+            except:
+                messages.error(request, 'Invalid CNIC, patient not found')
+                return redirect('feed')
             request.session['cnic'] = cnic
             try:
                 request.POST['newRecord']
@@ -412,8 +422,6 @@ def profile(request):
                 person.save()
         except:
             pass
-        # if person.photo != 'C:/Users/Acer/MediLog/static/images/profile.jpg':
-            #image = decrypt(person.photo)
         context = {'person': person, 'patient': patient, 'image': image}
         return render(request, "BackEndApp/Profile.html", context)
 
@@ -648,10 +656,11 @@ def addPrescription(request):
             return redirect('addPrescription')
         hospital = request.user.username
         description = request.POST['description']
-        date = request.POST.get['date']
+        date = request.POST['date']
         date = datetime.datetime.strptime(
             date, '%Y-%m-%d').strftime("%Y-%m-%d")
-        x = Prescription(date=date, description=description,
+        severity = request.POST['severity']
+        x = Prescription(date=date, description=description, criticalLevel=severity,
                          patient=patient, label=label, doctor=doctor, hospital=hospital)
         x.save()
         for file in files:
@@ -660,7 +669,7 @@ def addPrescription(request):
             temp.save()
     hospital = Hospital.objects.get(license_No=request.user.username)
     context = {'hospital': hospital}
-    return render(request, 'BackEndApp/hospitalHomePage.html', context)
+    return render(request, 'BackEndApp/hospitalLandingPage.html', context)
 
 
 @allowed_users(allowed=['Laboratory'])
@@ -684,7 +693,8 @@ def addLabReport(request):
         date = request.POST.get('date')
         date = datetime.datetime.strptime(
             date, '%Y-%m-%d').strftime("%Y-%m-%d")
-        x = LabReport(date=date, doctor=doctor, description=description,
+        severity = request.POST['severity']
+        x = LabReport(date=date, doctor=doctor, description=description, criticalLevel = severity,
                       patient=patient, label=label, laboratory=laboratory.name)
         x.save()
         for file in files:
