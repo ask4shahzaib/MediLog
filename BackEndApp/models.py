@@ -97,6 +97,7 @@ class Hospital(models.Model):
 class Prescription(models.Model):
     label = models.CharField(max_length=30, null=False)
     date = models.DateField()
+    criticalLevel = models.TextField()
     description = models.CharField(max_length=99999)
     patient = models.CharField(max_length=99)
     doctor = models.CharField(max_length=99)
@@ -126,6 +127,7 @@ class ReportFiles(models.Model):
 class LabReport(models.Model):
     label = models.CharField(max_length=30, null=False)
     date = models.DateField()
+    criticalLevel = models.TextField()
     doctor = models.CharField(max_length=99)
     description = models.CharField(max_length=99999)
     patient = models.CharField(max_length=99)
