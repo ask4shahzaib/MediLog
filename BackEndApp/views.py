@@ -209,7 +209,7 @@ def viewTrustedContact(request):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed=['Patient', 'Doctor', 'Hospital'])
+@allowed_users(allowed=['Patient', 'Doctor', 'Hospital', 'Laboratory'])
 def viewAllRecords(request):
     group = request.user.groups.all()
     group = str(group[0])
@@ -226,9 +226,15 @@ def viewAllRecords(request):
         except:
             return redirect('feed')
         doctor = Doctor.objects.get(license_No=request.user.username)
-    else:
+    elif group == 'Hospital':
         try:
             cnic = request.POST['cnic']
+            request.session['cnic'] = cnic
+            try:
+                newRecord = request.POST['newRecord']
+                return render(request, "BackEndApp/newPrescription.html")
+            except:
+                followUp = request.POST['followUp']
             person = Patient.objects.get(CNIC=cnic)
         except:
             messages.error(
@@ -254,12 +260,17 @@ def viewAllRecords(request):
                 report.doctor = doctorName(report.doctor)
             if len(report.description) > 40:
                 report.description = report.description[0:40] + ' ...'
-
-    context = {'prescriptions': prescriptions, 'reports': reports,
-               'person': person, 'check': check, 'doctor': doctor}
     if group == 'Hospital':
+        context = {'prescriptions': prescriptions,
+                   'person': person, 'check': check, 'doctor': doctor}
+        return render(request, "BackEndApp/addFollowUp.html", context)
+    if group == 'Laboratory':
+        context = {'reports': reports,
+                   'person': person, 'check': check, 'doctor': doctor}
         return render(request, "BackEndApp/addFollowUp.html", context)
     else:
+        context = {'prescriptions': prescriptions, 'reports': reports,
+                   'person': person, 'check': check, 'doctor': doctor}
         return render(request, "BackEndApp/allRecords.html", context)
 
 
@@ -269,10 +280,10 @@ def getPrescriptionFiles(request):
     prescription = Prescription.objects.get(id=serial)
     prescription.doctor = doctorName(prescription.doctor)
     prescription.hospital = hospitalName(prescription.hospital)
-    files = prescriptionFiles.objects.filter(serial=serial)
+    files = PrescriptionFiles.objects.filter(serial=serial)
     for file in files:
-        temp = {'label': prescription.label, 'description': prescription.description, 'file': file.file,
-                'doctor': prescription.doctor, 'hospital': prescription.hospital, 'date': prescription.date}
+        temp = {'label': file.label, 'description': file.description, 'file': file.file,
+                'doctor': prescription.doctor, 'hospital': prescription.hospital, 'date': file.date}
         prescriptions.append(temp)
     context = {'prescriptions': prescriptions}
     return render(request, "BackEndApp/someRecords.html", context)
@@ -285,7 +296,7 @@ def getReportFiles(request):
     if report.doctor is not None:
         report.doctor = doctorName(report.doctor)
     report.hospital = hospitalName(report.hospital)
-    files = reportFiles.objects.filter(serial=serial)
+    files = ReportFiles.objects.filter(serial=serial)
     for file in files:
         temp = {'label': report.label, 'description': report.description, 'file': file.file,
                 'doctor': report.doctor, 'hospital': report.hospital, 'date': report.date}
@@ -609,29 +620,30 @@ def loginPage(request):
 def addPrescription(request):
     if request.method == "POST" and request.FILES['file']:
         files = request.FILES.getlist('file')
-        patient = request.POST.get('patient')
+        patient = request.session['cnic']
         try:
             Patient.objects.get(CNIC=patient)
         except:
             messages.error(request, "Incorrect Patient CNIC")
             return redirect('addPrescription')
-        doctor = request.POST.get('doctor')
-        label = request.POST.get('label')
+        doctor = request.POST['doctor']
+        label = request.POST['label']
         try:
             Doctor.objects.get(license_No=doctor)
         except:
             messages.error(request, "Incorrect Doctor License Number")
             return redirect('addPrescription')
         hospital = request.user.username
-        description = request.POST.get('description')
-        date = request.POST.get('date')
+        description = request.POST['description']
+        date = request.POST.get['date']
         date = datetime.datetime.strptime(
             date, '%Y-%m-%d').strftime("%Y-%m-%d")
         x = Prescription(date=date, description=description,
                          patient=patient, label=label, doctor=doctor, hospital=hospital)
         x.save()
-        for fil in files:
-            temp = prescriptionFiles(serial=x.id, file=fil)
+        for file in files:
+            temp = PrescriptionFiles(
+                serial=x.id, date=date, description=description, label=label, file=file)
             temp.save()
     hospital = Hospital.objects.get(license_No=request.user.username)
     context = {'hospital': hospital}
@@ -662,8 +674,9 @@ def addLabReport(request):
         x = LabReport(date=date, doctor=doctor, description=description,
                       patient=patient, label=label, laboratory=laboratory.name)
         x.save()
-        for fil in files:
-            temp = reportFiles(serial=x.id, file=fil)
+        for file in files:
+            temp = ReportFiles(serial=x.id, date=date,
+                               description=description, label=label, file=file)
             temp.save()
     context = {'laboratory': laboratory}
     return render(request, 'BackEndApp/labHomePage.html', context)
@@ -734,9 +747,38 @@ def register(request):
         return render(request, 'BackEndApp/register.html')
 
 
+def followUpFiles(request):
+    if request.method == 'POST' and request.FILES['file']:
+        try:
+            serial = request.session['serial']
+            label = request.POST['label']
+            description = request.POST['description']
+            date = request.POST['date']
+            files = request.FILES.getlist('file')
+            try:
+                x = Prescription.objects.get(id=serial)
+                for file in files:
+                    x = PrescriptionFiles(
+                        serial=serial, date=date, description=description, label=label, file=file)
+                    x.save()
+                messages.success(request, 'Follow Up added successfully')
+            except:
+                x = LabReport.objects.get(id=serial)
+                for file in files:
+                    x = ReportFiles(
+                        serial=serial, date=date, description=description, label=label, file=file)
+                    x.save()
+                    messages.success(request, 'Follow Up added successfully')
+        except:
+            return redirect('feed')
+        return render(request, 'BackEndApp/hospitalLandingPage.html')
+
+
 def addFollowUp(request):
-    if request.method == 'GET':
-        return render(request, 'BackEndApp/hospitalHomePage.html')
+    if request.method == 'POST':
+        serial = request.POST['serial']
+        request.session['serial'] = serial
+        return render(request, 'BackEndApp/followUpForm.html')
 
 
 @allowed_users(allowed=['Patient'])

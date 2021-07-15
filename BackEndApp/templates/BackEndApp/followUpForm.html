@@ -56,16 +56,16 @@
         </div>
 
         <div class="hospAddRecord">
-            <form action="/addPrescription/" enctype="multipart/form-data" method="POST">
+            <form action="/followUpFiles/" enctype="multipart/form-data" method="POST">
                 {%csrf_token%}
-                <label class="animateCnicOnHosp">
+                <!-- <label class="animateCnicOnHosp">
                     <input type="text" id = "patient" name="patient" required>
                     <div class="label-text">Patient's CNIC</div>
-                </label>
-                <label class="animateCnicOnHosp" style="padding-top: 10%;">
+                </label> -->
+                <!-- <label class="animateCnicOnHosp" style="padding-top: 10%;">
                     <input type="text" id = "doctor" name="doctor" required>
                     <div class="label-text">Doctor's License Number</div>
-                </label>
+                </label> -->
                 <label class="animateCnicOnHosp" style="padding-top: 10%;">
                     <input type="text" id = "label" name="label" required>
                     <div class="label-text">Label</div>

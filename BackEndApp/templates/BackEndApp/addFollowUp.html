@@ -114,7 +114,7 @@
                     <td>{{prescription.description}}</td>
                     <td>{{prescription.date}}</td>
                     <td>
-                        <form id="form" action="/getPrescriptionFiles/" method="POST">
+                        <form id="form" action="/addFollowUp/" method="POST">
                             {%csrf_token%}
                             <button class="btn btn-md btn-info" type="text" name="serial" value="{{prescription.id}}">Add Follow Up</button>
                         </form>
@@ -128,7 +128,7 @@
                         <td>{{report.description}}</td>
                         <td>{{report.date}}</td>
                         <td>
-                            <form id="form" action="/getReportFiles/" method="POST">
+                            <form id="form" action="/addFollowUp/" method="POST">
                                 {%csrf_token%}
                                 <button class="btn btn-md btn-info" type="text" name="serial" value="{{report.id}}">Add Follow Up</button>
                             </form>

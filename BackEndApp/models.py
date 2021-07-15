@@ -107,13 +107,19 @@ class Prescription(models.Model):
         return self.description
 
 
-class prescriptionFiles(models.Model):
+class PrescriptionFiles(models.Model):
     serial = models.TextField()
+    label = models.CharField(max_length=30, null=False)
+    date = models.DateField()
+    description = models.CharField(max_length=99999)
     file = models.FileField(upload_to=prescriptions)
 
 
-class reportFiles(models.Model):
+class ReportFiles(models.Model):
     serial = models.TextField()
+    label = models.CharField(max_length=30, null=False)
+    date = models.DateField()
+    description = models.CharField(max_length=99999)
     file = models.FileField(upload_to=reports)
 
 
