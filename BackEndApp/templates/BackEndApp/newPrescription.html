@@ -3,7 +3,7 @@
 <html>
 
 <head>
-    <title>Home Page</title>
+    <title>New Prescription</title>
 
     <link rel="JavaScript" href="{% static '/js/index.js' %}" />
     <link rel="stylesheet" href="{% static '/css/styles.css' %}" />
@@ -34,7 +34,7 @@
 
                 <ul class="nav navbar-nav float-left ml-auto">
                     {%block content%}
-                    <li style="margin-top: 15px;">Hello, {{hospital}}</li>
+                    <li style="margin-top: 15px;">Hello, {{user}}</li>
                     <li><a href="{% url 'logout' %}">Logout <i class="fas fa-sign-out-alt"></i></span></a></li>
                     {%endblock%}
                 </ul>

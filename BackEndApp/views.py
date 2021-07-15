@@ -231,10 +231,24 @@ def viewAllRecords(request):
             cnic = request.POST['cnic']
             request.session['cnic'] = cnic
             try:
-                newRecord = request.POST['newRecord']
+                request.POST['newRecord']
                 return render(request, "BackEndApp/newPrescription.html")
             except:
-                followUp = request.POST['followUp']
+                request.POST['followUp']
+            person = Patient.objects.get(CNIC=cnic)
+        except:
+            messages.error(
+                request, "Invalid CNIC, Patient not found.")
+            return redirect('feed')
+    elif group == 'Laboratory':
+        try:
+            cnic = request.POST['cnic']
+            request.session['cnic'] = cnic
+            try:
+                request.POST['newRecord']
+                return render(request, "BackEndApp/newReport.html")
+            except:
+                request.POST['followUp']
             person = Patient.objects.get(CNIC=cnic)
         except:
             messages.error(
@@ -292,14 +306,13 @@ def getPrescriptionFiles(request):
 def getReportFiles(request):
     reports = []
     serial = request.POST['serial']
-    report = Prescription.objects.get(id=serial)
+    report = LabReport.objects.get(id=serial)
     if report.doctor is not None:
         report.doctor = doctorName(report.doctor)
-    report.hospital = hospitalName(report.hospital)
     files = ReportFiles.objects.filter(serial=serial)
     for file in files:
-        temp = {'label': report.label, 'description': report.description, 'file': file.file,
-                'doctor': report.doctor, 'hospital': report.hospital, 'date': report.date}
+        temp = {'label': file.label, 'description': file.description, 'file': file.file,
+                'doctor': report.doctor, 'laboratory':report.laboratory, 'date': file.date}
         reports.append(temp)
     context = {'reports': reports}
     return render(request, "BackEndApp/someRecords.html", context)
@@ -581,7 +594,7 @@ def feed(request):
     if group == 'Laboratory':
         laboratory = Laboratory.objects.get(license_No=id)
         context = {'laboratory': laboratory}
-        return render(request, 'BackEndApp/labHomePage.html', context)
+        return render(request, 'BackEndApp/hospitalLandingPage.html', context)
 
     if group == 'Doctor':
         doctor = Doctor.objects.get(license_No=id)
@@ -655,7 +668,7 @@ def addLabReport(request):
     laboratory = Laboratory.objects.get(license_No=request.user.username)
     if request.method == "POST" and request.FILES['file']:
         files = request.FILES.getlist('file')
-        patient = request.POST.get('patient')
+        patient = request.session['cnic']
         doctor = None
         try:
             Patient.objects.get(CNIC=patient)
@@ -679,7 +692,7 @@ def addLabReport(request):
                                description=description, label=label, file=file)
             temp.save()
     context = {'laboratory': laboratory}
-    return render(request, 'BackEndApp/labHomePage.html', context)
+    return render(request, 'BackEndApp/hospitalLandingPage.html', context)
 
 
 @login_required(login_url='login')
@@ -755,23 +768,25 @@ def followUpFiles(request):
             description = request.POST['description']
             date = request.POST['date']
             files = request.FILES.getlist('file')
-            try:
+            group = request.user.groups.all()
+            group = str(group[0])
+            if group == 'Hospital':
                 x = Prescription.objects.get(id=serial)
                 for file in files:
                     x = PrescriptionFiles(
                         serial=serial, date=date, description=description, label=label, file=file)
                     x.save()
                 messages.success(request, 'Follow Up added successfully')
-            except:
+            else:
                 x = LabReport.objects.get(id=serial)
                 for file in files:
                     x = ReportFiles(
                         serial=serial, date=date, description=description, label=label, file=file)
                     x.save()
-                    messages.success(request, 'Follow Up added successfully')
+                messages.success(request, 'Follow Up added successfully')
         except:
             return redirect('feed')
-        return render(request, 'BackEndApp/hospitalLandingPage.html')
+    return redirect('feed')
 
 
 def addFollowUp(request):
