@@ -105,13 +105,12 @@
       src="{% static 'images/UI/welcome.png' %}"
       alt="welcome-img"
     />
-    <div style="position: absolute; top: 25%; left: 76%">
+    <div style="position: absolute; top: 25%; left: 13%">
       {{form.errors}} {% for message in messages %}
       <div
         style="
-          background-color: rgb(228, 58, 58);
+          color: rgb(228, 58, 58);
           height: 30px;
-          color: seashell;
         "
       >
         <h5 style="padding-top: 5px">{{message}}</h5>
