@@ -312,7 +312,7 @@ def getReportFiles(request):
     files = ReportFiles.objects.filter(serial=serial)
     for file in files:
         temp = {'label': file.label, 'description': file.description, 'file': file.file,
-                'doctor': report.doctor, 'laboratory':report.laboratory, 'date': file.date}
+                'doctor': report.doctor, 'laboratory': report.laboratory, 'date': file.date}
         reports.append(temp)
     context = {'reports': reports}
     return render(request, "BackEndApp/someRecords.html", context)
@@ -794,10 +794,6 @@ def addFollowUp(request):
         serial = request.POST['serial']
         request.session['serial'] = serial
         return render(request, 'BackEndApp/followUpForm.html')
-
-
-def about(request):
-    return render(request, 'BackEndApp/about.html', {})
 
 
 @allowed_users(allowed=['Patient'])
