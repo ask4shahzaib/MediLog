@@ -2,52 +2,14 @@
 
 <div class="sidebar">
     <ul class="ul1">
-        {% if patient%}
-        <li class="li1">
-            <a href="{% url 'feed' %}"><i class="fas fa-home"></i>Home</a>
-        </li>
-        <li class="li1">
-            <a href="{% url 'profile' %}"><i class="fas fa-user"></i>Profile</a>
-        </li>
-        <li>
-            <a href="{% url 'timeline' %}"><i class="fas fa-laptop-medical"></i>Timeline</a
-      >
-    </li>
-
-    <li>
-      <a href="{% url 'viewAllRecords' %}"
-        ><i class="glyphicon glyphicon-th-list" style="padding-right: 9px"></i
-        >All Records</a
-      >
-    </li>
-    <li class="li1">
-      <a href="{% url 'viewTrustedContact' %}"
-        ><i class="glyphicon glyphicon-ok" style="padding-right: 9px"></i
-        >Trusted Contact</a
-      >
-    </li>
-    <li class="li1">
-      <a href="{% url 'viewConnections' %}"
-        ><i class="fas fa-users"></i>Connections</a
-      >
-    </li>
-    <li class="li1">
-      <a href="#"><i class="fas fa-address-book"></i>Contact Us</a>
-        </li>
-        {%endif%} {%if not patient%}
-        <!-- Doctor's Sidebar  -->
-        <li class="li1">
-            <a href="{% url 'feed' %}"><i class="fas fa-home"></i>Home</a>
-        </li>
-        <li class="li1">
-            <a href="{% url 'profile' %}"><i class="fas fa-user"></i>Profile</a>
-        </li>
-        <li class="li1">
-            <a href="#"><i class="fas fa-address-card"></i>About</a>
-        </li>
-        <li class="li1">
-            <a href="#"><i class="fas fa-address-book"></i>Contact</a>
-        </li>
-        {%endif%}
+        <li class="li1"><a href="{% url 'feed' %}"><i class="fas fa-home"></i>Home</a></li>
+        <li class="li1"><a href="{% url 'profile' %}"><i class="fas fa-user"></i>Profile</a></li>
+        <li><a href="{% url 'timeline' %}"><i class="fas fa-laptop-medical"></i>Timeline</a></li>
+        <li><a href="{% url 'viewAllRecords' %}"><i class="glyphicon glyphicon-th-list" style="padding-right: 9px"></i>All Records</a></li>
+        <li class="li1"><a href="{% url 'viewTrustedContact' %}"><i class="glyphicon glyphicon-ok" style="padding-right: 9px"></i>Trusted Contact</a></li>
+        <li class="li1"><a href="{% url 'viewConnections' %}"><i class="fas fa-users"></i>Connections</a></li>
+        
+        <li><a href="{% url 'about' %}"><i class="glyphicon glyphicon-info-sign" style="padding-right: 9px"></i>About Us</a></li>
+        <li class="li1"><a href="#"><i class="fas fa-address-book"></i>Contact Us</a></li>   
     </ul>
 </div>

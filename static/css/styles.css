@@ -416,7 +416,11 @@
     background-color: rgba(199, 199, 199, 0.2);
 }
 
-
+.denied {
+    position: absolute;
+    top: 15%;
+    left: 25%;
+}
 /**************************************************************** END CSS for internal segments ****************************************/
 
 .has-search .form-control-feedback {
@@ -449,6 +453,13 @@
 
 
 /**************************************************** BUTTONS *********************************************/
+
+.sBtn0 {
+    display: inline;
+    position: absolute;
+    left: 72%;
+    top: 45%;
+}
 
 .sBtn {
     display: inline;
