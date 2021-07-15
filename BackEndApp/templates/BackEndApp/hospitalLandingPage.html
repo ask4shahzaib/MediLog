@@ -40,14 +40,8 @@
     </nav>
 
     <div class="wrapper">
-        <div class="sidebar">
-            <ul class="ul1">
-                <li class="li1"><a href="{% url 'feed' %}"><i class="fas fa-home"></i>Home</a></li>
-                <li class="li1"><a href="{% url 'profile' %}"><i class="fas fa-user"></i>Profile</a></li>
-                <li class="li1"><a href="#"><i class="fas fa-address-card"></i>About</a></li>
-                <li class="li1"><a href="#"><i class="fas fa-address-book"></i>Contact</a></li>
-            </ul>
-        </div>
+        
+       {% include 'BackEndApp/hospitalSidebar.html' %}
 
         <!-- Search  bar of doctor to search patient by CNIC -->
         <div class="sBar">

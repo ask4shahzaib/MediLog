@@ -733,6 +733,10 @@ def addFollowUp(request):
         return render(request, 'BackEndApp/hospitalHomePage.html')
 
 
+def about(request):
+    return render(request, 'BackEndApp/about.html', {})
+
+
 @allowed_users(allowed=['Patient'])
 def viewConnections(request):
     if request.method == 'GET':

@@ -46,16 +46,10 @@
 
 
     <div class="wrapper">
-        <div class="sidebar">
-            <ul>
-                <li><a href="{% url 'feed' %}"><i class="fas fa-home"></i>Home</a></li>
-                <li><a href="#"><i class="fas fa-address-card"></i>About</a></li>
-                <li><a href="#"><i class="fas fa-address-book"></i>Contact</a></li>
-            </ul>
+        
+        {% include 'BackEndApp/hospitalSidebar.html' %}
 
-        </div>
-
-        <div class="hospAddRecord">
+                <div class="hospAddRecord">
             <form action="/addPrescription/" enctype="multipart/form-data" method="POST">
                 {%csrf_token%}
                 <label class="animateCnicOnHosp">
