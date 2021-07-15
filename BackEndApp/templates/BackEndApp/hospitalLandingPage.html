@@ -51,7 +51,7 @@
 
         <!-- Search  bar of doctor to search patient by CNIC -->
         <div class="sBar">
-            <form action="/timeline/" method="POST">
+            <form action="/viewAllRecords/" method="POST">
                 {%csrf_token%}
                 <input type="text" id="cnic" name="cnic" class="form-control" placeholder="Search Patient - by CNIC">
         </div>

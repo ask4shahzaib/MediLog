@@ -76,7 +76,7 @@ def timeline(request):
             cnic = request.POST['cnic']
             request.session['cnic'] = cnic
             try:
-                valid = Patient.objects.get(CNIC=cnic)
+                Patient.objects.get(CNIC=cnic)
             except:
                 messages.error(request, "Invalid CNIC, Patient not found.")
                 return redirect('feed')
@@ -209,7 +209,7 @@ def viewTrustedContact(request):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed=['Patient', 'Doctor'])
+@allowed_users(allowed=['Patient', 'Doctor', 'Hospital'])
 def viewAllRecords(request):
     group = request.user.groups.all()
     group = str(group[0])
@@ -219,18 +219,21 @@ def viewAllRecords(request):
     if group == 'Patient':
         check = True
         person = Patient.objects.get(CNIC=request.user.username)
+    elif group == 'Doctor':
+        try:
+            cnic = request.session['cnic']
+            person = Patient.objects.get(CNIC=cnic)
+        except:
+            return redirect('feed')
+        doctor = Doctor.objects.get(license_No=request.user.username)
     else:
         try:
             cnic = request.POST['cnic']
             person = Patient.objects.get(CNIC=cnic)
         except:
-            try:
-                cnic = request.session['cnic']
-                person = Patient.objects.get(CNIC=cnic)
-            except:
-                return redirect('feed')
-        doctor = Doctor.objects.get(license_No=request.user.username)
-
+            messages.error(
+                request, "Invalid CNIC, Patient not found.")
+            return redirect('feed')
     try:
         prescriptions = Prescription.objects.filter(patient=person.CNIC)
     except:
@@ -254,7 +257,10 @@ def viewAllRecords(request):
 
     context = {'prescriptions': prescriptions, 'reports': reports,
                'person': person, 'check': check, 'doctor': doctor}
-    return render(request, "BackEndApp/allRecords.html", context)
+    if group == 'Hospital':
+        return render(request, "BackEndApp/addFollowUp.html", context)
+    else:
+        return render(request, "BackEndApp/allRecords.html", context)
 
 
 def getPrescriptionFiles(request):
@@ -728,7 +734,7 @@ def register(request):
         return render(request, 'BackEndApp/register.html')
 
 
-def followUp(request):
+def addFollowUp(request):
     if request.method == 'GET':
         return render(request, 'BackEndApp/hospitalHomePage.html')
 
