@@ -728,7 +728,7 @@ def register(request):
         return render(request, 'BackEndApp/register.html')
 
 
-def followUp(request):
+def addFollowUp(request):
     if request.method == 'GET':
         return render(request, 'BackEndApp/hospitalHomePage.html')
 
