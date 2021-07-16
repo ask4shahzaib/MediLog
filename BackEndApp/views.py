@@ -36,15 +36,19 @@ def decrypt(bytes):
     key = filekey.read()
     fernet = Fernet(key)
     bytes = fernet.decrypt(bytes)
-    # imageStream = io.BytesIO(bytes)
-    # imageFile = Image.open(imageStream)
     encoded = b64encode(bytes)
     mime = "image/jpeg"
     encoded = str(encoded)[3:]
     uri = "data:%s;base64,%s" % (mime, encoded)
-    # imageFile.show()
-    # imageFile.save(imageStream,format='jpeg')
     return uri
+
+
+def generateText(request):
+    if request.method == 'POST':
+
+        None
+    else:
+        None
 
 
 def timeline(request):
@@ -90,24 +94,24 @@ def timeline(request):
                 'person': person
             }
             return render(request, "BackEndApp/timeline.html", context)
-
-    group = request.user.groups.all()
-    group = str(group[0])
-    if group == 'Patient':
-        patient = True
-        person = Patient.objects.get(CNIC=request.user.username)
     else:
-        patient = False
-        person = Doctor.objects.get(license_No=request.user.username)
-    data = timelineData(request.user.username)
-    if not data:
-        data = False
-    context = {
-        'patient': patient,
-        'data': data,
-        'person': person
-    }
-    return render(request, "BackEndApp/timeline.html", context)
+        group = request.user.groups.all()
+        group = str(group[0])
+        if group == 'Patient':
+            patient = True
+            person = Patient.objects.get(CNIC=request.user.username)
+        else:
+            patient = False
+            person = Doctor.objects.get(license_No=request.user.username)
+        data = timelineData(request.user.username)
+        if not data:
+            data = False
+        context = {
+            'patient': patient,
+            'data': data,
+            'person': person
+        }
+        return render(request, "BackEndApp/timeline.html", context)
 
 
 @login_required(login_url='login')
@@ -694,7 +698,7 @@ def addLabReport(request):
         date = datetime.datetime.strptime(
             date, '%Y-%m-%d').strftime("%Y-%m-%d")
         severity = request.POST['severity']
-        x = LabReport(date=date, doctor=doctor, description=description, criticalLevel = severity,
+        x = LabReport(date=date, doctor=doctor, description=description, criticalLevel=severity,
                       patient=patient, label=label, laboratory=laboratory.name)
         x.save()
         for file in files:
@@ -753,7 +757,6 @@ def register(request):
                 group.save()
                 group = Group.objects.get(name='Patient')
             x.groups.add(group)
-            photo = encrypt(photo.file.read(), photo.name)
             z = Patient(CNIC=cnic, fName=fname, lName=lname,
                         dob=dob, phone=phone, address=address, email=email, photo=photo, user=x,
                         verification=verification)
