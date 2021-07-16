@@ -445,7 +445,7 @@ def profile(request):
         try:
             photo = request.FILES['photo']
             try:
-                if person.photo.name != 'profile.jpg':
+                if person.photo.name != 'C:/Users/Acer/MediLog/static/images/profile.jpg':
                     os.remove(person.photo.name)
             except:
                 pass
