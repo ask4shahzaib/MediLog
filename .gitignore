@@ -5,8 +5,9 @@ static/images/prescriptions
 static/images/reports
 static/images/profile
 static/images/profile
+migrations/__pycache__
 .idea/
-BackEndApp/__pycache__
+__pycache__/
 MediLog/__pycache__
 .mypy_cache/
 .vscode/
