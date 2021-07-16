@@ -36,14 +36,10 @@ def decrypt(bytes):
     key = filekey.read()
     fernet = Fernet(key)
     bytes = fernet.decrypt(bytes)
-    # imageStream = io.BytesIO(bytes)
-    # imageFile = Image.open(imageStream)
     encoded = b64encode(bytes)
     mime = "image/jpeg"
     encoded = str(encoded)[3:]
     uri = "data:%s;base64,%s" % (mime, encoded)
-    # imageFile.show()
-    # imageFile.save(imageStream,format='jpeg')
     return uri
 
 
@@ -441,13 +437,12 @@ def profile(request):
         try:
             photo = request.FILES['photo']
             try:
-                if person.photo.name != 'profile.jpg':
+                if person.photo.name != 'C:/Users/Acer/MediLog/static/images/profile.jpg':
                     os.remove(person.photo.name)
             except:
                 pass
         except:
             photo = person.photo
-        #photo = encrypt(photo.file.read())
         if group == 'Patient':
             person = Patient.objects.get(CNIC=id)
             person.phone = phone
@@ -694,7 +689,7 @@ def addLabReport(request):
         date = datetime.datetime.strptime(
             date, '%Y-%m-%d').strftime("%Y-%m-%d")
         severity = request.POST['severity']
-        x = LabReport(date=date, doctor=doctor, description=description, criticalLevel = severity,
+        x = LabReport(date=date, doctor=doctor, description=description, criticalLevel=severity,
                       patient=patient, label=label, laboratory=laboratory.name)
         x.save()
         for file in files:
@@ -753,7 +748,6 @@ def register(request):
                 group.save()
                 group = Group.objects.get(name='Patient')
             x.groups.add(group)
-            photo = encrypt(photo.file.read(), photo.name)
             z = Patient(CNIC=cnic, fName=fname, lName=lname,
                         dob=dob, phone=phone, address=address, email=email, photo=photo, user=x,
                         verification=verification)
