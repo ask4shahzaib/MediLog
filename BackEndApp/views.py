@@ -196,7 +196,7 @@ def viewTrustedContact(request):
                         temp.save()
                     except:
                         messages.error(
-                            request, "Invalid CNIC, Patient not found.")
+                            request, "Invalid CNIC, No user found with id: " + cnic + ".")
                 else:
                     messages.error(
                         request, "Cannot add yourself as your trusted contact.")
@@ -451,6 +451,7 @@ def profile(request):
                 pass
         except:
             photo = person.photo
+        #photo = encrypt(photo.file.read())
         if group == 'Patient':
             person = Patient.objects.get(CNIC=id)
             person.phone = phone
@@ -788,14 +789,12 @@ def followUpFiles(request):
                     x = PrescriptionFiles(
                         serial=serial, date=date, description=description, label=label, file=file)
                     x.save()
-                messages.success(request, 'Follow Up added successfully')
             else:
                 x = LabReport.objects.get(id=serial)
                 for file in files:
                     x = ReportFiles(
                         serial=serial, date=date, description=description, label=label, file=file)
                     x.save()
-                messages.success(request, 'Follow Up added successfully')
         except:
             return redirect('feed')
     return redirect('feed')

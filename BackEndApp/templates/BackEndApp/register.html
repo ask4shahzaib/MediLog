@@ -16,16 +16,21 @@
 
 <body class="signUpBody">
     <div class="signup">
-        <div id="error"></div>
         <form id="form" name="form1" action="" onsubmit="return validateForm()" enctype="multipart/form-data" method="POST">
             {%csrf_token%}
 
             <div class="label-text">
-                <h2 text-align: center>Sign Up</h2>
+                <!-- <h3 text-align: center>Sign Up</h3> -->
             </div>
 
             <label class="animate">
-          <input name="cnic" id="cnic" type="text" required />
+          <input
+            style="padding-top: 25px"
+            name="cnic"
+            id="cnic"
+            type="text"
+            required
+          />
           <div class="label-text" name="your-CNIC">CNIC</div>
         </label>
 
@@ -89,7 +94,7 @@
           Sign Up
         </button>
 
-        <div class="label-text" style="padding-bottom: 17px">
+        <div class="label-text" style="padding-bottom: 25px">
           Already have an account? <a href="{% url 'login' %}">Login</a>
         </div>
       </form>
@@ -105,14 +110,9 @@
       src="{% static 'images/UI/welcome.png' %}"
       alt="welcome-img"
     />
-    <div style="position: absolute; top: 25%; left: 13%">
+    <div style="position: absolute; top: 93%; left: 13%">
       {{form.errors}} {% for message in messages %}
-      <div
-        style="
-          color: rgb(228, 58, 58);
-          height: 30px;
-        "
-      >
+      <div style="color: rgb(228, 58, 58); height: 30px">
         <h5 style="padding-top: 5px">{{message}}</h5>
       </div>
       {% endfor %}

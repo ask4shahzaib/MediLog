@@ -48,10 +48,7 @@
 
     <div class="wrapper">
 
-        {% include 'BackEndApp/patientSidebar.html' %} 
-        
-        
-        {%block content%}
+        {% include 'BackEndApp/patientSidebar.html' %} {%block content%}
         <div class="usableBody">
             {%if person%}
 
@@ -94,7 +91,7 @@
                         <input type="text" id="CNIC" name="CNIC" class="form-control" placeholder="Enter CNIC of Contact">
                     </div>
 
-                    <div class="sBtn">
+                    <div class="sBtn0">
                         <button name="new" class="btn" type="submit">
                     <i class="glyphicon glyphicon-plus"></i>
                 </button>
@@ -102,6 +99,16 @@
                 </form>
 
                 {% endif %}
+            </div>
+            <div style="position: absolute; top: 55%; left: 44%">
+                {{form.errors}} {% for message in messages %}
+                <div style="
+                    color: rgb(228, 58, 58);
+                    height: 30px;
+                  ">
+                    <h5 style="padding-top: 5px">{{message}}</h5>
+                </div>
+                {% endfor %}
             </div>
             {%endblock%}
 

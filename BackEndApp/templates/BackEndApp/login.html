@@ -49,13 +49,10 @@
     <p id="messages">{{message}}</p>
     {% endfor %} -->
 
-    <div style="position: absolute; top: 66%; left: 75%">
+    <div style="position: absolute; top: 75%; left: 76%">
         {{form.errors}} {% for message in messages %}
-        <div style="
-          color: rgb(228, 58, 58);
-          height: 15px;
-        ">
-           <b> <h5 style="padding-top: 5px">{{message}}</h5></b>
+        <div style="color: rgb(228, 58, 58); height: 15px">
+            <b> <h5 style="padding-top: 5px">{{message}}</h5></b>
         </div>
         {% endfor %}
     </div>
