@@ -451,7 +451,6 @@ def profile(request):
                 pass
         except:
             photo = person.photo
-        #photo = encrypt(photo.file.read())
         if group == 'Patient':
             person = Patient.objects.get(CNIC=id)
             person.phone = phone

@@ -63,7 +63,18 @@
         </div>
         </form>
     </div>
-
+    <div style="position: absolute; top: 52%; left: 35%">
+        {{form.errors}} {% for message in messages %}
+        <div
+          style="
+            color: rgb(228, 58, 58);
+            height: 30px;
+          "
+        >
+          <h5 style="padding-top: 5px">{{message}}</h5>
+        </div>
+        {% endfor %}
+      </div>
 </body>
 
 </html>
