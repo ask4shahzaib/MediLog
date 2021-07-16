@@ -6,8 +6,6 @@ static/images/reports
 static/images/profile
 static/images/profile
 .idea/
-BackEndApp/__pycache__
-MediLog/__pycache__
 .mypy_cache/
 .vscode/
 filekey.txt
