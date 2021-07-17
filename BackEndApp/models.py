@@ -42,7 +42,6 @@ class Patient(models.Model):
     email = models.CharField(max_length=100, null=True)
     photo = models.ImageField(
         upload_to=patient_profile, default='profile.jpg', null=True, blank=True)
-    # photo = models.TextField(null=True)
     verification = models.BooleanField(
         default=False)
     objects = models.Manager()
@@ -136,3 +135,8 @@ class LabReport(models.Model):
 
     def __str__(self):
         return self.description
+
+class Message(models.Model):
+    sender = models.CharField(max_length=30, null=False)
+    receiver = models.CharField(max_length=30, null=False)
+    text = models.CharField(max_length=300, null=False)

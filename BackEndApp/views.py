@@ -895,3 +895,35 @@ def viewConnections(request):
             'person': person
         }
         return render(request, "BackEndApp/timeline.html", context)
+
+def sendMessage (request):
+    
+    senderID = request.user.username
+    receiverID = request.POST['uID']
+    messageText = request.POST['text']
+    x = Message(sender = senderID, receiver = receiverID, text = messageText)
+    x.save()
+    return redirect('loadSenders') 
+
+def loadMessages(request):
+    receiverID = request.user.username
+    messages = Message.objects.filter(receiver = receiverID)
+    return redirect('feed')
+
+def loadSenders(request):
+    receiverID = request.user.username
+    chatPeople = []
+    messages = Message.objects.filter(receiver = receiverID)
+    for message in messages:
+        user = Patient.objects.get(CNIC = message.sender)
+        if user not in chatPeople:
+            chatPeople.append(user)
+    
+    messages = Message.objects.filter(sender = receiverID)
+    for message in messages:
+        user = Patient.objects.get(CNIC = message.receiver)
+        if user not in chatPeople:
+            chatPeople.append(user)
+
+    context = {'chatPeople': chatPeople}
+    return render(request, 'BackEndApp/chat.html', context)
