@@ -4,7 +4,7 @@
 
 <head>
     <title>Profile</title>
-    
+
     <link rel="stylesheet" href=" {% static 'css/styles.css' %}">
     <link rel="icon" href="{% static 'images/UI/favicon1.ico' %}">
     <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -47,15 +47,13 @@
     </nav>
     <div class="wrapper">
 
-       
-                {% if patient%}
-                 <!-- Patient's Side bar -->
-                    {% include 'BackEndApp/patientSidebar.html' %}
-                {%endif%} {%if not patient%}
-                <!-- Doctor's Sidebar  -->
-                    {% include 'BackEndApp/doctorSidebar.html' %}
-                {%endif%}
-            
+
+        {% if patient%}
+        <!-- Patient's Side bar -->
+        {% include 'BackEndApp/patientSidebar.html' %} {%endif%} {%if not patient%}
+        <!-- Doctor's Sidebar  -->
+        {% include 'BackEndApp/doctorSidebar.html' %} {%endif%}
+
     </div>
 
     <div class="usableBody">
@@ -97,8 +95,6 @@
 
             <button type="submit" class="btn btn-primary">Update</button> {%endblock%}
         </form>
-
-
 
     </div>
 

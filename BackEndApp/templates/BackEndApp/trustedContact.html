@@ -79,8 +79,8 @@
             <hr>
             <form action="/viewTrustedContact/" method="POST">
                 {%csrf_token%}
-                <button name="change" type="submit" class="btn btn-primary">Change</button>
-                <button name="remove" type="submit" class="btn btn-primary">Remove</button>
+                <button name="change" id="change" type="submit" class="btn btn-primary">Change</button>
+                <button name="remove" id="remove" type="submit" class="btn btn-primary">Remove</button>
             </form>
             <div>
                 {% else %}

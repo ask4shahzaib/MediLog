@@ -60,18 +60,23 @@
     <div class="usableBody container" style="box-shadow: 0px 0px 0px 0px rgba(199, 199, 199, 0.2); border-radius: 0px; background-color:transparent;">
 
 
-        <div class="row" style="padding: 5px; 
+        <div class="row" style="padding: 0.1%; 
         box-shadow: 1.5px 1.5px 5px 5px rgba(199, 199, 199, 0.2);">
 
             <div class="col-lg-8">
-                {{text}}
+                <h4>Summary</h4>
+                {{text}}<br>
             </div>
 
         </div>
         <div class="row" style="margin-top: 3%;">
             <div class="col-lg-5">
                 {% if not patient %}
-                <a class="btn btn-success" id="allRecords" href="{% url 'viewAllRecords' %}">All Records</a>
+
+                <form action="/viewAllRecords/" method="POST">
+                    {% csrf_token %}
+                    <input class="btn btn-success" name="allRecords" id="allRecords" value="All Records" type="submit" />
+                </form>
                 <br><br> {% endif %}
 
 
@@ -87,7 +92,7 @@
                                 <div class="" style="margin-left: 6%; padding: 10px;  margin-top: 2%;">
 
                                     <li>
-                                        <form method="POST">
+                                        <form action="/timeline/" method="POST">
                                             {% csrf_token %}
                                             <div class="input-group">
                                                 <input name="q" type="submit" class='btn btn-info' placeholder="Search" value="{{y}} {{x.0}}" />
@@ -134,14 +139,14 @@
                             <td>
                                 <form id="form" action="/getPrescriptionFiles/" method="POST">
                                     {%csrf_token%}
-                                    <button type="text" name="serial" value="{{s.id}}">View</button>
+                                    <button type="text" class="btn btn-sm btn-info" name="serial" value="{{s.id}}">View</button>
                                 </form>
                             </td>
                             {%endif%} {% if s.laboratory %}
                             <td>
                                 <form id="form" action="/getReportFiles/" method="POST">
                                     {%csrf_token%}
-                                    <button type="text" name="serial" value="{{s.id}}">View</button>
+                                    <button type="text" class="btn btn-sm btn-info" name="serial" value="{{s.id}}">View</button>
                                 </form>
                             </td>
                             {%endif%} {%endfor%} {%endblock%}

@@ -90,16 +90,9 @@ def timeline(request):
             }
             return render(request, "BackEndApp/timeline.html", context)
     else:
-        # group = request.user.groups.all()
-        # group = str(group[0])
-        # if group == 'Patient':
-        # patient = True
         person = Patient.objects.get(CNIC=request.user.username)
         cnic = person.CNIC
         text, sum = summary(cnic)
-        # else:
-        #     patient = False
-        #     person = Doctor.objects.get(license_No=request.user.username)
         data = timelineData(request.user.username)
         if not data:
             data = False
@@ -122,19 +115,19 @@ def viewFilterRecords(request):
     doctor = ""
 
     if group == 'Patient':
-        check = True
-        person = Patient.objects.filter(CNIC=request.user.username)
-        person = person[0]
+        try:
+            person = Patient.objects.get(CNIC=request.session['cnic'])
+        except:
+            check = True
+            person = Patient.objects.get(CNIC=request.user.username)
     else:
         try:
             cnic = request.POST['cnic']
-            person = Patient.objects.filter(CNIC=cnic)
-            person = person[0]
+            person = Patient.objects.get(CNIC=cnic)
         except:
             try:
                 cnic = request.session['cnic']
-                person = Patient.objects.filter(CNIC=cnic)
-                person = person[0]
+                person = Patient.objects.get(CNIC=cnic)
             except:
                 return redirect('feed')
         doctor = Doctor.objects.filter(license_No=request.user.username)
@@ -182,9 +175,10 @@ def viewTrustedContact(request):
     temp = Patient.objects.get(CNIC=request.user.username)
     if request.method == 'POST':
         try:
-            remove = request.POST['remove']
-            if remove:
-                temp.trustedContact = None
+            request.POST['remove']
+            temp.trustedContact = None
+            temp.save()
+            return redirect('viewTrustedContact')
         except:
             try:
                 cnic = request.POST['CNIC']
@@ -200,13 +194,12 @@ def viewTrustedContact(request):
                     messages.error(
                         request, "Cannot add yourself as your trusted contact.")
             except:
-                pass
+                return render(request, "BackEndApp/trustedContact.html")
     else:
         try:
             person = Patient.objects.get(CNIC=temp.trustedContact)
         except:
             person = None
-    temp.save()
     context = {'patient': temp, 'person': person}
     return render(request, "BackEndApp/trustedContact.html", context)
 
@@ -220,8 +213,12 @@ def viewAllRecords(request):
     doctor = ""
 
     if group == 'Patient':
-        check = True
-        person = Patient.objects.get(CNIC=request.user.username)
+        try:
+            request.POST['allRecords']
+            person = Patient.objects.get(CNIC=request.session['cnic'])
+        except:
+            check = True
+            person = Patient.objects.get(CNIC=request.user.username)
     elif group == 'Doctor':
         try:
             cnic = request.session['cnic']
@@ -404,15 +401,19 @@ def summary(cnic):
     for report in reports:
         data.append(report)
     data = sorted(
-            data, key=lambda data: data.date, reverse=True)
-    text = name
-    i = 1
-    for d in data:
-        if i == len(data):
-            text += " and " + d.description + "."
-        else:
-            text += " " + d.description + ","
-        i += 1
+        data, key=lambda data: data.date, reverse=True)
+    if not prescriptions and not reports:
+        name = Patient.objects.get(CNIC=cnic)
+        text = "No data found for " + name.fName + " " + name.lName
+    else:
+        text = name
+        i = 1
+        for d in data:
+            if i == len(data):
+                text += " and " + d.description + "."
+            else:
+                text += " " + d.description + ","
+            i += 1
 
     return text, data
 
@@ -834,29 +835,48 @@ def viewConnections(request):
         return render(request, 'BackEndApp/connections.html', context)
     else:
         cnic = request.POST['cnic']
-        name = Patient.objects.get(CNIC=cnic)
-        name = name.fName + " "+name.lName
+        request.session['cnic'] = cnic
         try:
-            prescriptions = Prescription.objects.filter(patient=cnic)
+            Patient.objects.get(CNIC=cnic)
         except:
-            prescriptions = None
-        try:
-            reports = LabReport.objects.filter(patient=cnic)
-        except:
-            reports = None
-        if prescriptions is not None:
-            for prescription in prescriptions:
-                prescription.doctor = doctorName(prescription.doctor)
-                prescription.hospital = hospitalName(prescription.hospital)
-                if len(prescription.description) > 40:
-                    prescription.description = prescription.description[0:40] + ' ...'
-        if reports is not None:
-            for report in reports:
-                if report.doctor is not None:
-                    report.doctor = doctorName(report.doctor)
-                if len(report.description) > 40:
-                    report.description = report.description[0:40] + ' ...'
+            messages.error(request, "Invalid CNIC, Patient not found.")
+            return redirect('viewConnections')
+        data = timelineData(cnic)
+        if data == []:
+            data = False
+        person = Patient.objects.get(CNIC=request.user.username)
+        text, sum = summary(cnic)
+        context = {
+            'text': text,
+            'sum': sum,
+            'patient': False,
+            'data': data,
+            'person': person
+        }
+        return render(request, "BackEndApp/timeline.html", context)
+        # name = Patient.objects.get(CNIC=cnic)
+        # name = name.fName + " "+name.lName
+        # try:
+        #     prescriptions = Prescription.objects.filter(patient=cnic)
+        # except:
+        #     prescriptions = None
+        # try:
+        #     reports = LabReport.objects.filter(patient=cnic)
+        # except:
+        #     reports = None
+        # if prescriptions is not None:
+        #     for prescription in prescriptions:
+        #         prescription.doctor = doctorName(prescription.doctor)
+        #         prescription.hospital = hospitalName(prescription.hospital)
+        #         if len(prescription.description) > 40:
+        #             prescription.description = prescription.description[0:40] + ' ...'
+        # if reports is not None:
+        #     for report in reports:
+        #         if report.doctor is not None:
+        #             report.doctor = doctorName(report.doctor)
+        #         if len(report.description) > 40:
+        #             report.description = report.description[0:40] + ' ...'
 
-        context = {'prescriptions': prescriptions, 'reports': reports, 'name': name,
-                   'person': Patient.objects.get(CNIC=request.user.username), 'check': True}
-        return render(request, "BackEndApp/allRecords.html", context)
+        # context = {'prescriptions': prescriptions, 'reports': reports, 'name': name,
+        #            'person': Patient.objects.get(CNIC=request.user.username), 'check': True}
+        # return render(request, "BackEndApp/allRecords.html", context)
