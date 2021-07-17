@@ -60,33 +60,30 @@
 
     <div class="wrapper">
 
-  
-                <!-- Patient's sidebar -->
-                {% if check %}
-      
-                    {% include 'BackEndApp/patientSidebar.html' %}
-  
-                {%endif%} {%if not check%}
-                <!-- Doctor's Sidebar  -->
-          
-                    {% include 'BackEndApp/doctorSidebar.html' %}
 
-                {%endif%}
-  
+        {% if patient %} {% include 'BackEndApp/patientSidebar.html' %} {%endif%} {%if doctor%} {% include 'BackEndApp/doctorSidebar.html' %} {%endif%}
+
 
     </div>
 
     <!-- <div style="height: 500px;"></div> -->
     <div class="usableBody2">
 
-                <h2>By the doctors, for the doctors | Medilog</h2>
-                <p>
+        <h2>By the doctors, for the doctors | Medilog</h2>
+        <p>
 
-                    In today’s life medical records of a person are one the most important documents in his life as they contain really sensitive and important information about their health. So, the management and safety of such documents should also be really important. Most of the doctors still examine a patient, take notes on a paper sheet and give them to the patient. And it is really difficult for the patient to manage them and keep them safe at one place. In most of the cases these crucial medical records get misplaced by the patient. But now the time has changed. Electronic records are taking place of paper records in almost every field of life as they are easier to manage, store and are less likely to get misplaced as compared to paper records thus making them far more efficient. This transformation of non-electronic and paper records to electronic records has made their management easy. Our project will be an electronic health record (EHR) system which will provide a central platform where all the medical records of the patient can be stored and managed easily. This will not only reduce the risk of losing important medical records by patients but also help the doctors in the diagnosis of the patient based on their previous records. In most of the cases patients cannot convey their issue correctly to their doctor due to shyness or lack of knowledge which can lead to the faulty diagnosis and can cause major issues. So, the system will be of real help by providing the previous record of the patient to the doctor for better diagnosis. Communication gap between the two different doctors of a common patient will be filled by our system. This project will be a web application developed in HTML, CSS, Django and MongoDB where patients can access their records by signing into their account.
-                </p>
+            In today’s life medical records of a person are one the most important documents in his life as they contain really sensitive and important information about their health. So, the management and safety of such documents should also be really important.
+            Most of the doctors still examine a patient, take notes on a paper sheet and give them to the patient. And it is really difficult for the patient to manage them and keep them safe at one place. In most of the cases these crucial medical records
+            get misplaced by the patient. But now the time has changed. Electronic records are taking place of paper records in almost every field of life as they are easier to manage, store and are less likely to get misplaced as compared to paper records
+            thus making them far more efficient. This transformation of non-electronic and paper records to electronic records has made their management easy. Our project will be an electronic health record (EHR) system which will provide a central platform
+            where all the medical records of the patient can be stored and managed easily. This will not only reduce the risk of losing important medical records by patients but also help the doctors in the diagnosis of the patient based on their previous
+            records. In most of the cases patients cannot convey their issue correctly to their doctor due to shyness or lack of knowledge which can lead to the faulty diagnosis and can cause major issues. So, the system will be of real help by providing
+            the previous record of the patient to the doctor for better diagnosis. Communication gap between the two different doctors of a common patient will be filled by our system. This project will be a web application developed in HTML, CSS, Django
+            and MongoDB where patients can access their records by signing into their account.
+        </p>
 
-                <p>This project will provide a great service in field of medical by providing the essential information to the doctors about the patient which they need for an effective diagnosis.</p>
-            </div>
+        <p>This project will provide a great service in field of medical by providing the essential information to the doctors about the patient which they need for an effective diagnosis.</p>
+    </div>
 
     {%endblock%}
 </body>
