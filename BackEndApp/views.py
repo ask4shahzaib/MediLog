@@ -380,7 +380,7 @@ def timelineData(id):
 
 def summary(cnic):
     name = Patient.objects.get(CNIC=cnic)
-    name = name.fName + " " + name.lName + " had"
+    text = name.fName + " " + name.lName + " had"
     try:
         prescriptions = Prescription.objects.filter(patient=cnic)
         prescriptions = prescriptions.filter(criticalLevel='Severe')
@@ -403,10 +403,26 @@ def summary(cnic):
     data = sorted(
         data, key=lambda data: data.date, reverse=True)
     if not prescriptions and not reports:
-        name = Patient.objects.get(CNIC=cnic)
         text = "No data found for " + name.fName + " " + name.lName
     else:
-        text = name
+        temp = data[len(data)-1]
+        days = (date.today() - temp.date).days
+        years = days // 365
+        months = (days - years * 365) // 30
+        days = (days - years * 365 - months*30)
+        years = str(years)
+        months = str(months)
+        days = str(days)
+        if years != '0':
+            if months != '0':
+                text = "Over the course of "+years + " years and "+months+" months " + text
+            else:
+                text = "Over the course of " + years + " years " + text
+        else:
+            if months != '0':
+                text = "Over the course of "+months+" months " + text
+            else:
+                text = "Over the course of "+days + " days " + text
         i = 1
         for d in data:
             if i == len(data):
@@ -592,13 +608,13 @@ def patientFeed(request, id):
     if prescriptions:
         prescriptions = prescriptions[0:3]
         for prescription in prescriptions:
-            prescription.label = prescription.label[0:12]
+            prescription.label = prescription.label[0:10]
             prescription.doctor = doctorName(prescription.doctor)[0:15]
 
     if reports:
         reports = reports[0:3]
         for report in reports:
-            report.label = report.label[0:12]
+            report.label = report.label[0:10]
             report.laboratory = report.laboratory[0:15]
 
     context = {'patient': patient,
