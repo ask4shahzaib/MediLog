@@ -870,29 +870,35 @@ def viewConnections(request):
             'person': person
         }
         return render(request, "BackEndApp/timeline.html", context)
-        # name = Patient.objects.get(CNIC=cnic)
-        # name = name.fName + " "+name.lName
-        # try:
-        #     prescriptions = Prescription.objects.filter(patient=cnic)
-        # except:
-        #     prescriptions = None
-        # try:
-        #     reports = LabReport.objects.filter(patient=cnic)
-        # except:
-        #     reports = None
-        # if prescriptions is not None:
-        #     for prescription in prescriptions:
-        #         prescription.doctor = doctorName(prescription.doctor)
-        #         prescription.hospital = hospitalName(prescription.hospital)
-        #         if len(prescription.description) > 40:
-        #             prescription.description = prescription.description[0:40] + ' ...'
-        # if reports is not None:
-        #     for report in reports:
-        #         if report.doctor is not None:
-        #             report.doctor = doctorName(report.doctor)
-        #         if len(report.description) > 40:
-        #             report.description = report.description[0:40] + ' ...'
 
-        # context = {'prescriptions': prescriptions, 'reports': reports, 'name': name,
-        #            'person': Patient.objects.get(CNIC=request.user.username), 'check': True}
-        # return render(request, "BackEndApp/allRecords.html", context)
+def sendMessage (request):
+    
+    senderID = request.user.username
+    receiverID = request.POST['uID']
+    messageText = request.POST['text']
+    x = Message(sender = senderID, receiver = receiverID, text = messageText)
+    x.save()
+    return redirect('loadSenders') 
+
+def loadMessages(request):
+    receiverID = request.user.username
+    messages = Message.objects.filter(receiver = receiverID)
+    return redirect('feed')
+
+def loadSenders(request):
+    receiverID = request.user.username
+    chatPeople = []
+    messages = Message.objects.filter(receiver = receiverID)
+    for message in messages:
+        user = Patient.objects.get(CNIC = message.sender)
+        if user not in chatPeople:
+            chatPeople.append(user)
+    
+    messages = Message.objects.filter(sender = receiverID)
+    for message in messages:
+        user = Patient.objects.get(CNIC = message.receiver)
+        if user not in chatPeople:
+            chatPeople.append(user)
+
+    context = {'chatPeople': chatPeople}
+    return render(request, 'BackEndApp/chat.html', context)
