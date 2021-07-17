@@ -96,7 +96,7 @@
                     <td>
                         <form id="form" action="/addFollowUp/" method="POST">
                             {%csrf_token%}
-                            <button class="btn btn-md btn-info" type="text" name="serial" value="{{prescription.id}}">Add Follow Up</button>
+                            <button class="btn btn-md btn-primary" type="text" name="serial" value="{{prescription.id}}">Add Follow Up</button>
                         </form>
                     </td>
                     {%endfor%} {% for report in reports%}
@@ -110,7 +110,7 @@
                         <td>
                             <form id="form" action="/addFollowUp/" method="POST">
                                 {%csrf_token%}
-                                <button class="btn btn-md btn-info" type="text" name="serial" value="{{report.id}}">Add Follow Up</button>
+                                <button class="btn btn-md btn-primary" type="text" name="serial" value="{{report.id}}">Add Follow Up</button>
                             </form>
                     </tr>
                     {%endfor%} {%endblock%}

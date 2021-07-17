@@ -85,7 +85,7 @@
 
                     {%if data%} {% for x in data %}
                     <div class="container" style="padding-top:10px; padding-bottom: 10px;">
-                        <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#{{x.0}}">{{x.0}}</button>
+                        <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#{{x.0}}">{{x.0}}</button>
                         <div id="{{x.0}}" class="collapse">
                             <ul>
                                 {% for y in x %} {% if y != x.0 %}
@@ -95,7 +95,7 @@
                                         <form action="/timeline/" method="POST">
                                             {% csrf_token %}
                                             <div class="input-group">
-                                                <input name="q" type="submit" class='btn btn-info' placeholder="Search" value="{{y}} {{x.0}}" />
+                                                <input name="q" type="submit" class='btn btn-primary' placeholder="Search" value="{{y}} {{x.0}}" />
                                             </div>
                                         </form>
 
@@ -139,14 +139,14 @@
                             <td>
                                 <form id="form" action="/getPrescriptionFiles/" method="POST">
                                     {%csrf_token%}
-                                    <button type="text" class="btn btn-sm btn-info" name="serial" value="{{s.id}}">View</button>
+                                    <button type="text" class="btn btn-sm btn-primary" name="serial" value="{{s.id}}">View</button>
                                 </form>
                             </td>
                             {%endif%} {% if s.laboratory %}
                             <td>
                                 <form id="form" action="/getReportFiles/" method="POST">
                                     {%csrf_token%}
-                                    <button type="text" class="btn btn-sm btn-info" name="serial" value="{{s.id}}">View</button>
+                                    <button type="text" class="btn btn-sm btn-primary" name="serial" value="{{s.id}}">View</button>
                                 </form>
                             </td>
                             {%endif%} {%endfor%} {%endblock%}

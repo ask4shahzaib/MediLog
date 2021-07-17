@@ -96,7 +96,7 @@
                     <td>
                         <form id="form" action="/getPrescriptionFiles/" method="POST">
                             {%csrf_token%}
-                            <button type="text" name="serial" value="{{prescription.id}}">View</button>
+                            <button type="text" class="btn btn-sm btn-primary" name="serial" value="{{prescription.id}}">View</button>
                         </form>
                     </td>
                     {%endfor%} {% for report in reports%}
@@ -110,7 +110,7 @@
                         <td>
                             <form id="form" action="/getReportFiles/" method="POST">
                                 {%csrf_token%}
-                                <button type="text" id="serial" name="serial" value="{{report.id}}">View</button>
+                                <button type="text" id="serial" class="btn btn-sm btn-primary" name="serial" value="{{report.id}}">View</button>
                             </form>
                     </tr>
                     {%endfor%} {%endblock%}

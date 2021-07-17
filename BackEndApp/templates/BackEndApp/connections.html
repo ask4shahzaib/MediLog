@@ -59,17 +59,13 @@
     </nav>
     <div class="wrapper">
 
-      
-                <!-- Patient's sidebar -->
-                {% if check %}
 
-                      {% include 'BackEndApp/patientSidebar.html' %}
-                {%endif%} {%if not check%}
-                <!-- Doctor's Sidebar  -->
+        <!-- Patient's sidebar -->
+        {% if check %} {% include 'BackEndApp/patientSidebar.html' %} {%endif%} {%if not check%}
+        <!-- Doctor's Sidebar  -->
 
-                    {% include 'BackEndApp/patientSidebar.html' %}
-                {%endif%}
-    
+        {% include 'BackEndApp/patientSidebar.html' %} {%endif%}
+
     </div>
 
     <!-- <div style="height: 500px;"></div> -->
@@ -84,20 +80,20 @@
             </thead>
             <tbody>
                 {% if connections%} {% for connection in connections %}
-                 <tr>   <td>
-                            <h4>
-                         {{connection}}</h4></td>
-            
-                <td>    
-                    <form id="form" action="" method="POST">
+                <tr>
+                    <td>
+                        <h4>
+                            {{connection}}</h4>
+                    </td>
+
+                    <td>
+                        <form id="form" action="" method="POST">
                             {%csrf_token%}
-                            <button class="btn btn lg btn-info" style="color: black;" type="text" name="cnic" value="{{connection.CNIC}}">View Details</button>
-                        </form></td></tr>
-            <br /> {% endfor %} {% endif %} 
-
-
-
-{%endblock%}
+                            <button class="btn btn lg btn-primary" style="color: black;" type="text" name="cnic" value="{{connection.CNIC}}">View Details</button>
+                        </form>
+                    </td>
+                </tr>
+                <br /> {% endfor %} {% endif %} {%endblock%}
             </tbody>
     </div>
 
@@ -111,6 +107,3 @@
 </body>
 
 </html>
-
-
-
