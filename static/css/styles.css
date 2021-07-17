@@ -121,6 +121,24 @@
     /* box-shadow: 1px 1px 2px 2px #888888; */
 }
 
+.changePass {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    font-family: 'Montserrat', sans-serif;
+    padding: 2% 2.5%;
+    height: auto;
+    width: auto;
+    /* border-radius: 0.8em; */
+    position: absolute;
+    background-color: #bce6eb;
+    color: black;
+    opacity: 0.8;
+    left: 30%;
+    top: 25%;
+    /* box-shadow: 1px 1px 2px 2px #888888; */
+}
+
 .animate {
     display: block;
     letter-spacing: 1px;

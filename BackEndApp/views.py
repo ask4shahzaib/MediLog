@@ -568,6 +568,31 @@ def graphData(prescriptions, reports):
     return visitcount
 
 
+def changePassword(request):
+    if request.method == 'GET':
+        return render(request, 'BackEndApp/changePassword.html')
+    else:
+        oldPassword = request.POST['oldPassword']
+        newPassword = request.POST['newPassword']
+        user = authenticate(
+            request, username=request.user.username, password=oldPassword)
+        if user is not None:
+            try:
+                user.set_password(newPassword)
+                user.save()
+                messages.success(request, 'Password changed successfully')
+                login(request, user)
+                return redirect('feed')
+            except:
+                messages.error(
+                    request, 'Password not changed, choose a strong Password')
+                return redirect('changePassword')
+        else:
+            messages.error(
+                request, 'Incorrect old Password, Password not changed')
+            return redirect('changePassword')
+
+
 @login_required(login_url='login')
 def patientFeed(request, id):
     try:
@@ -839,7 +864,7 @@ def addFollowUp(request):
 
 
 def about(request):
-    return render(request, 'BackEndApp/about.html', {})
+    return render(request, 'BackEndApp/about.html')
 
 
 @allowed_users(allowed=['Patient'])
@@ -870,29 +895,3 @@ def viewConnections(request):
             'person': person
         }
         return render(request, "BackEndApp/timeline.html", context)
-        # name = Patient.objects.get(CNIC=cnic)
-        # name = name.fName + " "+name.lName
-        # try:
-        #     prescriptions = Prescription.objects.filter(patient=cnic)
-        # except:
-        #     prescriptions = None
-        # try:
-        #     reports = LabReport.objects.filter(patient=cnic)
-        # except:
-        #     reports = None
-        # if prescriptions is not None:
-        #     for prescription in prescriptions:
-        #         prescription.doctor = doctorName(prescription.doctor)
-        #         prescription.hospital = hospitalName(prescription.hospital)
-        #         if len(prescription.description) > 40:
-        #             prescription.description = prescription.description[0:40] + ' ...'
-        # if reports is not None:
-        #     for report in reports:
-        #         if report.doctor is not None:
-        #             report.doctor = doctorName(report.doctor)
-        #         if len(report.description) > 40:
-        #             report.description = report.description[0:40] + ' ...'
-
-        # context = {'prescriptions': prescriptions, 'reports': reports, 'name': name,
-        #            'person': Patient.objects.get(CNIC=request.user.username), 'check': True}
-        # return render(request, "BackEndApp/allRecords.html", context)

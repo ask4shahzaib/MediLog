@@ -93,11 +93,14 @@
             <label class="form-label" for="customFile">Profile Picture</label>
             <input type="file" name="photo" class="form-control" accept="Application/pdf, image/*" id="customFile" /><br>
 
-            <button type="submit" class="btn btn-primary">Update</button> {%endblock%}
+            <button type="submit" class="btn btn-primary" style="position: relative; bottom: 10px;">Update</button>
+        </form>
+        <form action="/changePassword/" method="GET">
+            {%csrf_token%}
+            <button type="submit" class="btn btn-primary" style="position: relative; top: 4px; bottom: 10px;">Change Password</button> {%endblock%}
         </form>
 
     </div>
-
 
 </body>
 
