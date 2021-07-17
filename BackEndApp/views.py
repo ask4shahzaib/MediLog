@@ -1,6 +1,5 @@
 import datetime
-from calendar import day_abbr, month_name
-import io
+from calendar import month_name
 from datetime import date, timedelta
 from base64 import b64encode
 from time import strptime
@@ -12,7 +11,6 @@ from django.contrib.auth.models import Group
 from django.core.exceptions import ObjectDoesNotExist
 from django.http.response import json
 from django.shortcuts import render
-from PIL import Image
 from BackEndApp.models import *
 from .decorators import *
 from .forms import *
@@ -376,6 +374,10 @@ def timelineData(id):
             d1.append(enrty)
         data2.insert(0, d1)
     return data2
+
+
+def stats(request):
+    None
 
 
 def summary(cnic):
