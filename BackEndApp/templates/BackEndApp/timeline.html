@@ -14,10 +14,19 @@
     <link rel="JavaScript" href="{% static '/js/index.js' %}" />
     <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+
+    <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css">
+
+    <script type="text/javascript" src="http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+    <script type="" src="{% static 'js/index.js' %}" charset="utf-8"></script>
 
 
 </head>
@@ -47,63 +56,109 @@
         {% include 'BackEndApp/patientSidebar.html' %}
 
     </div>
-
-    <div class="headerOfTimeline">
-        <h1 style="padding-left: 5%; padding-top: 1.5%; font-size: 80;">MEDICAL TIMELINE</h1>
-    </div>
-    <div class="w3-container listPresStyle" style="width: 78%; top: 30%; left: 15%; border-radius: 25px;">
+    {% block content %}
+    <div class="usableBody container" style="box-shadow: 0px 0px 0px 0px rgba(199, 199, 199, 0.2); border-radius: 0px; background-color:transparent;">
 
 
-        {% if not patient %}
-        <a class="btn btn-success" id="allRecords" href="{% url 'viewAllRecords' %}">All Records</a>
-        <br><br> {% endif %}
+        <div class="row" style="padding: 5px; 
+        box-shadow: 1.5px 1.5px 5px 5px rgba(199, 199, 199, 0.2);">
+
+            <div class="col-lg-8">
+                {{text}}
+            </div>
+
+        </div>
+        <div class="row" style="margin-top: 3%;">
+            <div class="col-lg-5">
+                {% if not patient %}
+                <a class="btn btn-success" id="allRecords" href="{% url 'viewAllRecords' %}">All Records</a>
+                <br><br> {% endif %}
 
 
 
-        <ul class="w3-ul w3-card-4">
+                <ul class="w3-ul w3-card-4">
 
-            {%if data%} {% for x in data %}
-            <div class="container" style="padding-top:10px; padding-bottom: 10px;">
-                <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#{{x.0}}">{{x.0}}</button>
-                <div id="{{x.0}}" class="collapse">
-                    <ul>
-                        {% for y in x %} {% if y != x.0 %}
-                        <div class="" style="margin-left: 6%; padding: 10px;  margin-top: 2%;">
+                    {%if data%} {% for x in data %}
+                    <div class="container" style="padding-top:10px; padding-bottom: 10px;">
+                        <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#{{x.0}}">{{x.0}}</button>
+                        <div id="{{x.0}}" class="collapse">
+                            <ul>
+                                {% for y in x %} {% if y != x.0 %}
+                                <div class="" style="margin-left: 6%; padding: 10px;  margin-top: 2%;">
 
-                            <li>
-                                <form method="POST">
-                                    {% csrf_token %}
-                                    <div class="input-group">
-                                        <input name="q" type="submit" class='btn btn-info' placeholder="Search" value="{{y}} {{x.0}}" />
-                                    </div>
-                                </form>
+                                    <li>
+                                        <form method="POST">
+                                            {% csrf_token %}
+                                            <div class="input-group">
+                                                <input name="q" type="submit" class='btn btn-info' placeholder="Search" value="{{y}} {{x.0}}" />
+                                            </div>
+                                        </form>
 
-                            </li>
+                                    </li>
+                                </div>
+                                {% endif %} {% endfor %}
+                            </ul>
+
                         </div>
-                        {% endif %} {% endfor %}
-                    </ul>
+                    </div>
 
-                </div>
+                    {% endfor %} {%endif%} </ul> {%if not data%}
+
+                <ul class="w3-ul w3-card-4">
+
+                    <div class="container" style="padding-top:10px; padding-bottom: 10px;">
+                        <h3>No Record found</h3>
+                    </div>
+                </ul>
+
+                {%endif%}
+            </div>
+            <div class="col-lg-7">
+
+                <table class="table" id="prescriptions" style="background-color: rgba(227, 254, 255, 0.9);">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Label</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for s in sum%}
+                        <tr>
+                            <td>{{s.label}}</td>
+                            <td>{{s.description}}</td>
+                            <td>{{s.date}}</td>
+                            {% if s.hospital %}
+                            <td>
+                                <form id="form" action="/getPrescriptionFiles/" method="POST">
+                                    {%csrf_token%}
+                                    <button type="text" name="serial" value="{{s.id}}">View</button>
+                                </form>
+                            </td>
+                            {%endif%} {% if s.laboratory %}
+                            <td>
+                                <form id="form" action="/getReportFiles/" method="POST">
+                                    {%csrf_token%}
+                                    <button type="text" name="serial" value="{{s.id}}">View</button>
+                                </form>
+                            </td>
+                            {%endif%} {%endfor%} {%endblock%}
+                    </tbody>
             </div>
 
-            {% endfor %} {%endif%} </ul> {%if not data%}
-
-
-
-
-
-        <ul class="w3-ul w3-card-4">
-
-            <div class="container" style="padding-top:10px; padding-bottom: 10px;">
-                <h3>No Record found</h3>
-            </div>
-        </ul>
-
-
-
-
-        {%endif%}
+        </div>
     </div>
+
+
+
+    <script>
+        $(document).ready(function() {
+            $('#prescriptions').dataTable();
+        });
+    </script>
+
 
 </body>
 

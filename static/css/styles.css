@@ -613,8 +613,10 @@
     position: absolute;
     margin-left: 14%;
     margin-top: 5%;
-    height: 15%;
+    padding: 1%;
+    height: auto;
     width: 80%;
+    display: block;
     box-shadow: 1.5px 1.5px 5px 5px rgba(199, 199, 199, 0.8);
     border-radius: 20px;
 }

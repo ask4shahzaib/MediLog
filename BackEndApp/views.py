@@ -1,7 +1,7 @@
 import datetime
-from calendar import month_name
+from calendar import day_abbr, month_name
 import io
-from datetime import timedelta
+from datetime import date, timedelta
 from base64 import b64encode
 from time import strptime
 from cryptography.fernet import Fernet
@@ -43,14 +43,6 @@ def decrypt(bytes):
     return uri
 
 
-def generateText(request):
-    if request.method == 'POST':
-
-        None
-    else:
-        None
-
-
 def timeline(request):
     if request.method == 'POST':
         try:
@@ -88,26 +80,33 @@ def timeline(request):
             if data == []:
                 data = False
             person = Doctor.objects.get(license_No=request.user.username)
+            text, sum = summary(cnic)
             context = {
+                'text': text,
+                'sum': sum,
                 'patient': False,
                 'data': data,
                 'person': person
             }
             return render(request, "BackEndApp/timeline.html", context)
     else:
-        group = request.user.groups.all()
-        group = str(group[0])
-        if group == 'Patient':
-            patient = True
-            person = Patient.objects.get(CNIC=request.user.username)
-        else:
-            patient = False
-            person = Doctor.objects.get(license_No=request.user.username)
+        # group = request.user.groups.all()
+        # group = str(group[0])
+        # if group == 'Patient':
+        # patient = True
+        person = Patient.objects.get(CNIC=request.user.username)
+        cnic = person.CNIC
+        text, sum = summary(cnic)
+        # else:
+        #     patient = False
+        #     person = Doctor.objects.get(license_No=request.user.username)
         data = timelineData(request.user.username)
         if not data:
             data = False
         context = {
-            'patient': patient,
+            'text': text,
+            'sum': sum,
+            'patient': True,
             'data': data,
             'person': person
         }
@@ -382,25 +381,40 @@ def timelineData(id):
     return data2
 
 
-@login_required(login_url='login')
-@allowed_users(allowed=['Patient', 'Doctor'])
-def summary(request):
-    if request.method == "GET":
-        patient = Patient.objects.get(CNIC=request.user.username)
-        context = {'patient': patient, 'check': True}
-        return render(request, "BackEndApp/summary.html", context)
+def summary(cnic):
+    name = Patient.objects.get(CNIC=cnic)
+    name = name.fName + " " + name.lName + " had"
+    try:
+        prescriptions = Prescription.objects.filter(patient=cnic)
+        prescriptions = prescriptions.filter(criticalLevel='Severe')
+        prescriptions = sorted(
+            prescriptions, key=lambda prescriptions: prescriptions.date, reverse=True)
+    except:
+        prescriptions = None
+    try:
+        reports = LabReport.objects.filter(patient=cnic)
+        reports = reports.filter(criticalLevel='Severe')
+        reports = sorted(
+            reports, key=lambda reports: reports.date, reverse=True)
+    except:
+        reports = None
+    data = []
+    for prescription in prescriptions:
+        data.append(prescription)
+    for report in reports:
+        data.append(report)
+    data = sorted(
+            data, key=lambda data: data.date, reverse=True)
+    text = name
+    i = 1
+    for d in data:
+        if i == len(data):
+            text += " and " + d.description + "."
+        else:
+            text += " " + d.description + ","
+        i += 1
 
-    else:
-        id = request.POST['cnic']
-        patient = None
-        try:
-            patient = Patient.objects.get(CNIC=id)
-        except:
-            messages.error(request, "Patient not found")
-            return redirect('feed')
-        doctor = Doctor.objects.get(license_No=request.user.username)
-        context = {'patient': patient, 'doctor': doctor, 'check': False}
-        return render(request, "BackEndApp/summary.html", context)
+    return text, data
 
 
 @login_required(login_url='login')
