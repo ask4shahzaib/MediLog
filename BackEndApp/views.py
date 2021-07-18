@@ -687,23 +687,25 @@ def feed(request):
         return patientFeed(request, id)
 
     if group == 'Laboratory':
-        laboratory = Laboratory.objects.get(license_No=id)
-        context = {'laboratory': laboratory}
+        user = Laboratory.objects.get(license_No=id)
+        context = {'user': user}
         return render(request, 'BackEndApp/hospitalLandingPage.html', context)
 
     if group == 'Doctor':
-        doctor = Doctor.objects.get(license_No=id)
-        context = {'doctor': doctor}
+        user = Doctor.objects.get(license_No=id)
+        context = {'user': user}
         return render(request, 'BackEndApp/doctorHomePage.html', context)
 
     if group == 'Hospital':
-        hospital = Hospital.objects.get(license_No=id)
-        context = {'hospital': hospital}
+        user = Hospital.objects.get(license_No=id)
+        context = {'user': user}
         return render(request, 'BackEndApp/hospitalLandingPage.html', context)
 
     if group == 'Admin':
         stats()
-        context = {'user': request.user}
+        user = User.objects.get(username=request.user.username)
+        user = user.first_name + " " + user.last_name
+        context = {'user': user}
         return render(request, 'BackEndApp/adminHomePage.html', context)
 
 
@@ -992,7 +994,31 @@ def addFollowUp(request):
 
 
 def about(request):
-    context = {'patient': True}
+    group = request.user.groups.all()
+    group = str(group[0])
+    context = {}
+    user = None
+    if group == 'Patient':
+        user = Patient.objects.get(CNIC=request.user.username)
+        context = {'patient': True, 'doctor': False, 'laboratory': False,
+                   'admin': False, 'hospital': False, 'user': user}
+    if group == 'Doctor':
+        user = Doctor.objects.get(license_No=request.user.username)
+        context = {'patient': False, 'doctor': True, 'laboratory': False,
+            'admin': False, 'hospital': False, 'user': user}
+    if group == 'Laboratory':
+        user = Laboratory.objects.get(license_No=request.user.username)
+        context = {'patient': False, 'doctor': False, 'laboratory': True,
+                   'admin': False, 'hospital': False, 'user': user}
+    if group == 'Admin':
+        user = User.objects.get(username=request.user.username)
+        user = user.first_name + " " + user.last_name
+        context = {'patient': False, 'doctor': False, 'laboratory': False,
+                   'admin': True, 'hospital': False, 'user': user}
+    if group == 'Hospital':
+        user = Hospital.objects.get(license_No=request.user.username)
+        context = {'patient': False, 'doctor': False, 'laboratory': False,
+                   'admin': False, 'hospital': True, 'user': user}
     return render(request, 'BackEndApp/about.html', context)
 
 
