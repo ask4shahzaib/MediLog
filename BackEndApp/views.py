@@ -376,8 +376,32 @@ def timelineData(id):
     return data2
 
 
-def stats(request):
-    None
+def stats():
+    city = 'Lahore'
+    disease = 'Corona'
+    year = '2021'
+    hospitals = Hospital.objects.filter(city=city.lower())
+    labs = Laboratory.objects.filter(city=city.lower())
+    data = []
+
+    prescriptions = Prescription.objects.filter(
+        label__icontains=disease.lower())
+    prescriptions = prescriptions.filter(date__year=year)
+    for hospital in hospitals:
+        temps = prescriptions.filter(hospital=hospital.license_No)
+        for temp in temps:
+            data.append(temp)
+
+    reports = LabReport.objects.filter(label__icontains=disease.lower())
+    reports = reports.filter(date__year=year)
+    for lab in labs:
+        temps = reports.filter(laboratory=lab.license_No)
+        for temp in temps:
+            data.append(temp)
+
+    data = sorted(data, key=lambda data: data.date, reverse=True)
+    for dat in data:
+        print(dat)
 
 
 def summary(cnic):
@@ -677,6 +701,7 @@ def feed(request):
         return render(request, 'BackEndApp/hospitalLandingPage.html', context)
 
     if group == 'Admin':
+        stats()
         context = {'user': request.user}
         return render(request, 'BackEndApp/adminHomePage.html', context)
 

@@ -72,6 +72,7 @@ class Doctor(models.Model):
 class Laboratory(models.Model):
     user = models.ForeignKey(User, null=False, on_delete=CASCADE)
     name = models.CharField(max_length=999)
+    city = models.TextField()
     license_No = models.CharField(max_length=10, primary_key=True)
     branch_code = models.IntegerField()
     verification = True
@@ -84,6 +85,7 @@ class Laboratory(models.Model):
 class Hospital(models.Model):
     user = models.ForeignKey(User, null=False, on_delete=CASCADE)
     name = models.CharField(max_length=999)
+    city = models.TextField()
     license_No = models.CharField(max_length=10, primary_key=True)
     branch_code = models.IntegerField()
     verification = True
@@ -135,6 +137,7 @@ class LabReport(models.Model):
 
     def __str__(self):
         return self.description
+
 
 class Message(models.Model):
     sender = models.CharField(max_length=30, null=False)
