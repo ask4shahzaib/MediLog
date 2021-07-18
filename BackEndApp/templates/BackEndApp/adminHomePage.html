@@ -43,41 +43,42 @@
     <script type="" src="{% static 'js/index.js' %}" charset="utf-8"></script>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-body {font-family: Arial, Helvetica, sans-serif;}
-* {box-sizing: border-box;}
 
-/* Button used to open the chat form - fixed at the bottom of the page */
-.open-button {
-  background-color: #555;
-  color: white;
-  padding: 16px 20px;
-  border: none;
-  cursor: pointer;
-  opacity: 0.8;
-  position: absolute;
-  top: 23px;
-  left: 28px;
-  height: 50px;
-  width: 150px;
-}
+    <style>
+    body {font-family: Arial, Helvetica, sans-serif;}
+*   {box-sizing: border-box;}
 
-/* The popup chat - hidden by default */
-.chat-popup {
-  display: none;
-  position: fixed;
-  bottom: 0;
-  right: 15px;
-  border: 3px solid #f1f1f1;
-  z-index: 9;
-}
+    /* Button used to open the chat form - fixed at the bottom of the page */
+    .open-button {
+      background-color: #555;
+      color: white;
+      padding: 16px 20px;
+      border: none;
+      cursor: pointer;
+      opacity: 0.8;
+      position: absolute;
+      top: 23px;
+      left: 28px;
+      height: 50px;
+      width: 150px;
+    }
 
-/* Add styles to the form container */
-.form-container {
-  max-width: 300px;
-  padding: 10px;
-  background-color: white;
-}
+    /* The popup chat - hidden by default */
+    .chat-popup {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      right: 15px;
+      border: 3px solid #f1f1f1;
+      z-index: 9;
+    }
+
+    /* Add styles to the form container */
+    .form-container {
+      max-width: 300px;
+      padding: 10px;
+      background-color: white;
+    }
 
 /* Full-width textarea */
 .form-container textarea {
@@ -119,6 +120,142 @@ body {font-family: Arial, Helvetica, sans-serif;}
 }
 </style>
 
+<script>
+  window.onload = function () {
+
+     // chart is for bar chart:
+  
+  var chart = new CanvasJS.Chart("chartContainer", {
+    animationEnabled: true,
+    title:{
+      text: "Total cases of major diseases in major cities of Pakistan"
+    },
+    axisY: {
+      title: "Billions of Barrels",
+      titleFontColor: "#4F81BC",
+      lineColor: "#4F81BC",
+      labelFontColor: "#4F81BC",
+      tickColor: "#4F81BC"
+    },
+    toolTip: {
+      shared: true
+    },
+    legend: {
+      cursor:"pointer",
+      itemclick: toggleDataSeries
+    },
+    data: [
+      
+    {
+      type: "column",
+      name: "Number of Corona Patients",
+      legendText: "Corona Patients",
+      showInLegend: true,
+      dataPoints:[
+        { label: "Lahore", y: 225670 },
+        { label: "Islamabad", y: 234243 },
+        { label: "Karachi", y: 652342 },
+        { label: "Quetta", y: 1013225 },
+        { label: "Peshawar", y: 932244 }
+      ]
+    },
+
+    {
+      type: "column",
+      name: "Number of Blood Pressure Patients",
+      legendText: "Blood Pressure Patients",
+      showInLegend: true,
+      dataPoints:[
+        { label: "Lahore", y: 845353 },
+        { label: "Islamabad", y: 63362 },
+        { label: "Karachi", y: 463333 },
+        { label: "Quetta", y: 35632 },
+        { label: "Peshawar", y: 45214 }
+      ]
+    },
+
+    {
+      type: "column",
+      name: "Number of Diabetes Patients",
+      legendText: "Diabetes Patients",
+      showInLegend: true,
+      dataPoints:[
+        { label: "Lahore", y: 225620 },
+        { label: "Islamabad", y: 232243 },
+        { label: "Karachi", y: 652222 },
+        { label: "Quetta", y: 1014335 },
+        { label: "Peshawar", y: 94644 }
+      ]
+    },
+
+    {
+      type: "column",
+      name: "Number of Hepatitus Patients",
+      legendText: "Hepatitus Patients",
+      showInLegend: true,
+      dataPoints:[
+        { label: "Lahore", y: 3412 },
+        { label: "Islamabad", y: 34241 },
+        { label: "Karachi", y: 43444 },
+        { label: "Quetta", y: 3535 },
+        { label: "Peshawar", y: 352 }
+      ]
+    },
+
+    {
+      type: "column",
+      name: "Number of Heart Patients",
+      legendText: "Heart Patients",
+      showInLegend: true,
+      dataPoints:[
+        { label: "Lahore", y: 22500 },
+        { label: "Islamabad", y: 2443 },
+        { label: "Karachi", y: 5522 },
+        { label: "Quetta", y: 101225 },
+        { label: "Peshawar", y: 93844 }
+      ]
+    },
+
+    ]
+  });
+  chart.render();
+  
+  function toggleDataSeries(e) {
+    if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+      e.dataSeries.visible = false;
+    }
+    else {
+      e.dataSeries.visible = true;
+    }
+    chart.render();
+  }
+
+  // chart2 is for pie chart:
+  
+  var chart2 = new CanvasJS.Chart("chartContainer2", {
+    animationEnabled: true,
+    title: {
+      text: "Situation of diseases in Pakistan"
+    },
+    data: [{
+      type: "pie",
+      startAngle: 240,
+      yValueFormatString: "##0.00\"%\"",
+      indexLabel: "{label} {y}",
+      dataPoints: [
+        {y: 39.45, label: "Corona"},
+        {y: 17.31, label: "Hepatitus"},
+        {y: 17.06, label: "Cancer"},
+        {y: 14.91, label: "Kidney Failure"},
+        {y: 11.26, label: "Others"}
+      ]
+    }]
+  });
+  chart2.render();
+  
+  }
+  </script>
+
 </head>
 
 <body class="bBody">
@@ -158,7 +295,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
         <button class="open-button" onclick="openPatientForm()" >Add Patient</button>
 
         <div class="chat-popup" id="myForm" style="position: absolute; right: 35%; left: 35%; width: 30%; text-align:center; bottom: 5%;">
-            <form id="form" name="form1" action="" onsubmit="return validateForm()" enctype="multipart/form-data" method="POST">
+            <form id="form" name="form1" action="/register/" onsubmit="return validateForm()" enctype="multipart/form-data" method="POST">
                 <h2>Add Patient</h2>
                 {%csrf_token%}
         
@@ -241,12 +378,10 @@ body {font-family: Arial, Helvetica, sans-serif;}
         <script>
         function openPatientForm() {
           document.getElementById("myForm").style.display = "block";
-          clicked = true;
         }
         
         function closePatientForm() {
           document.getElementById("myForm").style.display = "none";
-          clicked = false;
         }
         </script>
 
@@ -327,31 +462,34 @@ body {font-family: Arial, Helvetica, sans-serif;}
           style="padding-left: 12%; padding-top: 3%"
           accept="image/*"
         />
-      </div> </label
-    ><br />
+      </div> </label><br />
 
-    <button type="submit" class="btn">Register</button>
-    <button type="button" class="btn cancel" onclick="closeDoctorForm()">Cancel</button>
-  </form>
-</div>
-
-<script>
-function openDoctorForm() {
-  document.getElementById("myForm2").style.display = "block";
-}
-
-function closeDoctorForm() {
-  document.getElementById("myForm2").style.display = "none";
-}
-</script>
-
-
-
+      <button type="submit" class="btn">Register</button>
+      <button type="button" class="btn cancel" onclick="closeDoctorForm()">Cancel</button>
+      </form>
     </div>
 
+    <script>
+    function openDoctorForm() {
+      document.getElementById("myForm2").style.display = "block";
+    }
+
+    function closeDoctorForm() {
+      document.getElementById("myForm2").style.display = "none";
+    }
+    </script>
+
+  </div>
+
+
+  <!-- code for histogram -->
+  <div id="chartContainer" style="position: absolute; height: 50%; width: 80%; top: 90%; left: 16.8%;"></div>
+  <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
     
-
-
+  <!-- code for pie chart -->
+  <div id="chartContainer2" style="position: absolute; height: 50%; width: 30%; top: 25%; left: 16.8%;"></div>
+  <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+  
 </body>
 
 </html>
