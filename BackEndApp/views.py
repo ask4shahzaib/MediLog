@@ -928,8 +928,6 @@ def registerHospital(request):
         city = request.POST['city']
         branchCode = request.POST['branchCode']
       
-        # print("------------------------------->" , name , password, licenseNo, branchCode, city)
-
         try:
             y = User.objects.get(username=licenseNo)
         except ObjectDoesNotExist:
@@ -956,6 +954,50 @@ def registerHospital(request):
             return redirect('feed')
     else:
         return render(request, 'BackEndApp/adminHomePage.html')
+
+@login_required(login_url='login')
+@allowed_users(allowed=['Admin'])
+def registerLab(request):
+    if request.method == 'POST':
+        group = request.user.groups.all()
+        try:
+            group = str(group[0])
+        except:
+            group = 'Laboratory'
+
+        name = request.POST['name']
+        password = request.POST['password']
+        licenseNo = request.POST['licenseNo']
+        city = request.POST['city']
+        branchCode = request.POST['branchCode']
+      
+        try:
+            y = User.objects.get(username=licenseNo)
+        except ObjectDoesNotExist:
+            y = None
+        if y is None:
+            x = User.objects.create_user(
+                username=licenseNo, first_name=name, password=password)
+            x.save()
+            try:
+                group = Group.objects.get(name='Laboratory')
+            except:
+                group = Group(name='Laboratory')
+                group.save()
+                group = Group.objects.get(name='Laboratory')
+            x.groups.add(group)
+            z = Hospital(name=name,license_No=licenseNo,
+                        city=city,branch_code=branchCode, user=x)
+            z.save()
+            messages.success(request, 'Account Created Successfully')
+            return redirect('feed')
+        else:
+            messages.error(
+                request, "Already a hospital found with same license number")
+            return redirect('feed')
+    else:
+        return render(request, 'BackEndApp/adminHomePage.html')
+
 
 
 

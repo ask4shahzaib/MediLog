@@ -631,6 +631,70 @@
             }
         </script>
 
+
+
+ <!-- ********************************************************** Add laboratory from Admin panel  -->
+
+ <button class="open-button" onclick="openLabForm()" style="left: 510px;" >Add Laboratory</button>
+
+ <div class="chat-popup" id="myForm4" style="position: absolute; right: 35%; left: 35%; width: 30%; text-align:center; bottom: 5%;">
+     <form id="form" name="form1" action="/registerHospital/" onsubmit="return validateForm()" enctype="multipart/form-data" method="POST">
+         <h2>Add Hospital</h2>
+         {%csrf_token%}
+ 
+         
+         <label class="animate">
+             <input name="name" id="name" type="text" required />
+             <div class="label-text">Name</div>
+           </label>
+
+             <div>
+                 <label class="animate">
+         <input name="password" id="password" type="password" required />
+         <div class="label-text">Password</div>
+       </label>
+             </div>
+
+
+             <label class="animate">
+             <input name="licenseNo" id="licenseNo" type="text" required />
+             <div class="label-text">license Number</div>
+           </label>
+
+
+             <label class="animate">
+         <input name="branchCode" id="branchCode" type="text" required />
+         <div class="label-text">Branch Code</div>
+       </label>
+
+
+             <label class="animate">
+       <input name="city" id="city" type="text" required />
+       <div class="label-text">City</div>
+     </label>
+
+
+
+             <button type="submit" class="btn">Register</button>
+             <button type="button" class="btn btn-sm btn-danger" onclick="closeLabForm()">Cancel</button>
+         </form>
+     </div>
+
+     <script>
+         function openLabForm() {
+             document.getElementById("myForm4").style.display = "block";
+             clicked = true;
+         }
+
+         function closeLabForm() {
+             document.getElementById("myForm4").style.display = "none";
+             clicked = false;
+         }
+     </script>
+
+
+
+
     </div>
 
 =======
