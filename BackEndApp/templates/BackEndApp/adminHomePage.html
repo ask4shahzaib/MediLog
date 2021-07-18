@@ -42,7 +42,82 @@
 
     <script type="" src="{% static 'js/index.js' %}" charset="utf-8"></script>
 
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {font-family: Arial, Helvetica, sans-serif;}
+* {box-sizing: border-box;}
 
+/* Button used to open the chat form - fixed at the bottom of the page */
+.open-button {
+  background-color: #555;
+  color: white;
+  padding: 16px 20px;
+  border: none;
+  cursor: pointer;
+  opacity: 0.8;
+  position: absolute;
+  top: 23px;
+  left: 28px;
+  height: 50px;
+  width: 150px;
+}
+
+/* The popup chat - hidden by default */
+.chat-popup {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  right: 15px;
+  border: 3px solid #f1f1f1;
+  z-index: 9;
+}
+
+/* Add styles to the form container */
+.form-container {
+  max-width: 300px;
+  padding: 10px;
+  background-color: white;
+}
+
+/* Full-width textarea */
+.form-container textarea {
+  width: 100%;
+  padding: 15px;
+  margin: 5px 0 22px 0;
+  border: none;
+  background: #f1f1f1;
+  resize: none;
+  min-height: 200px;
+}
+
+/* When the textarea gets focus, do something */
+.form-container textarea:focus {
+  background-color: #ddd;
+  outline: none;
+}
+
+/* Set a style for the submit/send button */
+.form-container .btn {
+  background-color: #04AA6D;
+  color: white;
+  padding: 16px 20px;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  margin-bottom:10px;
+  opacity: 0.8;
+}
+
+/* Add a red background color to the cancel button */
+.form-container .cancel {
+  background-color: red;
+}
+
+/* Add some hover effects to buttons */
+.form-container .btn:hover, .open-button:hover {
+  opacity: 1;
+}
+</style>
 
 </head>
 
@@ -80,334 +155,196 @@
     <div class="usableBody" style="box-shadow: 0px 0px 0px 0px rgba(199, 199, 199, 0.2); border-radius: 0px; background-color:transparent;">
 
 
+        <button class="open-button" onclick="openPatientForm()" >Add Patient</button>
 
-
-        <a class="btn btn-primary" data-toggle="collapse" href="#patient" role="button" aria-expanded="false" aria-controls="patient">
-                Add Patient
-              </a>
-
-
-        <a class="btn btn-primary" data-toggle="collapse" href="#doctor" role="button" aria-expanded="false" aria-controls="doctor">
-                Add Doctor
-              </a>
-
-
-        <a class="btn btn-primary" data-toggle="collapse" href="#hospital" role="button" aria-expanded="false" aria-controls="hospital">
-            Add Hospital
-          </a>
-
-
-        <a class="btn btn-primary" data-toggle="collapse" href="#laboratory" role="button" aria-expanded="false" aria-controls="laboratory">
-            Add Laboratory
-          </a>
-
-
-        <div class="collapse" id="patient">
-            <div class="card card-body">
-
-
-                <form action="/register/" enctype="multipart/form-data" method="POST">
-                    {%csrf_token%}
-                    <div class="label-text" style="padding-left: 6%;">
-                        <h2 text-align: center>Add New Patient</h2>
-                    </div>
-
-
-                    <label class="animate">
-                            <input name="cnic" id="cnic" type="text" required />
-                            <div class="label-text">CNIC</div>
-                        </label>
-
-
-                    <div>
-                        <label class="animate">
-                                <input name="password" id="password" type="password" required />
-                                <div class="label-text">Password</div>
-                            </label>
-
-                    </div>
-
-                    <label class="animate">
-                            <input name="fname" id="fname" type="text" required />
-                            <div class="label-text">First Name</div>
-                        </label>
-
-                    <label class="animate">
-                            <input name="lname" id="lname" type="text" required />
-                            <div class="label-text">Last Name</div>
-                        </label>
-
-                    <label class="animate">
-                            <input name="phone" id="phone" type="phone" required />
-                            <div class="label-text">Phone</div>
-                        </label>
-
-                    <label class="animate">
-                            <input name="email" id="email" type="email" required />
-                            <div class="label-text">E-mail</div>
-                        </label>
-
-                    <label class="animate">
-                            <input
-                            name="dob"
-                            type="text"
-                            onfocus="(this.type='date')"
-                            onfocusout="(this.type='text')"
-                            required
-                            />
-                            <div class="label-text">Date of Birth</div>
-                        </label>
-
-                    <label class="animate">
-                            <input name="address" id="address" type="text" required />
-                            <div class="label-text">Address</div>
-                        </label>
-
-                    <label class="">
-                            <div>
-                            <input
-                                type="file"
-                                name="file"
-                                style="padding-left: 20%; padding-top: 3%"
-                                accept="image/*"
-                            />
-                            </div> </label<br>
-                        <button class='btn btn-primary' style="margin-left: 95px; margin-top: 15px;" type="submit" value="submit">Create Account</button>
-                </form>
-                
-                </div>
-            </div>
-
-
-
-
+        <div class="chat-popup" id="myForm" style="position: absolute; right: 35%; left: 35%; width: 30%; text-align:center; bottom: 5%;">
+            <form id="form" name="form1" action="" onsubmit="return validateForm()" enctype="multipart/form-data" method="POST">
+                <h2>Add Patient</h2>
+                {%csrf_token%}
         
-            <div class="collapse" id="doctor" >
-                <div class="card card-body">
-                    <form action="/register/" enctype="multipart/form-data" method="POST">
-                        {%csrf_token%}
-                        <div class="label-text" style="padding-left: 6%;">
-                            <h2 text-align: center>Add New Doctor</h2>
-                        </div>
-    
-    
-                        <label class="animate">
-                                <input name="cnic" id="cnic" type="text" required />
-                                <div class="label-text">CNIC</div>
-                            </label>
-
-
-                    <div>
-                        <label class="animate">
-                                    <input name="password" id="password" type="password" required />
-                                    <div class="label-text">Password</div>
-                                </label>
-
-                    </div>
-
-                    <label class="animate">
-                                <input name="fname" id="fname" type="text" required />
-                                <div class="label-text">First Name</div>
-                            </label>
-
-                    <label class="animate">
-                                <input name="lname" id="lname" type="text" required />
-                                <div class="label-text">Last Name</div>
-                            </label>
-
-                    <label class="animate">
-                                <input name="phone" id="phone" type="phone" required />
-                                <div class="label-text">Phone</div>
-                            </label>
-
-                    <label class="animate">
-                                <input name="email" id="email" type="email" required />
-                                <div class="label-text">E-mail</div>
-                            </label>
-
-                    <label class="animate">
-                                <input
-                                name="dob"
-                                type="text"
-                                onfocus="(this.type='date')"
-                                onfocusout="(this.type='text')"
-                                required
-                                />
-                                <div class="label-text">Date of Birth</div>
-                            </label>
-
-                    <label class="animate">
-                                <input name="address" id="address" type="text" required />
-                                <div class="label-text">Address</div>
-                            </label>
-
-                    <label class="">
-                                <div>
-                                <input
-                                    type="file"
-                                    name="file"
-                                    style="padding-left: 20%; padding-top: 3%"
-                                    accept="image/*"
-                                />
-                                </div> </label<br>
-                            <button class='btn btn-primary' style="margin-left: 95px; margin-top: 15px;" type="submit" value="submit">Create Account</button>
-                    </form>
-                    </div>
-            </div>
-
-
-            <div class="collapse" id="hospital">
-                <div class="card card-body">
-           
-                    <form action="/register/" enctype="multipart/form-data" method="POST">
-                        {%csrf_token%}
-                        <div class="label-text" style="padding-left: 6%;">
-                            <h2 text-align: center>Add New Account</h2>
-                        </div>
-    
-    
-                        <label class="animate">
-                                <input name="cnic" id="cnic" type="text" required />
-                                <div class="label-text">CNIC</div>
-                            </label>
-
-
-                    <div>
-                        <label class="animate">
-                                    <input name="password" id="password" type="password" required />
-                                    <div class="label-text">Password</div>
-                                </label>
-
-                    </div>
-
-                    <label class="animate">
-                                <input name="fname" id="fname" type="text" required />
-                                <div class="label-text">First Name</div>
-                            </label>
-
-                    <label class="animate">
-                                <input name="lname" id="lname" type="text" required />
-                                <div class="label-text">Last Name</div>
-                            </label>
-
-                    <label class="animate">
-                                <input name="phone" id="phone" type="phone" required />
-                                <div class="label-text">Phone</div>
-                            </label>
-
-                    <label class="animate">
-                                <input name="email" id="email" type="email" required />
-                                <div class="label-text">E-mail</div>
-                            </label>
-
-                    <label class="animate">
-                                <input
-                                name="dob"
-                                type="text"
-                                onfocus="(this.type='date')"
-                                onfocusout="(this.type='text')"
-                                required
-                                />
-                                <div class="label-text">Date of Birth</div>
-                            </label>
-
-                    <label class="animate">
-                                <input name="address" id="address" type="text" required />
-                                <div class="label-text">Address</div>
-                            </label>
-
-                    <label class="">
-                                <div>
-                                <input
-                                    type="file"
-                                    name="file"
-                                    style="padding-left: 20%; padding-top: 3%"
-                                    accept="image/*"
-                                />
-                                </div> </label<br>
-                            <button class='btn btn-primary' style="margin-left: 95px; margin-top: 15px;" type="submit" value="submit">Create Account</button>
-                    </form>
-           
-           
+                <div class="label-text">
+                    <!-- <h3 text-align: center>Sign Up</h3> -->
                 </div>
-            </div>
-
-            
-            <div class="collapse" id="laboratory">
-                <div class="card card-body">
-
-                    <form action="/register/" enctype="multipart/form-data" method="POST">
-                        {%csrf_token%}
-                        <div class="label-text" style="padding-left: 6%;">
-                            <h2 text-align: center>Add New Laboratory</h2>
-                        </div>
-    
-    
-                        <label class="animate">
-                                <input name="cnic" id="cnic" type="text" required />
-                                <div class="label-text">CNIC</div>
-                            </label>
-
-
-                    <div>
-                        <label class="animate">
-                                    <input name="password" id="password" type="password" required />
-                                    <div class="label-text">Password</div>
-                                </label>
-
-                    </div>
-
+        
+                <label class="animate">
+              <input
+                style="padding-top: 25px"
+                name="cnic"
+                id="cnic"
+                type="text"
+                required
+              />
+              <div class="label-text" name="your-CNIC" >CNIC</div>
+            </label>
+        
+                <div>
                     <label class="animate">
-                                <input name="fname" id="fname" type="text" required />
-                                <div class="label-text">First Name</div>
-                            </label>
-
-                    <label class="animate">
-                                <input name="lname" id="lname" type="text" required />
-                                <div class="label-text">Last Name</div>
-                            </label>
-
-                    <label class="animate">
-                                <input name="phone" id="phone" type="phone" required />
-                                <div class="label-text">Phone</div>
-                            </label>
-
-                    <label class="animate">
-                                <input name="email" id="email" type="email" required />
-                                <div class="label-text">E-mail</div>
-                            </label>
-
-                    <label class="animate">
-                                <input
-                                name="dob"
-                                type="text"
-                                onfocus="(this.type='date')"
-                                onfocusout="(this.type='text')"
-                                required
-                                />
-                                <div class="label-text">Date of Birth</div>
-                            </label>
-
-                    <label class="animate">
-                                <input name="address" id="address" type="text" required />
-                                <div class="label-text">Address</div>
-                            </label>
-
-                    <label class="">
-                                <div>
-                                <input
-                                    type="file"
-                                    name="file"
-                                    style="padding-left: 20%; padding-top: 3%"
-                                    accept="image/*"
-                                />
-                                </div> </label<br>
-                            <button class='btn btn-primary' style="margin-left: 95px; margin-top: 15px;" type="submit" value="submit">Create Account</button>
-                    </form>
-           
-
+                <input name="password" id="password" type="password" required />
+                <div class="label-text">Password</div>
+              </label>
                 </div>
-            </div>
+        
+                <label class="animate">
+              <input name="fname" id="fname" type="text" required />
+              <div class="label-text">First Name</div>
+            </label>
+        
+                <label class="animate">
+              <input name="lname" id="lname" type="text" required />
+              <div class="label-text">Last Name</div>
+            </label>
+        
+                <label class="animate">
+              <input name="phone" id="phone" type="phone" required />
+              <div class="label-text" name="your-phone">Phone</div>
+            </label>
+        
+                <label class="animate">
+              <input name="email" id="email" type="email" required />
+              <div class="label-text">E-mail</div>
+            </label>
+        
+                <label class="animate">
+              <input
+                name="dob"
+                id="dob"
+                type="text"
+                onfocus="(this.type='date')"
+                onfocusout="(this.type='text')"
+                required
+              />
+              <div class="label-text">Date of Birth</div>
+            </label>
+        
+                <label class="animate">
+              <input name="address" id="address" type="text" required />
+              <div class="label-text">Address</div>
+            </label>
+        
+                <label class="">
+              <div>
+                <input
+                  type="file"
+                  id="prescription"
+                  name="file"
+                  style="padding-left: 12%; padding-top: 3%"
+                  accept="image/*"
+                />
+              </div> </label
+            ><br />
+        
+            <button type="submit" class="btn">Register</button>
+            <button type="button" class="btn cancel" onclick="closePatientForm()">Cancel</button>
+          </form>
+        </div>
+        
+        <script>
+        function openPatientForm() {
+          document.getElementById("myForm").style.display = "block";
+          clicked = true;
+        }
+        
+        function closePatientForm() {
+          document.getElementById("myForm").style.display = "none";
+          clicked = false;
+        }
+        </script>
+
+
+
+<button class="open-button" onclick="openDoctorForm()" style="left: 188px;">Add Doctor</button>
+
+<div class="chat-popup" id="myForm2" style="position: absolute; right: 35%; left: 35%; width: 30%; text-align:center; bottom: 5%;">
+    <form id="form" name="form1" action="" onsubmit="return validateForm()" enctype="multipart/form-data" method="POST">
+        <h2>Add Doctor</h2>
+        {%csrf_token%}
+
+        <div class="label-text">
+            <!-- <h3 text-align: center>Sign Up</h3> -->
+        </div>
+
+        <label class="animate">
+      <input
+        style="padding-top: 25px"
+        name="cnic"
+        id="cnic"
+        type="text"
+        required
+      />
+      <div class="label-text" name="your-CNIC" >CNIC</div>
+    </label>
+
+        <div>
+            <label class="animate">
+        <input name="password" id="password" type="password" required />
+        <div class="label-text">Password</div>
+      </label>
+        </div>
+
+        <label class="animate">
+      <input name="fname" id="fname" type="text" required />
+      <div class="label-text">First Name</div>
+    </label>
+
+        <label class="animate">
+      <input name="lname" id="lname" type="text" required />
+      <div class="label-text">Last Name</div>
+    </label>
+
+        <label class="animate">
+      <input name="phone" id="phone" type="phone" required />
+      <div class="label-text" name="your-phone">Phone</div>
+    </label>
+
+        <label class="animate">
+      <input name="email" id="email" type="email" required />
+      <div class="label-text">E-mail</div>
+    </label>
+
+        <label class="animate">
+      <input
+        name="dob"
+        id="dob"
+        type="text"
+        onfocus="(this.type='date')"
+        onfocusout="(this.type='text')"
+        required
+      />
+      <div class="label-text">Date of Birth</div>
+    </label>
+
+        <label class="animate">
+      <input name="address" id="address" type="text" required />
+      <div class="label-text">Address</div>
+    </label>
+
+        <label class="">
+      <div>
+        <input
+          type="file"
+          id="prescription"
+          name="file"
+          style="padding-left: 12%; padding-top: 3%"
+          accept="image/*"
+        />
+      </div> </label
+    ><br />
+
+    <button type="submit" class="btn">Register</button>
+    <button type="button" class="btn cancel" onclick="closeDoctorForm()">Cancel</button>
+  </form>
+</div>
+
+<script>
+function openDoctorForm() {
+  document.getElementById("myForm2").style.display = "block";
+}
+
+function closeDoctorForm() {
+  document.getElementById("myForm2").style.display = "none";
+}
+</script>
+
 
 
     </div>
