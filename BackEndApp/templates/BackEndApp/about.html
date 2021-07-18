@@ -39,18 +39,13 @@
                     <img src="{% static 'images/UI/logo.png' %}" width="auto" height="50px">
                 </a>
             </div>
-            {%block content%}
+            {% block content %}
             <div class="collapse navbar-collapse navbar-right" id="navbarSupportedContent">
 
                 <ul class="nav navbar-nav float-left ml-auto">
                     <ul class="nav navbar-nav float-left ml-auto">
-                        {%if check%}
-                        <li style="margin-top: 15px;">Hello, {{person}}</li>
+                        <li style="margin-top: 15px;">Hello, {{user}}</li>
                         <li><a href="{% url 'logout' %}">Logout <i class="fas fa-sign-out-alt"></i></span></a></li>
-                        {%endif%} {%if not check%}
-                        <li style="margin-top: 15px;">Hello, {{doctor}}</li>
-                        <li><a href="{% url 'logout' %}">Logout <i class="fas fa-sign-out-alt"></i></span></a></li>
-                        {%endif%}
                     </ul>
                 </ul>
             </div>
@@ -60,8 +55,8 @@
 
     <div class="wrapper">
 
-
-        {% if patient %} {% include 'BackEndApp/patientSidebar.html' %} {%endif%} {%if doctor%} {% include 'BackEndApp/doctorSidebar.html' %} {%endif%}
+        {% if patient %} {% include 'BackEndApp/patientSidebar.html' %} {% elif admin %} {% include 'BackEndApp/adminSidebar.html'%} {% elif hospital %} {% include 'BackEndApp/hospitalSidebar.html' %} {% endif %} {% if doctor %} {% include 'BackEndApp/doctorSidebar.html'
+        %} {% elif laboratory %} {% include 'BackEndApp/hospitalSidebar.html' %} {% endif %}
 
 
     </div>
@@ -85,7 +80,7 @@
         <p>This project will provide a great service in field of medical by providing the essential information to the doctors about the patient which they need for an effective diagnosis.</p>
     </div>
 
-    {%endblock%}
+    {% endblock %}
 </body>
 
 </html>
