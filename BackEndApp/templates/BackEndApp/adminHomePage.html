@@ -29,9 +29,6 @@
 
 
 
-
-
-
     <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
     <link rel="stylesheet" href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css">
@@ -158,7 +155,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
         <button class="open-button" onclick="openPatientForm()" >Add Patient</button>
 
         <div class="chat-popup" id="myForm" style="position: absolute; right: 35%; left: 35%; width: 30%; text-align:center; bottom: 5%;">
-            <form id="form" name="form1" action="" onsubmit="return validateForm()" enctype="multipart/form-data" method="POST">
+            <form id="form" name="form1" action="/register/" onsubmit="return validateForm()" enctype="multipart/form-data" method="POST">
                 <h2>Add Patient</h2>
                 {%csrf_token%}
         
@@ -234,7 +231,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
             ><br />
         
             <button type="submit" class="btn">Register</button>
-            <button type="button" class="btn cancel" onclick="closePatientForm()">Cancel</button>
+            <button type="button" class="btn  btn-sm btn-danger" onclick="closePatientForm()">Cancel</button>
           </form>
         </div>
         
@@ -250,12 +247,12 @@ body {font-family: Arial, Helvetica, sans-serif;}
         }
         </script>
 
-
+        <!-- ************************************************ Add doctor implementation from admin panel -->
 
 <button class="open-button" onclick="openDoctorForm()" style="left: 188px;">Add Doctor</button>
 
 <div class="chat-popup" id="myForm2" style="position: absolute; right: 35%; left: 35%; width: 30%; text-align:center; bottom: 5%;">
-    <form id="form" name="form1" action="" onsubmit="return validateForm()" enctype="multipart/form-data" method="POST">
+    <form id="form" name="form1" action="/registerDoctor/" onsubmit="return validateForm()" enctype="multipart/form-data" method="POST">
         <h2>Add Doctor</h2>
         {%csrf_token%}
 
@@ -274,6 +271,13 @@ body {font-family: Arial, Helvetica, sans-serif;}
       <div class="label-text" name="your-CNIC" >CNIC</div>
     </label>
 
+
+    <label class="animate">
+        <input name="licenseNo" id="licenseNo" type="text" required />
+        <div class="label-text">License Number</div>
+      </label>
+
+      
         <div>
             <label class="animate">
         <input name="password" id="password" type="password" required />
@@ -301,17 +305,6 @@ body {font-family: Arial, Helvetica, sans-serif;}
       <div class="label-text">E-mail</div>
     </label>
 
-        <label class="animate">
-      <input
-        name="dob"
-        id="dob"
-        type="text"
-        onfocus="(this.type='date')"
-        onfocusout="(this.type='text')"
-        required
-      />
-      <div class="label-text">Date of Birth</div>
-    </label>
 
         <label class="animate">
       <input name="address" id="address" type="text" required />
@@ -331,7 +324,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
     ><br />
 
     <button type="submit" class="btn">Register</button>
-    <button type="button" class="btn cancel" onclick="closeDoctorForm()">Cancel</button>
+    <button type="button" class="btn  btn-sm btn-danger" onclick="closeDoctorForm()">Cancel</button>
   </form>
 </div>
 
@@ -346,8 +339,86 @@ function closeDoctorForm() {
 </script>
 
 
+    <!-- ********************************************************** Add hospital from Admin panel  -->
 
+    <button class="open-button" onclick="openHospitalForm()" style="left: 350px;" >Add Hospital</button>
+
+    <div class="chat-popup" id="myForm3" style="position: absolute; right: 35%; left: 35%; width: 30%; text-align:center; bottom: 5%;">
+        <form id="form" name="form1" action="/registerHospital/" onsubmit="return validateForm()" enctype="multipart/form-data" method="POST">
+            <h2>Add Hospital</h2>
+            {%csrf_token%}
+    
+            
+            <label class="animate">
+                <input name="name" id="name" type="text" required />
+                <div class="label-text">Name</div>
+              </label>
+          
+            <div>
+                <label class="animate">
+            <input name="password" id="password" type="password" required />
+            <div class="label-text">Password</div>
+          </label>
+            </div>
+    
+
+            <label class="animate">
+                <input name="licenseNo" id="licenseNo" type="text" required />
+                <div class="label-text">license Number</div>
+              </label>
+    
+              
+        <label class="animate">
+            <input name="branchCode" id="branchCode" type="text" required />
+            <div class="label-text">Branch Code</div>
+          </label>
+
+
+            <label class="animate">
+          <input name="city" id="city" type="text" required />
+          <div class="label-text">City</div>
+        </label>
+    
+          
+    
+        <button type="submit" class="btn">Register</button>
+        <button type="button" class="btn btn-sm btn-danger" onclick="closeHospitalForm()">Cancel</button>
+      </form>
     </div>
+    
+    <script>
+    function openHospitalForm() {
+      document.getElementById("myForm3").style.display = "block";
+      clicked = true;
+    }
+    
+    function closeHospitalForm() {
+      document.getElementById("myForm3").style.display = "none";
+      clicked = false;
+    }
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
 
     
 

@@ -679,6 +679,7 @@ def patientFeed(request, id):
 @login_required(login_url='login')
 @allowed_users(allowed=['Patient', 'Laboratory', 'Admin', 'Doctor', 'Hospital'])
 def feed(request):
+    
     group = request.user.groups.all()
     group = str(group[0])
     id = request.user.username
@@ -854,6 +855,106 @@ def register(request):
         if request.user.is_authenticated:
             return redirect('feed')
         return render(request, 'BackEndApp/register.html')
+
+
+@login_required(login_url='login')
+@allowed_users(allowed=['Admin'])
+def registerDoctor(request):
+    if request.method == 'POST':
+        group = request.user.groups.all()
+        try:
+            group = str(group[0])
+        except:
+            group = 'Doctor'
+
+        cnic = request.POST['cnic']
+        password = request.POST['password']
+        fname = request.POST['fname']
+        lname = request.POST['lname']
+        licenseNo = request.POST['licenseNo']
+        phone = request.POST['phone']
+        email = request.POST['email']
+        address = request.POST['address']
+
+        try:
+            photo = request.FILES['file']
+        except:
+            photo = 'C:/Users/Acer/MediLog/static/images/profile.jpg'
+        
+        try:
+            y = User.objects.get(username=licenseNo)
+        except ObjectDoesNotExist:
+            y = None
+        if y is None:
+            x = User.objects.create_user(
+                username=licenseNo, first_name=fname, last_name=lname, password=password, email=email)
+            x.save()
+            try:
+                group = Group.objects.get(name='Doctor')
+            except:
+                group = Group(name='Doctor')
+                group.save()
+                group = Group.objects.get(name='Doctor')
+            x.groups.add(group)
+            z = Doctor(CNIC=cnic, fName=fname, lName=lname,license_No=licenseNo,
+                        phone=phone, address=address, email=email, photo=photo, user=x)
+            z.save()
+            messages.success(request, 'Account Created Successfully')
+            return redirect('feed')
+        else:
+            messages.error(
+                request, "Already a doctor found with same license number")
+            return redirect('feed')
+    else:
+        return render(request, 'BackEndApp/adminHomePage.html')
+
+
+
+@login_required(login_url='login')
+@allowed_users(allowed=['Admin'])
+def registerHospital(request):
+    if request.method == 'POST':
+        group = request.user.groups.all()
+        try:
+            group = str(group[0])
+        except:
+            group = 'Hospital'
+
+        name = request.POST['name']
+        password = request.POST['password']
+        licenseNo = request.POST['licenseNo']
+        city = request.POST['city']
+        branchCode = request.POST['branchCode']
+      
+        # print("------------------------------->" , name , password, licenseNo, branchCode, city)
+
+        try:
+            y = User.objects.get(username=licenseNo)
+        except ObjectDoesNotExist:
+            y = None
+        if y is None:
+            x = User.objects.create_user(
+                username=licenseNo, first_name=name, password=password)
+            x.save()
+            try:
+                group = Group.objects.get(name='Hospital')
+            except:
+                group = Group(name='Hospital')
+                group.save()
+                group = Group.objects.get(name='Hospital')
+            x.groups.add(group)
+            z = Hospital(name=name,license_No=licenseNo,
+                        city=city,branch_code=branchCode, user=x)
+            z.save()
+            messages.success(request, 'Account Created Successfully')
+            return redirect('feed')
+        else:
+            messages.error(
+                request, "Already a hospital found with same license number")
+            return redirect('feed')
+    else:
+        return render(request, 'BackEndApp/adminHomePage.html')
+
 
 
 def followUpFiles(request):
