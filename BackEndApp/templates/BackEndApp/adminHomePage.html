@@ -33,7 +33,12 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
     <link rel="stylesheet" href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css">
 
+    <!-- For drop button in Admin sidebar ONLY -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
+
+
+    
     <script type="text/javascript" src="http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 
@@ -348,7 +353,7 @@
     <div class="usableBody" style="box-shadow: 0px 0px 0px 0px rgba(199, 199, 199, 0.2); border-radius: 0px; background-color:transparent;">
 
 
-        <button class="open-button" onclick="openPatientForm()">Add Patient</button>
+        <!-- <button class="open-button" onclick="openPatientForm()">Add Patient</button> -->
 
         <div class="chat-popup" id="myForm" style="position: absolute; right: 35%; left: 35%; width: 30%; text-align:center; bottom: 5%;">
             <form id="form" name="form1" action="/register/" onsubmit="return validateForm()" enctype="multipart/form-data" method="POST">
@@ -443,7 +448,7 @@
 
         <!-- ************************************************ Add doctor implementation from admin panel -->
 
-<button class="open-button" onclick="openDoctorForm()" style="left: 188px;">Add Doctor</button>
+<!-- <button class="open-button" onclick="openDoctorForm()" style="left: 188px;">Add Doctor</button> -->
 
 <div class="chat-popup" id="myForm2" style="position: absolute; right: 35%; left: 35%; width: 30%; text-align:center; bottom: 5%;">
     <form id="form" name="form1" action="/registerDoctor/" onsubmit="return validateForm()" enctype="multipart/form-data" method="POST">
@@ -544,7 +549,7 @@
 
         <!-- ********************************************************** Add hospital from Admin panel -->
 
-        <button class="open-button" onclick="openHospitalForm()" style="left: 350px;">Add Hospital</button>
+        <!-- <button class="open-button" onclick="openHospitalForm()" style="left: 350px;">Add Hospital</button> -->
 
         <div class="chat-popup" id="myForm3" style="position: absolute; right: 35%; left: 35%; width: 30%; text-align:center; bottom: 5%;">
             <form id="form" name="form1" action="/registerHospital/" onsubmit="return validateForm()" enctype="multipart/form-data" method="POST">
@@ -605,7 +610,7 @@
 
         <!-- ********************************************************** Add laboratory from Admin panel  -->
 
-        <button class="open-button" onclick="openLabForm()" style="left: 510px;">Add Laboratory</button>
+        <!-- <button class="open-button" onclick="openLabForm()" style="left: 510px;">Add Laboratory</button> -->
 
         <div class="chat-popup" id="myForm4" style="position: absolute; right: 35%; left: 35%; width: 30%; text-align:center; bottom: 5%;">
             <form id="form" name="form1" action="/registerHospital/" onsubmit="return validateForm()" enctype="multipart/form-data" method="POST">
