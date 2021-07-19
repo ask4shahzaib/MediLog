@@ -150,24 +150,24 @@
 
                     {
                         type: "column",
-                        name: "Number of Corona Patients",
+                        name: '{{disease1}}',
                         legendText: "Corona Patients",
                         showInLegend: true,
                         dataPoints: [{
                             label: "Lahore",
-                            y: 225670
+                            y: 220
                         }, {
                             label: "Islamabad",
-                            y: 234243
+                            y: 243
                         }, {
                             label: "Karachi",
-                            y: 652342
+                            y: 342
                         }, {
                             label: "Quetta",
-                            y: 1013225
+                            y: 125
                         }, {
                             label: "Peshawar",
-                            y: 932244
+                            y: 154
                         }]
                     },
 
@@ -178,19 +178,19 @@
                         showInLegend: true,
                         dataPoints: [{
                             label: "Lahore",
-                            y: 845353
+                            y: 453
                         }, {
                             label: "Islamabad",
-                            y: 63362
+                            y: 362
                         }, {
                             label: "Karachi",
-                            y: 463333
+                            y: 333
                         }, {
                             label: "Quetta",
-                            y: 35632
+                            y: 192
                         }, {
                             label: "Peshawar",
-                            y: 45214
+                            y: 214
                         }]
                     },
 
@@ -201,19 +201,19 @@
                         showInLegend: true,
                         dataPoints: [{
                             label: "Lahore",
-                            y: 225620
+                            y: 225
                         }, {
                             label: "Islamabad",
-                            y: 232243
+                            y: 232
                         }, {
                             label: "Karachi",
-                            y: 652222
+                            y: 652
                         }, {
                             label: "Quetta",
-                            y: 1014335
+                            y: 101
                         }, {
                             label: "Peshawar",
-                            y: 94644
+                            y: 946
                         }]
                     },
 
@@ -224,47 +224,47 @@
                         showInLegend: true,
                         dataPoints: [{
                             label: "Lahore",
-                            y: 3412
+                            y: 341
                         }, {
                             label: "Islamabad",
-                            y: 34241
+                            y: 241
                         }, {
                             label: "Karachi",
-                            y: 43444
+                            y: 444
                         }, {
                             label: "Quetta",
-                            y: 3535
+                            y: 353
                         }, {
                             label: "Peshawar",
                             y: 352
                         }]
-                    },
-
-                    {
+                    }, {
                         type: "column",
-                        name: "Number of Heart Patients",
+                        name: '{{vis}}',
                         legendText: "Heart Patients",
                         showInLegend: true,
                         dataPoints: [{
                             label: "Lahore",
-                            y: 22500
+                            y: 200
                         }, {
                             label: "Islamabad",
-                            y: 2443
+                            y: 243
                         }, {
                             label: "Karachi",
-                            y: 5522
+                            y: 522
                         }, {
                             label: "Quetta",
-                            y: 101225
+                            y: 125
                         }, {
                             label: "Peshawar",
-                            y: 93844
+                            y: 244
                         }]
                     },
 
                 ]
             });
+
+
             chart.render();
 
             function toggleDataSeries(e) {
@@ -521,11 +521,11 @@
       </div> </label
     ><br />
 
-    <button type="submit" class="btn">Register</button>
+    <button type="submit" id = "register" name = "register" class="btn">Register</button>
     <button type="button" class="btn  btn-sm btn-danger" onclick="closeDoctorForm()">Cancel</button>
   </form>
 </div>
-      </div> </label><br /> >>>>>>> afnan
+      </div> </label><br />
 
                 <button type="submit" class="btn">Register</button>
                 <button type="button" class="btn cancel" onclick="closeDoctorForm()">Cancel</button>

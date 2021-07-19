@@ -590,7 +590,7 @@ def graphData(prescriptions, reports):
         start_date -= delta
         i -= 1
 
-    visitcount = [['Date', 'Visits to Doctor', 'Tests']] + visitcount
+    visitcount = [['Date', 'Prescriptions', 'Tests']] + visitcount
     return visitcount
 
 
@@ -679,7 +679,7 @@ def patientFeed(request, id):
 @login_required(login_url='login')
 @allowed_users(allowed=['Patient', 'Laboratory', 'Admin', 'Doctor', 'Hospital'])
 def feed(request):
-    
+
     group = request.user.groups.all()
     group = str(group[0])
     id = request.user.username
@@ -705,7 +705,10 @@ def feed(request):
         stats()
         user = User.objects.get(username=request.user.username)
         user = user.first_name + " " + user.last_name
-        context = {'user': user}
+        vis = {'type': "column", 'name': "Number of Corona Patients", 'legendText': "Corona Patients",
+               'showInLegend': True, 'dataPoints': {'label': "Lahore", 'y': 220}}
+        context = {'user': user, 'vis': 'Number of Heart Patients',
+                   'disease1': "Number of Corona Patients"}
         return render(request, 'BackEndApp/adminHomePage.html', context)
 
 
@@ -882,7 +885,7 @@ def registerDoctor(request):
             photo = request.FILES['file']
         except:
             photo = 'C:/Users/Acer/MediLog/static/images/profile.jpg'
-        
+
         try:
             y = User.objects.get(username=licenseNo)
         except ObjectDoesNotExist:
@@ -898,8 +901,8 @@ def registerDoctor(request):
                 group.save()
                 group = Group.objects.get(name='Doctor')
             x.groups.add(group)
-            z = Doctor(CNIC=cnic, fName=fname, lName=lname,license_No=licenseNo,
-                        phone=phone, address=address, email=email, photo=photo, user=x)
+            z = Doctor(CNIC=cnic, fName=fname, lName=lname, license_No=licenseNo,
+                       phone=phone, address=address, email=email, photo=photo, user=x)
             z.save()
             messages.success(request, 'Account Created Successfully')
             return redirect('feed')
@@ -909,7 +912,6 @@ def registerDoctor(request):
             return redirect('feed')
     else:
         return render(request, 'BackEndApp/adminHomePage.html')
-
 
 
 @login_required(login_url='login')
@@ -927,7 +929,7 @@ def registerHospital(request):
         licenseNo = request.POST['licenseNo']
         city = request.POST['city']
         branchCode = request.POST['branchCode']
-      
+
         try:
             y = User.objects.get(username=licenseNo)
         except ObjectDoesNotExist:
@@ -943,8 +945,8 @@ def registerHospital(request):
                 group.save()
                 group = Group.objects.get(name='Hospital')
             x.groups.add(group)
-            z = Hospital(name=name,license_No=licenseNo,
-                        city=city,branch_code=branchCode, user=x)
+            z = Hospital(name=name, license_No=licenseNo,
+                         city=city, branch_code=branchCode, user=x)
             z.save()
             messages.success(request, 'Account Created Successfully')
             return redirect('feed')
@@ -954,6 +956,7 @@ def registerHospital(request):
             return redirect('feed')
     else:
         return render(request, 'BackEndApp/adminHomePage.html')
+
 
 @login_required(login_url='login')
 @allowed_users(allowed=['Admin'])
@@ -970,7 +973,7 @@ def registerLab(request):
         licenseNo = request.POST['licenseNo']
         city = request.POST['city']
         branchCode = request.POST['branchCode']
-      
+
         try:
             y = User.objects.get(username=licenseNo)
         except ObjectDoesNotExist:
@@ -986,8 +989,8 @@ def registerLab(request):
                 group.save()
                 group = Group.objects.get(name='Laboratory')
             x.groups.add(group)
-            z = Hospital(name=name,license_No=licenseNo,
-                        city=city,branch_code=branchCode, user=x)
+            z = Hospital(name=name, license_No=licenseNo,
+                         city=city, branch_code=branchCode, user=x)
             z.save()
             messages.success(request, 'Account Created Successfully')
             return redirect('feed')
@@ -997,8 +1000,6 @@ def registerLab(request):
             return redirect('feed')
     else:
         return render(request, 'BackEndApp/adminHomePage.html')
-
-
 
 
 def followUpFiles(request):
@@ -1047,7 +1048,7 @@ def about(request):
     if group == 'Doctor':
         user = Doctor.objects.get(license_No=request.user.username)
         context = {'patient': False, 'doctor': True, 'laboratory': False,
-            'admin': False, 'hospital': False, 'user': user}
+                   'admin': False, 'hospital': False, 'user': user}
     if group == 'Laboratory':
         user = Laboratory.objects.get(license_No=request.user.username)
         context = {'patient': False, 'doctor': False, 'laboratory': True,
