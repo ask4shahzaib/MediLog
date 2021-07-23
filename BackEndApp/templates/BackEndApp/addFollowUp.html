@@ -44,13 +44,8 @@
 
                 <ul class="nav navbar-nav float-left ml-auto">
                     <ul class="nav navbar-nav float-left ml-auto">
-                        {%if check%}
-                        <li style="margin-top: 15px;">Hello, {{person}}</li>
+                        <li style="margin-top: 15px;">Hello, {{user}}</li>
                         <li><a href="{% url 'logout' %}">Logout <i class="fas fa-sign-out-alt"></i></span></a></li>
-                        {%endif%} {%if not check%}
-                        <li style="margin-top: 15px;">Hello, {{doctor}}</li>
-                        <li><a href="{% url 'logout' %}">Logout <i class="fas fa-sign-out-alt"></i></span></a></li>
-                        {%endif%}
                     </ul>
                 </ul>
             </div>
@@ -68,10 +63,7 @@
 
     <!-- <div style="height: 500px;"></div> -->
     <div class="usableBody2">
-        {% if name%}
-        <h2>{{name}}'s Records</h2> {% endif %} {% if not name %}
         <h2>All Records</h2>
-        {% endif %}
         <table class="table" id="prescriptions" style="background-color: rgba(227, 254, 255, 0.9);">
             <thead class="thead-dark">
                 <tr>

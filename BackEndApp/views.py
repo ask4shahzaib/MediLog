@@ -77,21 +77,20 @@ def timeline(request):
             data = timelineData(cnic)
             if data == []:
                 data = False
-            person = Doctor.objects.get(license_No=request.user.username)
+            user = Doctor.objects.get(license_No=request.user.username)
             text, sum = summary(cnic)
             context = {
                 'text': text,
                 'sum': sum,
                 'patient': False,
                 'data': data,
-                'person': person
+                'user': user
             }
             return render(request, "BackEndApp/timeline.html", context)
     else:
-        person = Patient.objects.get(CNIC=request.user.username)
-        cnic = person.CNIC
-        text, sum = summary(cnic)
-        data = timelineData(request.user.username)
+        user = Patient.objects.get(CNIC=request.user.username)
+        text, sum = summary(user.CNIC)
+        data = timelineData(user.CNIC)
         if not data:
             data = False
         context = {
@@ -99,7 +98,7 @@ def timeline(request):
             'sum': sum,
             'patient': True,
             'data': data,
-            'person': person
+            'user': user
         }
         return render(request, "BackEndApp/timeline.html", context)
 
@@ -109,45 +108,41 @@ def timeline(request):
 def viewFilterRecords(request):
     group = request.user.groups.all()
     group = str(group[0])
-    check = False
-    doctor = ""
 
     if group == 'Patient':
-        try:
-            person = Patient.objects.get(CNIC=request.session['cnic'])
-        except:
-            check = True
-            person = Patient.objects.get(CNIC=request.user.username)
+        check = 1  # for patient
+        user = Patient.objects.get(CNIC=request.user.username)
+        patient = user
     else:
         try:
             cnic = request.POST['cnic']
-            person = Patient.objects.get(CNIC=cnic)
+            patient = Patient.objects.get(CNIC=cnic)
         except:
             try:
                 cnic = request.session['cnic']
-                person = Patient.objects.get(CNIC=cnic)
+                patient = Patient.objects.get(CNIC=cnic)
             except:
                 return redirect('feed')
-        doctor = Doctor.objects.filter(license_No=request.user.username)
-        doctor = doctor[0]
+        check = 2
+        user = Doctor.objects.get(license_No=request.user.username)
 
     prescriptions = ""
     try:
         if request.session.has_key('start') and request.session.has_key('end'):
-            prescriptions = Prescription.objects.filter(patient=person.CNIC)
+            prescriptions = Prescription.objects.filter(patient=patient.CNIC)
             prescriptions = prescriptions.filter(
                 date__range=[request.session['start'][0], request.session['end'][0]])
         else:
-            prescriptions = Prescription.objects.filter(patient=person.CNIC)
+            prescriptions = Prescription.objects.filter(patient=patient.CNIC)
     except:
         prescriptions = None
     try:
         if request.session.has_key('start') and request.session.has_key('end'):
-            reports = LabReport.objects.filter(patient=person.CNIC)
+            reports = LabReport.objects.filter(patient=patient.CNIC)
             reports = reports.filter(
                 date__range=[request.session['start'][0], request.session['end'][0]])
         else:
-            reports = LabReport.objects.filter(patient=person.CNIC)
+            reports = LabReport.objects.filter(patient=patient.CNIC)
     except:
         reports = None
     if prescriptions is not None:
@@ -164,7 +159,7 @@ def viewFilterRecords(request):
                 report.description = report.description[0:40] + ' ...'
 
     context = {'prescriptions': prescriptions, 'reports': reports,
-               'person': person, 'check': check, 'doctor': doctor}
+               'user': user, 'check': check, 'patient': patient}
     return render(request, "BackEndApp/allRecords.html", context)
 
 
@@ -207,67 +202,70 @@ def viewTrustedContact(request):
 def viewAllRecords(request):
     group = request.user.groups.all()
     group = str(group[0])
-    check = False
-    doctor = ""
+    user = None
+    patient = None
+    check = 0
 
     if group == 'Patient':
-        try:
-            request.POST['allRecords']
-            person = Patient.objects.get(CNIC=request.session['cnic'])
-        except:
-            check = True
-            person = Patient.objects.get(CNIC=request.user.username)
+        check = 1  # for patient
+        user = Patient.objects.get(CNIC=request.user.username)
+        patient = user
     elif group == 'Doctor':
         try:
             cnic = request.session['cnic']
-            person = Patient.objects.get(CNIC=cnic)
+            patient = Patient.objects.get(CNIC=cnic)
         except:
             return redirect('feed')
-        doctor = Doctor.objects.get(license_No=request.user.username)
+        check = 2  # for doctor
+        user = Doctor.objects.get(license_No=request.user.username)
     elif group == 'Hospital':
+        check = 3  # for hospital
+        user = Hospital.objects.get(license_No=request.user.username)
         try:
             cnic = request.POST['cnic']
             try:
-                Patient.objects.get(CNIC=cnic)
+                patient = Patient.objects.get(CNIC=cnic)
             except:
                 messages.error(request, 'Invalid CNIC, patient not found')
                 return redirect('feed')
             request.session['cnic'] = cnic
             try:
                 request.POST['newRecord']
-                return render(request, "BackEndApp/newPrescription.html")
+                context = {'user': user}
+                return render(request, "BackEndApp/newPrescription.html",context)
             except:
-                request.POST['followUp']
-            person = Patient.objects.get(CNIC=cnic)
+                None
         except:
             messages.error(
                 request, "Invalid CNIC, Patient not found.")
             return redirect('feed')
     elif group == 'Laboratory':
+        check = 3  # for lab
+        user = Laboratory.objects.get(license_No=request.user.username)
         try:
             cnic = request.POST['cnic']
             try:
-                Patient.objects.get(CNIC=cnic)
+                patient = Patient.objects.get(CNIC=cnic)
             except:
                 messages.error(request, 'Invalid CNIC, patient not found')
                 return redirect('feed')
             request.session['cnic'] = cnic
             try:
                 request.POST['newRecord']
-                return render(request, "BackEndApp/newReport.html")
+                context = {'user':user}
+                return render(request, "BackEndApp/newReport.html",context)
             except:
-                request.POST['followUp']
-            person = Patient.objects.get(CNIC=cnic)
+                None
         except:
             messages.error(
                 request, "Invalid CNIC, Patient not found.")
             return redirect('feed')
     try:
-        prescriptions = Prescription.objects.filter(patient=person.CNIC)
+        prescriptions = Prescription.objects.filter(patient=patient.CNIC)
     except:
         prescriptions = None
     try:
-        reports = LabReport.objects.filter(patient=person.CNIC)
+        reports = LabReport.objects.filter(patient=patient.CNIC)
     except:
         reports = None
     if prescriptions is not None:
@@ -284,15 +282,15 @@ def viewAllRecords(request):
                 report.description = report.description[0:40] + ' ...'
     if group == 'Hospital':
         context = {'prescriptions': prescriptions,
-                   'person': person, 'check': check, 'doctor': doctor}
+                   'patient': patient, 'check': check, 'user': user}
         return render(request, "BackEndApp/addFollowUp.html", context)
     if group == 'Laboratory':
         context = {'reports': reports,
-                   'person': person, 'check': check, 'doctor': doctor}
+                   'patient': patient, 'check': check, 'user': user}
         return render(request, "BackEndApp/addFollowUp.html", context)
     else:
         context = {'prescriptions': prescriptions, 'reports': reports,
-                   'person': person, 'check': check, 'doctor': doctor}
+                   'patient': patient, 'check': check, 'user': user}
         return render(request, "BackEndApp/allRecords.html", context)
 
 
@@ -301,10 +299,10 @@ def getPrescriptionFiles(request):
     serial = request.POST['serial']
     prescription = Prescription.objects.get(id=serial)
     if prescription.patient == request.user.username:
-        user = Patient.objects.get(CNIC = prescription.patient)
+        user = Patient.objects.get(CNIC=prescription.patient)
         check = True
     else:
-        user = Doctor.objects.get(license_No = request.user.username)
+        user = Doctor.objects.get(license_No=request.user.username)
         check = False
     prescription.doctor = doctorName(prescription.doctor)
     prescription.hospital = hospitalName(prescription.hospital)
@@ -313,8 +311,8 @@ def getPrescriptionFiles(request):
         temp = {'label': file.label, 'description': file.description, 'file': file.file,
                 'doctor': prescription.doctor, 'hospital': prescription.hospital, 'date': file.date}
         prescriptions.append(temp)
-    
-    context = {'prescriptions': prescriptions, 'user': user, 'check':check}
+
+    context = {'prescriptions': prescriptions, 'user': user, 'check': check}
     return render(request, "BackEndApp/someRecords.html", context)
 
 
@@ -459,7 +457,7 @@ def summary(cnic):
         i = 1
         for d in data:
             if len(data) == 1:
-                text += " "+ d.description + "."                
+                text += " " + d.description + "."
             elif i == len(data):
                 text += " and " + d.description + "."
             else:
