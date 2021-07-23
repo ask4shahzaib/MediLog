@@ -138,7 +138,7 @@
                     text: "Total cases of major diseases in major cities of Pakistan"
                 },
                 axisY: {
-                    title: "Billions of Barrels",
+                    title: "Number of Patients",
                     titleFontColor: "#4F81BC",
                     lineColor: "#4F81BC",
                     labelFontColor: "#4F81BC",
@@ -156,115 +156,115 @@
                     {
                         type: "column",
                         name: "Number of Corona Patients",
-                        legendText: "Corona Patients",
+                        legendText: "Corona",
                         showInLegend: true,
                         dataPoints: [{
                             label: "Lahore",
-                            y: 225670
+                            y: JSON.parse('{{ data.Lahore.Corona}}')
                         }, {
                             label: "Islamabad",
-                            y: 234243
+                            y: JSON.parse("{{data.Islamabad.Corona}}")
                         }, {
                             label: "Karachi",
-                            y: 652342
+                            y: JSON.parse("{{data.Karachi.Corona}}")
                         }, {
                             label: "Quetta",
-                            y: 1013225
+                            y: JSON.parse("{{data.Quetta.Corona}}")
                         }, {
                             label: "Peshawar",
-                            y: 932244
+                            y: JSON.parse("{{data.Peshawar.Corona}}")
                         }]
                     },
 
                     {
                         type: "column",
-                        name: "Number of Blood Pressure Patients",
-                        legendText: "Blood Pressure Patients",
+                        name: "Number of Cancer Patients",
+                        legendText: "Cancer",
                         showInLegend: true,
                         dataPoints: [{
                             label: "Lahore",
-                            y: 845353
+                            y: JSON.parse("{{data.Lahore.Cancer}}")
                         }, {
                             label: "Islamabad",
-                            y: 63362
+                            y: JSON.parse("{{data.Islamabad.Cancer}}")
                         }, {
                             label: "Karachi",
-                            y: 463333
+                            y: JSON.parse("{{data.Karachi.Cancer}}")
                         }, {
                             label: "Quetta",
-                            y: 35632
+                            y: JSON.parse("{{data.Quetta.Cancer}}")
                         }, {
                             label: "Peshawar",
-                            y: 45214
+                            y: JSON.parse("{{data.Peshawar.Cancer}}")
                         }]
                     },
 
                     {
                         type: "column",
                         name: "Number of Diabetes Patients",
-                        legendText: "Diabetes Patients",
+                        legendText: "Diabetes",
                         showInLegend: true,
                         dataPoints: [{
                             label: "Lahore",
-                            y: 225620
+                            y: JSON.parse("{{data.Lahore.Diabetes}}")
                         }, {
                             label: "Islamabad",
-                            y: 232243
+                            y: JSON.parse("{{data.Islamabad.Diabetes}}")
                         }, {
                             label: "Karachi",
-                            y: 652222
+                            y: JSON.parse("{{data.Karachi.Diabetes}}")
                         }, {
                             label: "Quetta",
-                            y: 1014335
+                            y: JSON.parse("{{data.Quetta.Diabetes}}")
                         }, {
                             label: "Peshawar",
-                            y: 94644
+                            y: JSON.parse("{{data.Peshawar.Diabetes}}")
                         }]
                     },
 
                     {
                         type: "column",
-                        name: "Number of Hepatitus Patients",
-                        legendText: "Hepatitus Patients",
+                        name: "Number of Hepatitis Patients",
+                        legendText: "Hepatitis",
                         showInLegend: true,
                         dataPoints: [{
                             label: "Lahore",
-                            y: 3412
+                            y: JSON.parse("{{data.Lahore.Hepatitis}}")
                         }, {
                             label: "Islamabad",
-                            y: 34241
+                            y: JSON.parse("{{data.Islamabad.Hepatitis}}")
                         }, {
                             label: "Karachi",
-                            y: 43444
+                            y: JSON.parse("{{data.Karachi.Hepatitis}}")
                         }, {
                             label: "Quetta",
-                            y: 3535
+                            y: JSON.parse("{{data.Quetta.Hepatitis}}")
                         }, {
                             label: "Peshawar",
-                            y: 352
+                            y: JSON.parse("{{data.Peshawar.Hepatitis}}")
                         }]
                     },
 
                     {
                         type: "column",
                         name: "Number of Heart Patients",
-                        legendText: "Heart Patients",
+                        legendText: "Heart",
                         showInLegend: true,
                         dataPoints: [{
                             label: "Lahore",
-                            y: 22500
+                            y: JSON.parse("{{data.Lahore.Heart}}")
                         }, {
                             label: "Islamabad",
-                            y: 2443
+                            y: JSON.parse("{{data.Islamabad.Heart}}")
                         }, {
                             label: "Karachi",
-                            y: 5522
+                            y: JSON.parse("{{data.Karachi.Heart}}")
                         }, {
                             label: "Quetta",
-                            y: 101225
+                            y: JSON.parse("{{data.Quetta.Heart}}")
                         }, {
                             label: "Peshawar",
-                            y: 93844
+                            y: JSON.parse("{{data.Peshawar.Heart}}")
                         }]
                     },
 
@@ -307,7 +307,7 @@
                         label: "Kidney Failure"
                     }, {
                         y: 11.26,
-                        label: "Others"
+                        label: "{{city}}"
                     }]
                 }]
             });

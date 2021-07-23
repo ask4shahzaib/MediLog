@@ -232,7 +232,7 @@ def viewAllRecords(request):
             try:
                 request.POST['newRecord']
                 context = {'user': user}
-                return render(request, "BackEndApp/newPrescription.html",context)
+                return render(request, "BackEndApp/newPrescription.html", context)
             except:
                 None
         except:
@@ -252,8 +252,8 @@ def viewAllRecords(request):
             request.session['cnic'] = cnic
             try:
                 request.POST['newRecord']
-                context = {'user':user}
-                return render(request, "BackEndApp/newReport.html",context)
+                context = {'user': user}
+                return render(request, "BackEndApp/newReport.html", context)
             except:
                 None
         except:
@@ -381,7 +381,35 @@ def timelineData(id):
     return data2
 
 
+def hospitalCity(id):
+    return Hospital.objects.get(license_No=id).city
+
+
 def stats():
+    diseases = ['Corona', 'Hepatitis', "Cancer", 'Diabetes', 'Heart']
+    data = {'Lahore': {'Corona': 0, 'Hepatitis': 0, "Cancer": 0, 'Diabetes': 0, 'Heart': 0},
+            'Islamabad': {'Corona': 0, 'Hepatitis': 0, "Cancer": 0, 'Diabetes': 0, 'Heart': 0},
+            'Karachi': {'Corona': 0, 'Hepatitis': 0, "Cancer": 0, 'Diabetes': 0, 'Heart': 0},
+            'Quetta': {'Corona': 0, 'Hepatitis': 0, "Cancer": 0, 'Diabetes': 0, 'Heart': 0},
+            'Peshawar': {'Corona': 0, 'Hepatitis': 0, "Cancer": 0, 'Diabetes': 0, 'Heart': 0}}
+    for disease in diseases:
+        prescriptions = Prescription.objects.filter(
+            label__icontains=disease)
+        for prescription in prescriptions:
+            if hospitalCity(prescription.hospital) == 'Lahore':
+                data['Lahore'][disease] += 1
+            elif hospitalCity(prescription.hospital) == 'Karachi':
+                data['Karachi'][disease] += 1
+            elif hospitalCity(prescription.hospital) == 'Peshawar':
+                data['Peshawar'][disease] += 1
+            elif hospitalCity(prescription.hospital) == 'Quetta':
+                data['Quetta'][disease] += 1
+            elif hospitalCity(prescription.hospital) == 'Islamabad':
+                data['Islamabad'][disease] += 1
+    return data
+
+
+def statsByCity():
     city = 'Lahore'
     disease = 'Corona'
     year = '2021'
@@ -405,8 +433,7 @@ def stats():
             data.append(temp)
 
     data = sorted(data, key=lambda data: data.date, reverse=True)
-    for dat in data:
-        print(dat)
+    return data
 
 
 def summary(cnic):
@@ -709,10 +736,10 @@ def feed(request):
         return render(request, 'BackEndApp/hospitalLandingPage.html', context)
 
     if group == 'Admin':
-        # stats()
+        data = stats()
         user = User.objects.get(username=request.user.username)
         user = user.first_name + " " + user.last_name
-        context = {'user': user, 'city': 'HEHEHE'}
+        context = {'user': user, 'data': data}
         return render(request, 'BackEndApp/adminHomePage.html', context)
 
 
