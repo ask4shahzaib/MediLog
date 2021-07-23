@@ -73,7 +73,7 @@ class Laboratory(models.Model):
     user = models.ForeignKey(User, null=False, on_delete=CASCADE)
     name = models.CharField(max_length=999)
     city = models.TextField()
-    license_No = models.CharField(max_length=10, primary_key=True)
+    license_No = models.TextField(primary_key=True)
     branch_code = models.IntegerField()
     verification = True
     objects = models.Manager()
@@ -86,7 +86,7 @@ class Hospital(models.Model):
     user = models.ForeignKey(User, null=False, on_delete=CASCADE)
     name = models.CharField(max_length=999)
     city = models.TextField()
-    license_No = models.CharField(max_length=10, primary_key=True)
+    license_No = models.TextField(primary_key=True)
     branch_code = models.IntegerField()
     verification = True
     objects = models.Manager()
