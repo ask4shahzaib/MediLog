@@ -396,44 +396,40 @@ def stats():
         prescriptions = Prescription.objects.filter(
             label__icontains=disease)
         for prescription in prescriptions:
-            if hospitalCity(prescription.hospital) == 'Lahore':
+            if prescription.city == 'Lahore':
                 data['Lahore'][disease] += 1
-            elif hospitalCity(prescription.hospital) == 'Karachi':
+            elif prescription.city == 'Karachi':
                 data['Karachi'][disease] += 1
-            elif hospitalCity(prescription.hospital) == 'Peshawar':
+            elif prescription.city == 'Peshawar':
                 data['Peshawar'][disease] += 1
-            elif hospitalCity(prescription.hospital) == 'Quetta':
+            elif prescription.city == 'Quetta':
                 data['Quetta'][disease] += 1
-            elif hospitalCity(prescription.hospital) == 'Islamabad':
+            elif prescription.city == 'Islamabad':
                 data['Islamabad'][disease] += 1
     return data
 
 
-def statsByCity():
+def cityAnalysis():
     city = 'Lahore'
-    disease = 'Corona'
-    year = '2021'
-    hospitals = Hospital.objects.filter(city=city.lower())
-    labs = Laboratory.objects.filter(city=city.lower())
-    data = []
-
-    prescriptions = Prescription.objects.filter(
-        label__icontains=disease.lower())
-    prescriptions = prescriptions.filter(date__year=year)
-    for hospital in hospitals:
-        temps = prescriptions.filter(hospital=hospital.license_No)
-        for temp in temps:
-            data.append(temp)
-
-    reports = LabReport.objects.filter(label__icontains=disease.lower())
-    reports = reports.filter(date__year=year)
-    for lab in labs:
-        temps = reports.filter(laboratory=lab.license_No)
-        for temp in temps:
-            data.append(temp)
-
-    data = sorted(data, key=lambda data: data.date, reverse=True)
-    return data
+    diseases = {}
+    start = "2021-03-01"
+    end = "2021-06-30"
+    if start and end:
+        prescriptions = Prescription.objects.filter(date__range=[start, end])
+        if city:
+            prescriptions = prescriptions.filter(city=city)
+    else:
+        prescriptions = Prescription.objects.all()
+        if city:
+            prescriptions = prescriptions.filter(city=city)
+    for prescription in prescriptions:
+        if diseases.get(prescription.label):
+            diseases[prescription.label] += 1
+        else:
+            temp = {prescription.label: 1}
+            diseases.update(temp)
+    diseases = sorted(diseases.items(), key=lambda x: x[1], reverse=True)
+    return diseases
 
 
 def summary(cnic):
@@ -736,6 +732,7 @@ def feed(request):
         return render(request, 'BackEndApp/hospitalLandingPage.html', context)
 
     if group == 'Admin':
+        data = cityAnalysis()
         data = stats()
         user = User.objects.get(username=request.user.username)
         user = user.first_name + " " + user.last_name
@@ -785,20 +782,21 @@ def addPrescription(request):
             date, '%Y-%m-%d').strftime("%Y-%m-%d")
         severity = request.POST['severity']
         x = Prescription(date=date, description=description, criticalLevel=severity,
-                         patient=patient, label=label, doctor=doctor, hospital=hospital)
+                         patient=patient, label=label, city=hospitalCity(hospital), doctor=doctor, hospital=hospital)
         x.save()
         for file in files:
             temp = PrescriptionFiles(
                 serial=x.id, date=date, description=description, label=label, file=file)
             temp.save()
     hospital = Hospital.objects.get(license_No=request.user.username)
-    context = {'hospital': hospital}
+    context = {'user': hospital}
     return render(request, 'BackEndApp/hospitalLandingPage.html', context)
 
 
 @allowed_users(allowed=['Laboratory'])
 def addLabReport(request):
-    laboratory = Laboratory.objects.get(license_No=request.user.username)
+    laboratory = Laboratory.objects.get(
+        license_No=request.user.username).license_No
     if request.method == "POST" and request.FILES['file']:
         files = request.FILES.getlist('file')
         patient = request.session['cnic']
@@ -819,7 +817,9 @@ def addLabReport(request):
             date, '%Y-%m-%d').strftime("%Y-%m-%d")
         severity = request.POST['severity']
         x = LabReport(date=date, doctor=doctor, description=description, criticalLevel=severity,
-                      patient=patient, label=label, laboratory=laboratory.name)
+                      patient=patient, city=Laboratory.objects.get(
+                          license_No=laboratory).city,
+                      label=label, laboratory=laboratory)
         x.save()
         for file in files:
             temp = ReportFiles(serial=x.id, date=date,
