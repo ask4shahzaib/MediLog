@@ -387,11 +387,11 @@ def hospitalCity(id):
 
 def stats():
     diseases = ['Corona', 'Hepatitis', "Cancer", 'Diabetes', 'Heart']
-    data = {'Lahore': {'Corona': 0, 'Hepatitis': 0, "Cancer": 0, 'Diabetes': 0, 'Heart': 0},
-            'Islamabad': {'Corona': 0, 'Hepatitis': 0, "Cancer": 0, 'Diabetes': 0, 'Heart': 0},
-            'Karachi': {'Corona': 0, 'Hepatitis': 0, "Cancer": 0, 'Diabetes': 0, 'Heart': 0},
-            'Quetta': {'Corona': 0, 'Hepatitis': 0, "Cancer": 0, 'Diabetes': 0, 'Heart': 0},
-            'Peshawar': {'Corona': 0, 'Hepatitis': 0, "Cancer": 0, 'Diabetes': 0, 'Heart': 0}}
+    data = {'Lahore': dict.fromkeys(diseases, 0),
+            'Islamabad': dict.fromkeys(diseases, 0),
+            'Karachi': dict.fromkeys(diseases, 0),
+            'Quetta': dict.fromkeys(diseases, 0),
+            'Peshawar': dict.fromkeys(diseases, 0)}
     for disease in diseases:
         prescriptions = Prescription.objects.filter(
             label__icontains=disease)
