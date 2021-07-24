@@ -796,7 +796,7 @@ def addPrescription(request):
 @allowed_users(allowed=['Laboratory'])
 def addLabReport(request):
     laboratory = Laboratory.objects.get(
-        license_No=request.user.username).license_No
+        license_No=request.user.username)
     if request.method == "POST" and request.FILES['file']:
         files = request.FILES.getlist('file')
         patient = request.session['cnic']
@@ -817,9 +817,8 @@ def addLabReport(request):
             date, '%Y-%m-%d').strftime("%Y-%m-%d")
         severity = request.POST['severity']
         x = LabReport(date=date, doctor=doctor, description=description, criticalLevel=severity,
-                      patient=patient, city=Laboratory.objects.get(
-                          license_No=laboratory).city,
-                      label=label, laboratory=laboratory)
+                      patient=patient, city=laboratory.city,
+                      label=label, laboratory=laboratory.name)
         x.save()
         for file in files:
             temp = ReportFiles(serial=x.id, date=date,
