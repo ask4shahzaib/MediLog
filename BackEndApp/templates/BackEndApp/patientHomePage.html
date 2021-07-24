@@ -46,12 +46,9 @@
     </nav>
 
     <div class="wrapper">
- 
-        
-        {% include 'BackEndApp/patientSidebar.html' %}
-        
-        
-        {%block content%}
+
+
+        {% include 'BackEndApp/patientSidebar.html' %} {%block content%}
         <div class="main_content">
             <div class="lastAappointment">
                 <h3>LAST APPOINTMENT</h3>
@@ -67,7 +64,7 @@
                 <h4>Label : {{label}}</h4>
                 <h4>Date : {{labDate}}</h4>
             </div>
-            
+
             <div class="lastScan">
                 <h3>LAST SCAN</h3>
                 <h4>Lab : N/A</h4>
@@ -171,7 +168,11 @@
                     {% endif %}
                 </ul>
 
-                <form action="/loadSenders/"><button class="open-button" id="Show Chats" style="right: 20%;">Chat</button></form>
+                <!--
+                    <form action="/loadSenders/"><button class="open-button" id="Show Chats" style="right: 20%;">Chat</button></form>
+                    
+                    -->
+
             </div>
             {%endblock%}
         </div>

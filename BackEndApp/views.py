@@ -409,29 +409,6 @@ def stats():
     return data
 
 
-def cityAnalysis():
-    city = 'Lahore'
-    diseases = {}
-    start = "2021-03-01"
-    end = "2021-06-30"
-    if start and end:
-        prescriptions = Prescription.objects.filter(date__range=[start, end])
-        if city:
-            prescriptions = prescriptions.filter(city=city)
-    else:
-        prescriptions = Prescription.objects.all()
-        if city:
-            prescriptions = prescriptions.filter(city=city)
-    for prescription in prescriptions:
-        if diseases.get(prescription.label):
-            diseases[prescription.label] += 1
-        else:
-            temp = {prescription.label: 1}
-            diseases.update(temp)
-    diseases = sorted(diseases.items(), key=lambda x: x[1], reverse=True)
-    return diseases
-
-
 def summary(cnic):
     name = Patient.objects.get(CNIC=cnic)
     text = name.fName + " " + name.lName + " had"
@@ -732,7 +709,6 @@ def feed(request):
         return render(request, 'BackEndApp/hospitalLandingPage.html', context)
 
     if group == 'Admin':
-        data = cityAnalysis()
         data = stats()
         user = User.objects.get(username=request.user.username)
         user = user.first_name + " " + user.last_name
@@ -861,7 +837,6 @@ def register(request):
             photo = request.FILES['file']
         except:
             photo = 'C:/Users/Acer/MediLog/static/images/profile.jpg'
-
 
         try:
             y = User.objects.get(username=cnic)
@@ -1036,7 +1011,7 @@ def registerLab(request):
 
 def addPatient(request):
     return render(request, 'BackEndApp/addPatient.html')
-    
+
 
 def addDoctor(request):
     return render(request, 'BackEndApp/addDoctor.html')
@@ -1048,7 +1023,6 @@ def addLaboratory(request):
 
 def addHospital(request):
     return render(request, 'BackEndApp/addHospital.html')
-
 
 
 def followUpFiles(request):
@@ -1180,13 +1154,42 @@ def loadSenders(request):
 
 
 def analysisByCity(request):
+    user = User.objects.get(username=request.user.username)
+    user = user.first_name + " " + user.last_name
+    try:
+        city = request.POST['city']
+    except:
+        city = None
+    try:
+        start = request.POST['start']
+        end = request.POST['end']
+    except:
+        start = None
+        end = None
+    diseases = {}
+    if start and end:
+        prescriptions = Prescription.objects.filter(date__range=[start, end])
+        if city:
+            prescriptions = prescriptions.filter(city=city)
+    else:
+        prescriptions = Prescription.objects.all()
+        if city:
+            prescriptions = prescriptions.filter(city=city)
+    for prescription in prescriptions:
+        if diseases.get(prescription.label):
+            diseases[prescription.label] += 1
+        else:
+            temp = {prescription.label: 1}
+            diseases.update(temp)
+    data = {}
+    for key, value in diseases.items():
+        data.update({key:value})
 
-    return render(request, 'BackEndApp/analysisByCity.html')
-
-
+    context = {'diseases': diseases, 'data': json.dumps(data), 'user': user}
+    print(data)
+    return render(request, 'BackEndApp/analysisByCity.html', context)
 
 
 def analysisByDisease(request):
 
     return render(request, 'BackEndApp/analysisByDisease.html')
-

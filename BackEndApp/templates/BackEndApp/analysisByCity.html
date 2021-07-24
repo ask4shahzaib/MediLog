@@ -33,12 +33,6 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
     <link rel="stylesheet" href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css">
 
-    <!-- For drop button in Admin sidebar ONLY -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
-
-
-
     <script type="text/javascript" src="http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 
@@ -48,53 +42,31 @@
 
     <script>
         window.onload = function() {
-
-            var chart = new CanvasJS.Chart("chartContainer", {
-                animationEnabled: true,
-                theme: "light2", // "light1", "light2", "dark1", "dark2"
-                title: {
-                    text: "Top 10 diseases in Pakistan"
-                },
-                data: [{
-                    type: "column",
-                    showInLegend: true,
-                    legendMarkerColor: "grey",
-                    legendText: "Pakistan",
-                    dataPoints: [{
-                        y: 300878,
-                        label: "Corona"
-                    }, {
-                        y: 266455,
-                        label: "Cancer"
-                    }, {
-                        y: 169709,
-                        label: "Blood Pressure"
-                    }, {
-                        y: 158400,
-                        label: "Depression"
-                    }, {
-                        y: 142503,
-                        label: "Hepatitis"
-                    }, {
-                        y: 101500,
-                        label: "Brain Tumor"
-                    }, {
-                        y: 97800,
-                        label: "Obesity"
-                    }, {
-                        y: 80000,
-                        label: "Malaria"
-                    }, {
-                        y: 94300,
-                        label: "Dengue"
-                    }, {
-                        y: 83500,
-                        label: "Diabetes"
+            var data = JSON.parse('{{data | safe}}');
+            var dps = [];
+            console.log(data);
+            for (var element in data) {
+                dps.push({
+                    label: element,
+                    y: data[element]
+                });
+                var chart = new CanvasJS.Chart("chartContainer", {
+                    animationEnabled: true,
+                    theme: "light2", // "light1", "light2", "dark1", "dark2"
+                    title: {
+                        text: "Top 10 diseases in Pakistan"
+                    },
+                    data: [{
+                        type: "column",
+                        showInLegend: true,
+                        legendMarkerColor: "grey",
+                        legendText: "Pakistan",
+                        // "{{data}}"
+                        dataPoints: dps
                     }]
-                }]
-            });
+                });
+            }
             chart.render();
-
         }
     </script>
 
@@ -143,16 +115,16 @@
 
             <label>
                 <label>Start Date:</label>
-            <input name="startDate" id="startDate" type="text" onfocus="(this.type='date')" onfocusout="(this.type='text')" required />
+            <input name="start" id="start" type="text" onfocus="(this.type='date')" onfocusout="(this.type='text')" required />
             </label>
 
             <label>
                 <label>End Date:</label>
-            <input name="endDate" id="endDate" type="text" onfocus="(this.type='date')" onfocusout="(this.type='text')" required />
+            <input name="end" id="end" type="text" onfocus="(this.type='date')" onfocusout="(this.type='text')" required />
             </label>
             <br><br>
 
-            <input type="submit" value="Submit" style="position: absolute; left: 94%;">
+            <input class="btn btn-md btn-primary" type="submit" value="Submit" style="position: absolute; left: 90%;">
         </form>
 
 

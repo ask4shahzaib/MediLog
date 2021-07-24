@@ -22,9 +22,6 @@
 }
 
 
-  
-  
-
 /************************************************************** original classes **************************************************/
 
 
@@ -304,13 +301,10 @@
     width: 25px;
 }
 
-
-
-
-
-  .sidebar a:hover, .dropdown-btn:hover {
+.sidebar a:hover,
+.dropdown-btn:hover {
     color: #f1f1f1;
-  }
+}
 
 .wrapper .sidebar ul li:hover {
     background-color: #00303f;
