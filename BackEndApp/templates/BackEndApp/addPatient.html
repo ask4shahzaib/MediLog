@@ -1,0 +1,172 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Add Patient</title>
+
+    <link rel="JavaScript" href="{% static '/js/index.js' %}" />
+    <link rel="stylesheet" href="{% static '/css/styles.css' %}" />
+    <link rel="icon" href="{% static 'images/UI/favicon1.ico' %}" />
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script type="" src="{% static '/js/index.js' %}" charset="utf-8"></script>
+    <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+
+
+    <link rel="stylesheet" href=" {% static 'css/styles.css' %}">
+    <link rel="icon" href="{% static 'images/UI/favicon1.ico' %}">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="JavaScript" href="{% static '/js/index.js' %}" />
+    <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+
+
+    <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css">
+
+    <!-- For drop button in Admin sidebar ONLY -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+
+    
+    <script type="text/javascript" src="http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+    <script type="" src="{% static 'js/index.js' %}" charset="utf-8"></script>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+
+
+</head>
+
+<body class="bBody">
+
+    <!-- rgb(227, 254, 255); -->
+    <nav class="navbar  navbar-fixed-top" style="background-color: rgb(227, 254, 255); padding: 5px 0px; margin: 0px 0px; box-shadow: 2px 2px rgba(134, 133, 133, 0.1);">
+        <div class="container-fluid">
+
+            <div class="navbar-header">
+                <a href="#" class="navbar-left">
+                    <!--<span class="glyphicon glyphicon-search"></span>-->
+                    <img src="{% static 'images/UI/logo.png' %}" width="auto" height="50px">
+                </a>
+            </div>
+
+            <div class="collapse navbar-collapse navbar-right" id="navbarSupportedContent">
+
+                <ul class="nav navbar-nav float-left ml-auto">
+                    <li style="margin-top: 15px;">Hello, {{user}}</li>
+                    <li><a href="{% url 'logout' %}">Logout</span></a></li>
+                </ul>
+            </div>
+
+        </div>
+    </nav>
+
+
+
+    <div class="wrapper">
+
+        {% include 'BackEndApp/adminSidebar.html' %}
+
+    </div>
+
+    <div class="usableBody2" style="box-shadow: 0px 0px 0px 0px rgba(199, 199, 199, 0.2); border-radius: 0px; background-color:transparent;">
+
+        <div class="hospAddRecord">
+            <form id="form" name="form1" action="/register/"  enctype="multipart/form-data" method="POST">
+                <h2>Add Patient</h2>
+                {%csrf_token%}
+
+                <div class="label-text">
+                    <!-- <h3 text-align: center>Sign Up</h3> -->
+                </div>
+
+                <label class="animate">
+            <input
+                style="padding-top: 25px"
+                name="cnic"
+                id="cnic"
+                type="text"
+                required
+            />
+            <div class="label-text" name="your-CNIC" >CNIC</div>
+            </label>
+
+                <div>
+                    <label class="animate">
+                <input name="password" id="password" type="password" required />
+                <div class="label-text">Password</div>
+            </label>
+                </div>
+
+                <label class="animate">
+            <input name="fname" id="fname" type="text" required />
+            <div class="label-text">First Name</div>
+            </label>
+
+                <label class="animate">
+            <input name="lname" id="lname" type="text" required />
+            <div class="label-text">Last Name</div>
+            </label>
+
+                <label class="animate">
+            <input name="phone" id="phone" type="phone" required />
+            <div class="label-text" name="your-phone">Phone</div>
+            </label>
+
+                <label class="animate">
+            <input name="email" id="email" type="email" required />
+            <div class="label-text">E-mail</div>
+            </label>
+
+                <label class="animate">
+            <input
+                name="dob"
+                id="dob"
+                type="text"
+                onfocus="(this.type='date')"
+                onfocusout="(this.type='text')"
+                required
+            />
+            <div class="label-text">Date of Birth</div>
+            </label>
+
+                <label class="animate">
+            <input name="address" id="address" type="text" required />
+            <div class="label-text">Address</div>
+            </label>
+
+                <label class="">
+            <div>
+                <input
+                type="file"
+                id="prescription"
+                name="file"
+                style="padding-left: 12%; padding-top: 3%"
+                accept="image/*"
+                />
+            </div> </label
+            ><br />
+        
+            <button type="submit" class="addButtonHosp">Register</button>
+            </form>
+        </div>
+    </div>
+
+
+
+</body>
+
+</html>

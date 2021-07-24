@@ -2,17 +2,16 @@
 <div class="sidebar">
     <ul>
         <li><a href="{% url 'feed' %}"><i class="fas fa-home"></i>Home</a></li>
-        <li><a href="#"><i class="fas fa-user"></i>Profile</a></li>
 
-
-        <li><a href="#"><i class="glyphicon glyphicon-file" style="padding-right: 9px"></i>Add Laboratory</a></li>
-        <li><a href="#"><i class="glyphicon glyphicon-menu-hamburger" style="padding-right: 9px"></i>Add Doctor</a></li>
-        <li><a href="#"><i class="glyphicon glyphicon-pawn" style="padding-right: 9px"></i>Add Hospital</a></li>
-        <li><a href="#"><i class="fas fa-user"></i>Add Patient</a></li>
+        <li><a href="{% url 'addPatient' %}"><i class="fas fa-procedures"></i>Add Patient</a></li>        
+        <li><a href="{% url 'addLaboratory' %}"><i class="fas fa-flask"></i>Add Laboratory</a></li>
+        <li><a href="{% url 'addDoctor' %}"><i class="fas fa-stethoscope"></i>Add Doctor</a></li>
+        <li><a href="{% url 'addHospital' %}"><i class="fas fa-clinic-medical"></i>Add Hospital</a></li>
 
        
+        <li><a href="{% url 'analysisByCity' %}"><i class="glyphicon glyphicon-map-marker" style="padding-right: 9px"></i>City Analysis</a></li>
+        <li><a href="{% url 'analysisByDisease' %}"> <i class="glyphicon glyphicon-plus-sign" style="padding-right: 9px"></i>Disease Analysis</a></li>
         <li><a href="{% url 'about' %}"><i class="glyphicon glyphicon-info-sign" style="padding-right: 9px"></i>About Us</a></li>
-        <li><a href="#"><i class="fas fa-address-book"></i>Contact</a></li>
     </ul>
 
 </div>
