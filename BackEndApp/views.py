@@ -1159,3 +1159,16 @@ def loadSenders(request):
 
     context = {'chatPeople': chatPeople}
     return render(request, 'BackEndApp/chat.html', context)
+
+
+def analysisByCity(request):
+
+    return render(request, 'BackEndApp/analysisByCity.html')
+
+
+
+
+def analysisByDisease(request):
+
+    return render(request, 'BackEndApp/analysisByDisease.html')
+
