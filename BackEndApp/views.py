@@ -861,6 +861,8 @@ def register(request):
             photo = request.FILES['file']
         except:
             photo = 'C:/Users/Acer/MediLog/static/images/profile.jpg'
+
+
         try:
             y = User.objects.get(username=cnic)
         except ObjectDoesNotExist:
@@ -1030,6 +1032,23 @@ def registerLab(request):
             return redirect('feed')
     else:
         return render(request, 'BackEndApp/adminHomePage.html')
+
+
+def addPatient(request):
+    return render(request, 'BackEndApp/addPatient.html')
+    
+
+def addDoctor(request):
+    return render(request, 'BackEndApp/addDoctor.html')
+
+
+def addLaboratory(request):
+    return render(request, 'BackEndApp/addLaboratory.html')
+
+
+def addHospital(request):
+    return render(request, 'BackEndApp/addHospital.html')
+
 
 
 def followUpFiles(request):

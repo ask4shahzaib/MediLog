@@ -8,6 +8,16 @@ urlpatterns = [
     path('register/', views.register, name='register'),
     path('registerDoctor/', views.registerDoctor, name='registerDoctor'),
     path('registerHospital/', views.registerHospital, name='registerHospital'),
+    
+    
+    path('addPatient/', views.addPatient, name='addPatient'),
+    path('addDoctor/', views.addDoctor, name='addDoctor'),
+    path('addLaboratory/', views.addLaboratory, name='addLaboratory'),
+    path('addHospital/', views.addHospital, name='addHospital'),
+
+    
+    
+    
     path('registerLab/', views.registerLab, name='registerLab'),
     path('feed/', views.feed, name='feed'),
     path('logout/', views.logoutUser, name='logout'),
