@@ -36,9 +36,6 @@
     <!-- For drop button in Admin sidebar ONLY -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-
-
-
     <script type="text/javascript" src="http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 
@@ -268,7 +265,7 @@
         <div class="container-fluid">
 
             <div class="navbar-header">
-                <a href="#" class="navbar-left">
+                <a href="{% url 'feed' %}" class="navbar-left">
                     <!--<span class="glyphicon glyphicon-search"></span>-->
                     <img src="{% static 'images/UI/logo.png' %}" width="auto" height="50px">
                 </a>
@@ -278,7 +275,7 @@
 
                 <ul class="nav navbar-nav float-left ml-auto">
                     <li style="margin-top: 15px;">Hello, {{user}}</li>
-                    <li><a href="{% url 'logout' %}">Logout</span></a></li>
+                    <li><a href="{% url 'logout' %}">Logout <i style="margin-left: 9px;" class="fas fa-sign-out-alt"></i></span></a></li>
                 </ul>
             </div>
 
