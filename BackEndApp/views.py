@@ -552,7 +552,7 @@ def profile(request):
 
 @login_required(login_url='login')
 def home(request):
-    return redirect('login')
+    return redirect('feed')
 
 
 def doctorName(license):
@@ -693,6 +693,21 @@ def patientFeed(request, id):
     return render(request, 'BackEndApp/patientHomePage.html', context)
 
 
+def ready():
+    add_groups()
+    try:
+        u = User(username='manager1', password='12abcd34')
+        u.save()
+        group = Group.objects.get(name='Admin')
+        u.groups.add(group)
+    except:
+        None
+    add_patients()
+    add_doctors()
+    add_hospitals()
+    add_laboratories()
+
+
 @login_required(login_url='login')
 @allowed_users(allowed=['Patient', 'Laboratory', 'Admin', 'Doctor', 'Hospital'])
 def feed(request):
@@ -719,8 +734,6 @@ def feed(request):
         return render(request, 'BackEndApp/hospitalLandingPage.html', context)
 
     if group == 'Admin':
-        add_groups()
-        add_patients()
         users = accounts()
         ratios = ratio()
         data = stats()
@@ -734,6 +747,7 @@ def feed(request):
 @unauthenticated_user
 def loginPage(request):
     if request.method == 'POST':
+        ready()
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
@@ -1320,7 +1334,7 @@ def ratio():
 
 def add_groups():
     try:
-        group = Group.objects.get(name='Doctor')
+        Group.objects.get(name='Doctor')
     except:
         group = Group(name='Doctor')
         group.save()
@@ -1349,7 +1363,12 @@ def add_groups():
 def add_patients():
     group = Group.objects.get(name='Patient')
     data = [['1111122222223','Afnan Bashir'],['2222233333334','Talha Jaleel'],
-    ['3333344444445','Usama Rizwan'],['4444455555556','Jahanzaib Rao']]
+    ['3333344444445','Usama Rizwan'],['4444455555556','Jahanzaib Rao'],['5555566666667' , 'Bilal Tahir'],
+    ['6666677777778','Rohan Akhtar'],['7777788888889', 'Usama Malik'],['8888899999990','Jawad Gujjar'],
+    ['9999900000001','Usama Bashir'],['0000011111112','Muneeb Mughal'],['5555555555666','Moosa Rao'],
+    ['1236547893692','Haris Rao'],['1472589632581','Affan Rao'],['0000000000111','Rao Hanzala'],
+    ['1111111111222','Minhaj Rao'],['2222222222333','Saad Rao'],['3333333333444','Waqar Rao'],['4444444444555','Abdullah Ansar']]
+
     for d in data:
         try:
             x = User(
@@ -1360,6 +1379,64 @@ def add_patients():
             z = Patient(CNIC=d[0], fName=d[1].split()[0], lName=d[1].split()[1],
                         phone='03212233445', dob='2021-07-15', address='852-B Faisal Town Lahore',
                         email='patient@gmail.com', user=x, verification = True)
+            z.save()
+        except:
+            pass
+def add_doctors():
+    group = Group.objects.get(name='Docotor')
+    data = [['1111111111222','Docotor Sarim','doctorsarim'],['2222222222333','Doctor Abeeda','doctorabeeda'],['3333333333444','Doctor Sameen','docotorsameen'],
+    ['1236547893692','Doctor Aamir','doctoraamir'],['1472589632581','Doctor Asif','doctorasif'],['0000000000111','Doctor Saif','doctorsaif'],
+    ['9999900000001','Doctor Qasim','doctorqasim'],['0000011111112','Doctor Zareen','doctorzareen'],['5555555555666','Doctor Ibrahim','doctoribrahim'],
+    ['6666677777778','Doctor Ishrat','doctorishrat'],['7777788888889','Doctor Zeeshan','doctorzeeshan'],['8888899999990','Doctor Noshaba','doctornoshaba'],
+    ['1111122222223','Doctor Haroon','doctorharoon'],['2222233333334','Doctor Ifrah','doctorifrah'],['4444444444555','Doctor Usman','doctorusman']]
+    for d in data:
+        try:
+            x = User(
+                username=d[2], password='12abcd34')
+            x.save()
+            x.groups.add(group)
+
+            z = Doctor(CNIC=d[0], fName=d[1].split()[0], lName=d[1].split()[1],license_No=d[2],
+                        phone='03212233445', address='852-B Faisal Town Lahore',
+                        email='doctor@gmail.com', user=x)
+            z.save()
+        except:
+            pass
+
+def add_hospitals():
+      group = Group.objects.get(name='Hospital')
+      data = [['hospitallahore','Hospital Lahore','Lahore'],['hospitalsheikhupura','Hospital Sheikhupura','Sheikhopura'],['hospitalkarachi','Hopital Karachi','Karachi'],
+      ['hospitalmultan','Hospital Multan','Multan'],['hospitalislamabad','Hospital Islamabad','Islamabad'],['hospitalpeshawar','Hospital Peshawar','Peshawar'],
+      ['hospitalquetta','Hospital Quetta','Quetta'],['hospitalsahiwal','Hospital Sahiwal','Sahiwal'],['hospitalfaisalbad','Hospital Faisalabad','Faisalabad'],
+      ['hospitallodhran','Hospital Lodhran',"Lodhran"]]   
+      for d in data:
+        try:
+            x = User(
+                username=d[0], password='12abcd34')
+            x.save()
+            x.groups.add(group)
+
+            z = Hospital(license_No=d[0], name = d[1],City = d[2], 
+                        branch_code = 1,user = x)
+            z.save()
+        except:
+            pass
+
+def add_laboratories():
+    group = Group.objects.get(name='Laboratory')
+    data = [['laboratorylahore','Lab Lahore','Lahore'],['laboratorysheikhopura','Lab Sheikhopura','Sheikhopura'],['laboratorykarachi','Lab Karachi','Karachi'],
+      ['laboratorymultan','Lab Multan','Multan'],['laboratoryislamabad','Lab Islamabad','Islamabad'],['laboratorypeshawar','Lab Peshawar','Peshawar'],
+      ['laboratoryquetta','Lab Quetta','Quetta'],['laboratorysahiwal','Lab Sahiwal','Sahiwal'],['laboratoryfaisalbad','Lab Faisalabad','Faisalabad'],
+      ['laboratorylodhran','Lab Lodhran',"Lodhran"]]   
+    for d in data:
+        try:
+            x = User(
+                username=d[0], password='12abcd34')
+            x.save()
+            x.groups.add(group)
+
+            z = Laboratory(license_No=d[0], name = d[1],City = d[2], 
+                        branch_code = 1,user = x)
             z.save()
         except:
             pass
