@@ -1,6 +1,5 @@
 from calendar import month_name
-import datetime
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
 import random
 from base64 import b64encode
 from time import strptime
@@ -1137,9 +1136,9 @@ def sendMessage(request):
     senderID = request.user.username
     receiverID = request.POST['uID']
     messageText = request.POST['text']
-    datetime = DateTimeField.now()
+    date_time = datetime.now()
     x = Message(sender=senderID, receiver=receiverID,
-                text=messageText, datetime=datetime)
+                text=messageText, date_time=datetime)
     x.save()
     return redirect('loadSenders')
 
