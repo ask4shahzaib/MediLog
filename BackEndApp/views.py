@@ -696,7 +696,8 @@ def patientFeed(request, id):
 def ready():
     add_groups()
     try:
-        u = User(username='manager1', password='12abcd34')
+        u = User.objects.create_user(
+            username='manager1', first_name='Mr', last_name='Manager', password='12abcd34')
         u.save()
         group = Group.objects.get(name='Admin')
         u.groups.add(group)
@@ -747,7 +748,7 @@ def feed(request):
 @unauthenticated_user
 def loginPage(request):
     if request.method == 'POST':
-        ready()
+        # ready()
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
@@ -1175,7 +1176,7 @@ def loadMessages(request):
 
     for i in sentMessages:
         messages.append(i)
-    messages.sort(key = lambda x: x.date_time)
+    messages.sort(key=lambda x: x.date_time)
     group = request.user.groups.all()
     group = str(group[0])
     patient = True
@@ -1406,16 +1407,13 @@ def add_patients():
     for d in data:
         try:
             x = User.objects.get(username=d[0])
-            x.delete()
-            x = User(
-                username=d[0], password='12abcd34')
+            x.set_password('12abcd34')
             x.save()
         except:
-            x = User(
+            x = User.objects.create_user(
                 username=d[0], password='12abcd34')
             x.save()
-        x.groups.add(group)
-
+            x.groups.add(group)
         z = Patient(CNIC=d[0], fName=d[1].split()[0], lName=d[1].split()[1],
                     phone='03212233445', dob='2021-07-15', address='852-B Faisal Town Lahore',
                     email='patient@gmail.com', user=x, verification=True)
@@ -1434,16 +1432,14 @@ def add_doctors():
             ['1111122222223', 'Doctor Haroon', 'doctorharoon'], ['2222233333334', 'Doctor Ifrah', 'doctorifrah'], ['4444444444555', 'Doctor Usman', 'doctorusman']]
     for d in data:
         try:
-            x = User.objects.get(username=d[0])
-            x.delete()
-            x = User(
-                username=d[2], password='12abcd34')
+            x = User.objects.get(username=d[2])
+            x.set_password('12abcd34')
             x.save()
         except:
-            x = User(
+            x = User.objects.create_user(
                 username=d[2], password='12abcd34')
             x.save()
-        x.groups.add(group)
+            x.groups.add(group)
 
         z = Doctor(CNIC=d[0], fName=d[1].split()[0], lName=d[1].split()[1], license_No=d[2],
                    phone='03212233445', address='852-B Faisal Town Lahore',
@@ -1462,15 +1458,13 @@ def add_hospitals():
     for d in data:
         try:
             x = User.objects.get(username=d[0])
-            x.delete()
-            x = User(
-                username=d[0], password='12abcd34')
+            x.set_password('12abcd34')
             x.save()
         except:
-            x = User(
+            x = User.objects.create_user(
                 username=d[0], password='12abcd34')
             x.save()
-        x.groups.add(group)
+            x.groups.add(group)
 
         z = Hospital(license_No=d[0], name=d[1], city=d[2],
                      branch_code=1, user=x)
@@ -1488,15 +1482,13 @@ def add_laboratories():
     for d in data:
         try:
             x = User.objects.get(username=d[0])
-            x.delete()
-            x = User(
-                username=d[0], password='12abcd34')
+            x.set_password('12abcd34')
             x.save()
         except:
-            x = User(
+            x = User.objects.create_user(
                 username=d[0], password='12abcd34')
             x.save()
-        x.groups.add(group)
+            x.groups.add(group)
 
         z = Laboratory(license_No=d[0], name=d[1], city=d[2],
                        branch_code=1, user=x)
