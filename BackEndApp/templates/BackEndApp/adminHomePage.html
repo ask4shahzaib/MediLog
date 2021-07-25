@@ -233,6 +233,29 @@
             });
             chart2.render();
 
+            //chart3 is for user count chart
+
+            var chart3 = new CanvasJS.Chart("chartContainer3", {
+	            animationEnabled: true,
+	            theme: "light2", // "light1", "light2", "dark1", "dark2"
+	            title:{
+		            text: "Users"
+        	    },
+	            data: [{        
+		            type: "column",  
+		            showInLegend: true, 
+		            legendMarkerColor: "grey",
+		            legendText: "All Users",
+		            dataPoints: [      
+			            { y: 280878, label: "Patients" },
+			            { y: 266455,  label: "Doctors" },
+			            { y: 249709,  label: "Laboratories" },
+			            { y: 258400,  label: "Hospitals" }
+		            ]
+	            }]
+            });
+            chart3.render();
+
         }
     </script>
 
@@ -280,6 +303,9 @@
 
     <!-- code for pie chart -->
     <div id="chartContainer2" style="position: absolute; height: 50%; width: 30%; top: 25%; left: 16.8%;"></div>
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+
+    <div id="chartContainer3" style="position: absolute; height: 50%; width: 35%; top: 25%; left: 60.8%;"></div>
     <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 
 
