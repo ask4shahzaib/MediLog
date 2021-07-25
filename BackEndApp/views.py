@@ -1,5 +1,6 @@
 from calendar import month_name
-from datetime import date, timedelta, datetime
+import datetime
+from datetime import date, timedelta
 import random
 from base64 import b64encode
 from time import strptime
