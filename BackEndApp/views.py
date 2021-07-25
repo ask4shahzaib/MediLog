@@ -582,10 +582,10 @@ def hospitalName(id):
 
 
 def graphData(prescriptions, reports):
-    start_date = datetime.datetime.today()
+    start_date = datetime.today()
     start_date = str(start_date).split(' ')[0]
     start_date = str(start_date)
-    start_date = datetime.datetime.strptime(
+    start_date = datetime.strptime(
         start_date, '%Y-%m-%d').date()
     delta = timedelta(days=1)
     i = 7
@@ -601,7 +601,7 @@ def graphData(prescriptions, reports):
                 if report.date == start_date:
                     lab += 1
         start = str(start_date)
-        temp = datetime.datetime.strptime(
+        temp = datetime.strptime(
             start, '%Y-%m-%d').strftime("%d/%m/%Y")
         visitcount.insert(len(visitcount), [str(temp), doctor, lab])
         start_date -= delta
@@ -767,7 +767,7 @@ def addPrescription(request):
         hospital = request.user.username
         description = request.POST['description']
         date = request.POST['date']
-        date = datetime.datetime.strptime(
+        date = datetime.strptime(
             date, '%Y-%m-%d').strftime("%Y-%m-%d")
         severity = request.POST['severity']
         x = Prescription(date=date, description=description, criticalLevel=severity,
@@ -802,7 +802,7 @@ def addLabReport(request):
         label = request.POST.get('label')
         description = request.POST.get('description')
         date = request.POST.get('date')
-        date = datetime.datetime.strptime(
+        date = datetime.strptime(
             date, '%Y-%m-%d').strftime("%Y-%m-%d")
         severity = request.POST['severity']
         x = LabReport(date=date, doctor=doctor, description=description, criticalLevel=severity,
