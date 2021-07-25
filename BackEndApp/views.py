@@ -1124,14 +1124,22 @@ def sendMessage(request):
     senderID = request.user.username
     receiverID = request.POST['uID']
     messageText = request.POST['text']
-    x = Message(sender=senderID, receiver=receiverID, text=messageText)
+    datetime = datetime.now()
+    x = Message(sender=senderID, receiver=receiverID, text=messageText, datetime = datetime)
     x.save()
     return redirect('loadSenders')
 
 
 def loadMessages(request):
-    receiverID = request.user.username
-    messages = Message.objects.filter(receiver=receiverID)
+    userID = request.user.username
+    secUserId = request.POST['secondUserId']
+    receivedMessages = Message.objects.filter(receiver= userID)
+    receivedMessages = receivedMessages.filter(sender = secUserId)
+
+
+    sentMessages = Message.objects.filter(sender = userID)
+    sentMessages = sentMessages.filter(receiver = secUserId)
+    
     return redirect('feed')
 
 
