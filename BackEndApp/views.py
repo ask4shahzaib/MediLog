@@ -1165,7 +1165,6 @@ def analysisByCity(request):
     user = user.first_name + " " + user.last_name
     try:
         city = request.POST['city']
-
     except:
         city = None
     try:
@@ -1205,7 +1204,6 @@ def analysisByCity(request):
     else:
         text += "Pakistan"
     if start and end:
-        # start = datetime.datetime.strptime(start, "%y/%m/%d").strftime("%d-%m-%y")
         text += " during " + str(start)+" to "+str(end)
     random.shuffle(data)
     context = {'diseases': diseases, 'data': json.dumps(
@@ -1214,5 +1212,54 @@ def analysisByCity(request):
 
 
 def analysisByDisease(request):
-
-    return render(request, 'BackEndApp/analysisByDisease.html')
+    disease_list = []
+    prescriptions = Prescription.objects.all()
+    for prescription in prescriptions:
+        if prescription.label not in disease_list:
+            disease_list.append(prescription.label)
+    prescriptions = None
+    text = "Top "
+    try:
+        disease = request.POST['disease']
+    except:
+        disease = None
+    try:
+        start = request.POST['start']
+        end = request.POST['end']
+    except:
+        start = None
+        end = None
+    data = {}
+    if start and end:
+        prescriptions = Prescription.objects.filter(label=disease)
+        if disease:
+            prescriptions = prescriptions.filter(date__range=[start, end])
+    else:
+        prescriptions = Prescription.objects.all()
+        if disease:
+            prescriptions = prescriptions.filter(label=disease)
+    for prescription in prescriptions:
+        if data.get(prescription.city):
+            data[prescription.city] += 1
+        else:
+            data.update({prescription.city: 1})
+    temp = []
+    for key, value in data.items():
+        temp.append([key, value])
+    data = temp
+    if len(data) > 10:
+        data = data[:10]
+    if disease:
+        if len(data) > 1:
+            text += str(len(data)) + " cities with most patients of " + disease
+        else:
+            text = "Cases of "+disease+" in "+data[0][0]
+    else:
+        if len(data) > 1:
+            text += str(len(data)) + \
+                "Cities with most number of patients in Pakistan"
+        else:
+            text = "City with most number of patients"
+    data = sorted(data, key=lambda x: x[1], reverse=True)
+    context = {'text': text, 'data': json.dumps(data), 'list': disease_list}
+    return render(request, 'BackEndApp/analysisByDisease.html', context)

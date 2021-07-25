@@ -48,32 +48,34 @@
 
 
     <script>
-        window.onload = function () {
-        
-        var chart = new CanvasJS.Chart("chartContainer", {
-            animationEnabled: true,
-            theme: "light2", // "light1", "light2", "dark1", "dark2"
-            title:{
-                text: "Number of cases of Corona in major cities of Pakistan"
-            },
-            data: [{
-                type: "column",
-                showInLegend: true,
-                legendMarkerColor: "grey",
-                legendText: "Corona",
-                dataPoints: [
-                    { y: 300878, label: "Lahore" },
-                    { y: 266455,  label: "Karachi" },
-                    { y: 179709,  label: "Islamabad" },
-                    { y: 188400,  label: "Quetta" },
-                    { y: 248200,  label: "Peshawar" }
-                ]
-            }]
-        });
-        chart.render();
-        
+        window.onload = function() {
+            var data = JSON.parse('{{data | safe}}');
+            var dps = [];
+            console.log(data);
+            for (var element in data) {
+                console.log(element);
+                dps.push({
+                    label: data[element][0],
+                    y: data[element][1]
+                });
+                var chart = new CanvasJS.Chart("chartContainer", {
+                    animationEnabled: true,
+                    theme: "light2", // "light1", "light2", "dark1", "dark2"
+                    title: {
+                        text: "{{text}}"
+                    },
+                    data: [{
+                        type: "column",
+                        showInLegend: true,
+                        legendMarkerColor: "grey",
+                        legendText: "Corona",
+                        dataPoints: dps
+                    }]
+                });
+            }
+            chart.render();
         }
-        </script>
+    </script>
 
 
 </head>
@@ -108,44 +110,31 @@
     <div class="usableBody">
 
 
-        <form action="" style="position: absolute; left: 16%; top: 10%;">
+        <form action="" method="POST" style="position: absolute; left: 16%; top: 10%;">
+            {%csrf_token%}
             <label for="disease">Choose a disease:</label>
             <select name="disease" id="disease">
-              <option value="Corona">Corona</option>
-              <option value="Cancer">Cancer</option>
-              <option value="Hepatitis">Hepatitis</option>
-              <option value="Diabetes">Diabetes</option>
+              <option value=""></option>
+              {% for one in list %}
+              <option value="{{one}}">{{one}}</option>
+              {%endfor%}
             </select>
 
             <label>
                 <label>Start Date:</label>
-                <input
-                  name="startDate"
-                  id="startDate"
-                  type="text"
-                  onfocus="(this.type='date')"
-                  onfocusout="(this.type='text')"
-                  required
-                />
+            <input name="start" id="start" type="text" onfocus="(this.type='date')" onfocusout="(this.type='text')" />
             </label>
 
             <label>
                 <label>End Date:</label>
-                <input
-                  name="endDate"
-                  id="endDate"
-                  type="text"
-                  onfocus="(this.type='date')"
-                  onfocusout="(this.type='text')"
-                  required
-                />
+            <input name="end" id="end" type="text" onfocus="(this.type='date')" onfocusout="(this.type='text')" />
             </label>
             <br><br>
-            
-            <input type="submit" value="Submit" style="position: absolute; left: 94%;">
-          </form>
 
-        
+            <input type="submit" value="Submit" style="position: absolute; left: 94%;">
+        </form>
+
+
         <div id="chartContainer" style="position: absolute; height: 50%; width: 70%; top: 30%; left: 14.8%;"></div>
         <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 
