@@ -1218,6 +1218,8 @@ def analysisByDisease(request):
         if prescription.label not in disease_list:
             disease_list.append(prescription.label)
     prescriptions = None
+    user = User.objects.get(username=request.user.username)
+    user = user.first_name + " " + user.last_name
     text = "Top "
     try:
         disease = request.POST['disease']
@@ -1261,5 +1263,5 @@ def analysisByDisease(request):
         else:
             text = "City with most number of patients"
     data = sorted(data, key=lambda x: x[1], reverse=True)
-    context = {'text': text, 'data': json.dumps(data), 'list': disease_list}
+    context = {'text': text, 'data': json.dumps(data), 'list': disease_list, 'user': user}
     return render(request, 'BackEndApp/analysisByDisease.html', context)
