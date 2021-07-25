@@ -1351,12 +1351,15 @@ def add_patients():
     data = [['1111122222223','Afnan Bashir'],['2222233333334','Talha Jaleel'],
     ['3333344444445','Usama Rizwan'],['4444455555556','Jahanzaib Rao']]
     for d in data:
-        x = User(
-            username=d[0], password='12abcd34')
-        x.save()
-        x.groups.add(group)
+        try:
+            x = User(
+                username=d[0], password='12abcd34')
+            x.save()
+            x.groups.add(group)
 
-        z = Patient(CNIC=d[0], fName=d[1].split()[0], lName=d[1].split()[1],
-                    phone='03212233445', dob='2021-07-15', address='852-B Faisal Town Lahore',
-                    email='patient@gmail.com', user=x, verification = True)
-        z.save()
+            z = Patient(CNIC=d[0], fName=d[1].split()[0], lName=d[1].split()[1],
+                        phone='03212233445', dob='2021-07-15', address='852-B Faisal Town Lahore',
+                        email='patient@gmail.com', user=x, verification = True)
+            z.save()
+        except:
+            pass
