@@ -410,6 +410,15 @@ def stats():
     return data
 
 
+def accounts():
+    users = []
+    users.append(['Patients', len(Patient.objects.all())])
+    users.append(['Doctors', len(Doctor.objects.all())])
+    users.append(['Labs', len(Laboratory.objects.all())])
+    users.append(['Hospitals', len(Hospital.objects.all())])
+    return users
+
+
 def summary(cnic):
     name = Patient.objects.get(CNIC=cnic)
     text = name.fName + " " + name.lName + " had"
@@ -710,10 +719,13 @@ def feed(request):
         return render(request, 'BackEndApp/hospitalLandingPage.html', context)
 
     if group == 'Admin':
+        users = accounts()
+        ratios = ratio()
         data = stats()
         user = User.objects.get(username=request.user.username)
         user = user.first_name + " " + user.last_name
-        context = {'user': user, 'data': data}
+        context = {'user': user, 'data': data, 'users': json.dumps(
+            users), 'ratios': json.dumps(ratios)}
         return render(request, 'BackEndApp/adminHomePage.html', context)
 
 
@@ -1271,5 +1283,34 @@ def analysisByDisease(request):
         else:
             text = "City with most number of patients"
     data = sorted(data, key=lambda x: x[1], reverse=True)
-    context = {'text': text, 'data': json.dumps(data), 'list': disease_list, 'user': user}
+    context = {'text': text, 'data': json.dumps(
+        data), 'list': disease_list, 'user': user}
     return render(request, 'BackEndApp/analysisByDisease.html', context)
+
+
+def ratio():
+    diseases = {}
+    prescriptions = Prescription.objects.all()
+    for prescription in prescriptions:
+        if diseases.get(prescription.label):
+            diseases[prescription.label] += 1
+        else:
+            diseases.update({prescription.label: 1})
+    data = []
+    for key, value in diseases.items():
+        data.append([key, value])
+    data = sorted(data, key=lambda x: x[1], reverse=True)
+    count = 0
+    for d in data:
+        count += d[1]
+    for d in data:
+        d[1] = (d[1]/count) * 100
+    i = 0
+    for d in data:
+        if i < 5:
+            pass
+        else:
+            i += d[1]
+    data = data[:5]
+    data.append(['Others', i])
+    return data
