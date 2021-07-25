@@ -10,6 +10,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models.fields import DateTimeField
 from django.http.response import json
 from django.shortcuts import render
 from BackEndApp.models import *
@@ -1136,7 +1137,7 @@ def sendMessage(request):
     senderID = request.user.username
     receiverID = request.POST['uID']
     messageText = request.POST['text']
-    datetime = datetime.now()
+    datetime = DateTimeField.now()
     x = Message(sender=senderID, receiver=receiverID,
                 text=messageText, datetime=datetime)
     x.save()
