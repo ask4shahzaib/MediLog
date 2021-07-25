@@ -145,3 +145,5 @@ class Message(models.Model):
     sender = models.CharField(max_length=30, null=False)
     receiver = models.CharField(max_length=30, null=False)
     text = models.CharField(max_length=300, null=False)
+    datetime = models.DateField()
+

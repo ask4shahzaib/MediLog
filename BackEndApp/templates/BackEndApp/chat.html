@@ -16,9 +16,13 @@
         
       <div class="list-group" style="position: absolute; left: 0%; right: 50%;">
         {% for chatPerson in chatPeople %}
-          <a href="#" class="list-group-item list-group-item-action active" >
-           <h4>{{chatPerson}}</h4>
-          </a>
+
+        <form action="/loadMessages/" method="POST">
+          {%csrf_token%}
+          <button type="submit" class="list-group-item list-group-item-action active" value="{{chatPerson.CNIC}}" name = "secondUserId" id = "secondUserId">{{chatPerson}}</button>
+
+        </form>
+          
         {% endfor %}
       </div>
 
