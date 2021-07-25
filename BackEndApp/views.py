@@ -1,6 +1,5 @@
-import datetime
 from calendar import month_name
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
 import random
 from base64 import b64encode
 from time import strptime
@@ -1137,7 +1136,8 @@ def sendMessage(request):
     receiverID = request.POST['uID']
     messageText = request.POST['text']
     datetime = datetime.now()
-    x = Message(sender=senderID, receiver=receiverID, text=messageText, datetime = datetime)
+    x = Message(sender=senderID, receiver=receiverID,
+                text=messageText, datetime=datetime)
     x.save()
     return redirect('loadSenders')
 
@@ -1145,13 +1145,12 @@ def sendMessage(request):
 def loadMessages(request):
     userID = request.user.username
     secUserId = request.POST['secondUserId']
-    receivedMessages = Message.objects.filter(receiver= userID)
-    receivedMessages = receivedMessages.filter(sender = secUserId)
+    receivedMessages = Message.objects.filter(receiver=userID)
+    receivedMessages = receivedMessages.filter(sender=secUserId)
 
+    sentMessages = Message.objects.filter(sender=userID)
+    sentMessages = sentMessages.filter(receiver=secUserId)
 
-    sentMessages = Message.objects.filter(sender = userID)
-    sentMessages = sentMessages.filter(receiver = secUserId)
-    
     return redirect('feed')
 
 
