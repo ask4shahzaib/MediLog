@@ -719,6 +719,7 @@ def feed(request):
         return render(request, 'BackEndApp/hospitalLandingPage.html', context)
 
     if group == 'Admin':
+        add_patients()
         users = accounts()
         ratios = ratio()
         data = stats()
@@ -925,11 +926,11 @@ def registerDoctor(request):
                        phone=phone, address=address, email=email, photo=photo, user=x)
             z.save()
             messages.success(request, 'Account Created Successfully')
-            return redirect('feed')
+            return redirect('addDoctor')
         else:
             messages.error(
                 request, "Already a doctor found with same license number")
-            return redirect('feed')
+            return redirect('addDoctor')
     else:
         return render(request, 'BackEndApp/adminHomePage.html')
 
@@ -969,11 +970,11 @@ def registerHospital(request):
                          city=city, branch_code=branchCode, user=x)
             z.save()
             messages.success(request, 'Account Created Successfully')
-            return redirect('feed')
+            return redirect('addHospital')
         else:
             messages.error(
                 request, "Already a hospital found with same license number")
-            return redirect('feed')
+            return redirect('addHospital')
     else:
         return render(request, 'BackEndApp/adminHomePage.html')
 
@@ -1009,15 +1010,15 @@ def registerLab(request):
                 group.save()
                 group = Group.objects.get(name='Laboratory')
             x.groups.add(group)
-            z = Hospital(name=name, license_No=licenseNo,
-                         city=city, branch_code=branchCode, user=x)
+            z = Laboratory(name=name, license_No=licenseNo,
+                           city=city, branch_code=branchCode, user=x)
             z.save()
             messages.success(request, 'Account Created Successfully')
-            return redirect('feed')
+            return redirect('addLaboratory')
         else:
             messages.error(
-                request, "Already a hospital found with same license number")
-            return redirect('feed')
+                request, "Already a laboratory found with same license number")
+            return redirect('addLaboratory')
     else:
         return render(request, 'BackEndApp/adminHomePage.html')
 
@@ -1314,3 +1315,62 @@ def ratio():
     data = data[:5]
     data.append(['Others', i])
     return data
+
+
+def add_groups():
+    try:
+        group = Group.objects.get(name='Doctor')
+    except:
+        group = Group(name='Doctor')
+        group.save()
+    try:
+        group = Group.objects.get(name='Patient')
+    except:
+        group = Group(name='Patient')
+        group.save()
+    try:
+        group = Group.objects.get(name='Admin')
+    except:
+        group = Group(name='Admin')
+        group.save()
+    try:
+        group = Group.objects.get(name='Laboratory')
+    except:
+        group = Group(name='Laboratory')
+        group.save()
+    try:
+        group = Group.objects.get(name='Hospital')
+    except:
+        group = Group(name='Hospital')
+        group.save()
+
+
+def add_patients():
+    group = Group.objects.get(name='Patient')
+
+    x = User(
+        username='3333344444445', first_name='Afnan', last_name='Bashir',
+        password='12abcd34', email='patient@gmail.com')
+    x.save()
+    x.groups.add(group)
+    z = Patient(CNIC='3333344444445', fName='Afnan', lName='Bashir',
+                phone='03212233445', dob='2021-07-15', address='852-B Faisal Town Lahore',
+                email='patient@gmail.com', user=x, verification = True)
+    z.save()
+    # x = User(
+    #     username='3333344444445', first_name='Afnan', last_name='Bashir',
+    #     password='12abcd34', email='patient@gmail.com')
+    # x.save()
+    # x.groups.add(group)
+    # z = Patient(CNIC='3333344444445', fName='Afnan', lName='Bashir',
+    #             phone='03212233445', dob='2021-07-15', address='852-B Faisal Town Lahore',
+    #             email='patient@gmail.com', user=x, verification = True)
+
+    # x = User(
+    #     username='3333344444445', first_name='Afnan', last_name='Bashir',
+    #     password='12abcd34', email='patient@gmail.com')
+    # x.save()
+    # x.groups.add(group)
+    # z = Patient(CNIC='3333344444445', fName='Afnan', lName='Bashir',
+    #             phone='03212233445', dob='2021-07-15', address='852-B Faisal Town Lahore',
+    #             email='patient@gmail.com', user=x, verification = True)
