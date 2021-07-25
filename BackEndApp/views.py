@@ -15,6 +15,7 @@ from django.shortcuts import render
 from BackEndApp.models import *
 from .decorators import *
 from .forms import *
+from datetime import datetime
 
 thirty = ['04', '06', '09', '11']
 thirtyOne = ['01', '03', '05', '07', '08', '10', '12']
@@ -1139,8 +1140,7 @@ def sendMessage(request):
     receiverID = request.POST['uID']
     messageText = request.POST['text']
     date_time = datetime.now()
-    x = Message(sender=senderID, receiver=receiverID,
-                text=messageText, date_time=datetime)
+    x = Message(sender=senderID, receiver=receiverID, text=messageText, date_time = date_time)
     x.save()
     return redirect('loadSenders')
 
@@ -1148,13 +1148,29 @@ def sendMessage(request):
 def loadMessages(request):
     userID = request.user.username
     secUserId = request.POST['secondUserId']
-    receivedMessages = Message.objects.filter(receiver=userID)
-    receivedMessages = receivedMessages.filter(sender=secUserId)
 
-    sentMessages = Message.objects.filter(sender=userID)
-    sentMessages = sentMessages.filter(receiver=secUserId)
+    receivedMessages = Message.objects.filter(receiver= userID)
+    receivedMessages = receivedMessages.filter(sender = secUserId)
 
-    return redirect('feed')
+    sentMessages = Message.objects.filter(sender = userID)
+    sentMessages = sentMessages.filter(receiver = secUserId)
+
+    messages = []
+    for i in receivedMessages:
+        messages.append(i)
+
+    for i in sentMessages:
+        messages.append(i)
+
+
+
+    secondPerson = Patient.objects.get(CNIC = secUserId)
+
+    context = {'Messages': messages,
+    'secondPerson' : secondPerson
+    }
+    
+    return render(request, 'BackEndApp/chatOpened.html', context)
 
 
 def loadSenders(request):

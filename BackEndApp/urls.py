@@ -15,7 +15,7 @@ urlpatterns = [
     path('addLaboratory/', views.addLaboratory, name='addLaboratory'),
     path('addHospital/', views.addHospital, name='addHospital'),
 
-    
+    path('chatOpened/' , views.loadMessages, name = 'chatOpened'),
     
     
     path('registerLab/', views.registerLab, name='registerLab'),
