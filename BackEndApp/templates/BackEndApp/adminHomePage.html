@@ -203,6 +203,17 @@
 
             // chart2 is for pie chart:
 
+            var data = JSON.parse('{{ratios | safe}}');
+            var dps = [];
+            console.log(data);
+            for (var element in data) {
+                console.log(element);
+                dps.push({
+                    label: data[element][0],
+                    y: data[element][1]
+                });
+            }
+
             var chart2 = new CanvasJS.Chart("chartContainer2", {
                 animationEnabled: true,
                 title: {
@@ -213,46 +224,35 @@
                     startAngle: 240,
                     yValueFormatString: "##0.00\"%\"",
                     indexLabel: "{label} {y}",
-                    dataPoints: [{
-                        y: 39.45,
-                        label: "Corona"
-                    }, {
-                        y: 17.31,
-                        label: "Hepatitus"
-                    }, {
-                        y: 17.06,
-                        label: "Cancer"
-                    }, {
-                        y: 14.91,
-                        label: "Kidney Failure"
-                    }, {
-                        y: 11.26,
-                        label: "{{city}}"
-                    }]
+                    dataPoints: dps
                 }]
             });
             chart2.render();
 
             //chart3 is for user count chart
-
+            var data = JSON.parse('{{users | safe}}');
+            var dps = [];
+            console.log(data);
+            for (var element in data) {
+                console.log(element);
+                dps.push({
+                    label: data[element][0],
+                    y: data[element][1]
+                });
+            }
             var chart3 = new CanvasJS.Chart("chartContainer3", {
-	            animationEnabled: true,
-	            theme: "light2", // "light1", "light2", "dark1", "dark2"
-	            title:{
-		            text: "Users"
-        	    },
-	            data: [{        
-		            type: "column",  
-		            showInLegend: true, 
-		            legendMarkerColor: "grey",
-		            legendText: "All Users",
-		            dataPoints: [      
-			            { y: 280878, label: "Patients" },
-			            { y: 266455,  label: "Doctors" },
-			            { y: 249709,  label: "Laboratories" },
-			            { y: 258400,  label: "Hospitals" }
-		            ]
-	            }]
+                animationEnabled: true,
+                theme: "light2", // "light1", "light2", "dark1", "dark2"
+                title: {
+                    text: "Users"
+                },
+                data: [{
+                    type: "column",
+                    showInLegend: true,
+                    legendMarkerColor: "grey",
+                    legendText: "All Users",
+                    dataPoints: dps
+                }]
             });
             chart3.render();
 

@@ -51,23 +51,22 @@
                     label: data[element][0],
                     y: data[element][1]
                 });
-                var chart = new CanvasJS.Chart("chartContainer", {
-                    animationEnabled: true,
-                    theme: "light2",
-                    title: {
-                        text: "{{text}}"
-                    },
-                    data: [{
-                        type: "column",
-                        showInLegend: true,
-                        legendMarkerColor: "grey",
-                        legendText: "Pakistan",
-                        dataPoints: dps
-                    }]
-                });
             }
-            chart.render();
+            var chart = new CanvasJS.Chart("chartContainer", {
+                animationEnabled: true,
+                theme: "light2",
+                title: {
+                    text: "{{text}}"
+                },
+                data: [{
+                    type: "column",
+                    showInLegend: true,
+                    legendMarkerColor: "grey",
+                    dataPoints: dps
+                }]
+            });
         }
+        chart.render();
     </script>
 
 
