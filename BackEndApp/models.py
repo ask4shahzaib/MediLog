@@ -36,8 +36,7 @@ class Patient(models.Model):
     lName = models.CharField(max_length=30)
     dob = models.DateField()
     trustedContact = models.CharField(max_length=13)
-    phone = models.CharField(max_length=11, null=True,
-                             validators=[MinLengthValidator(11)])
+    phone = models.CharField(max_length=11, null=True,)
     address = models.CharField(max_length=999, null=True)
     email = models.CharField(max_length=100, null=True)
     photo = models.ImageField(
@@ -56,8 +55,7 @@ class Doctor(models.Model):
     fName = models.CharField(max_length=30)
     lName = models.CharField(max_length=30)
     license_No = models.CharField(max_length=20, null=False, primary_key=True)
-    phone = models.CharField(max_length=11, null=True,
-                             validators=[MinLengthValidator(11)])
+    phone = models.CharField(max_length=11, null=True)
     address = models.CharField(max_length=999, null=True)
     email = models.CharField(max_length=100, null=True)
     photo = models.ImageField(upload_to=doctor_profile,

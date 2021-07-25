@@ -15,7 +15,6 @@ from django.shortcuts import render
 from BackEndApp.models import *
 from .decorators import *
 from .forms import *
-from datetime import datetime
 
 thirty = ['04', '06', '09', '11']
 thirtyOne = ['01', '03', '05', '07', '08', '10', '12']
@@ -553,7 +552,7 @@ def profile(request):
 
 @login_required(login_url='login')
 def home(request):
-    return redirect('login')
+    return redirect('feed')
 
 
 def doctorName(license):
@@ -694,6 +693,21 @@ def patientFeed(request, id):
     return render(request, 'BackEndApp/patientHomePage.html', context)
 
 
+def ready():
+    add_groups()
+    try:
+        u = User(username='manager1', password='12abcd34')
+        u.save()
+        group = Group.objects.get(name='Admin')
+        u.groups.add(group)
+    except:
+        None
+    add_patients()
+    add_doctors()
+    add_hospitals()
+    add_laboratories()
+
+
 @login_required(login_url='login')
 @allowed_users(allowed=['Patient', 'Laboratory', 'Admin', 'Doctor', 'Hospital'])
 def feed(request):
@@ -720,8 +734,6 @@ def feed(request):
         return render(request, 'BackEndApp/hospitalLandingPage.html', context)
 
     if group == 'Admin':
-        add_groups()
-        add_patients()
         users = accounts()
         ratios = ratio()
         data = stats()
@@ -735,6 +747,7 @@ def feed(request):
 @unauthenticated_user
 def loginPage(request):
     if request.method == 'POST':
+        ready()
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
@@ -1351,27 +1364,27 @@ def ratio():
 
 def add_groups():
     try:
-        group = Group.objects.get(name='Doctor')
+        Group.objects.get(name='Doctor')
     except:
         group = Group(name='Doctor')
         group.save()
     try:
-        group = Group.objects.get(name='Patient')
+        Group.objects.get(name='Patient')
     except:
         group = Group(name='Patient')
         group.save()
     try:
-        group = Group.objects.get(name='Admin')
+        Group.objects.get(name='Admin')
     except:
         group = Group(name='Admin')
         group.save()
     try:
-        group = Group.objects.get(name='Laboratory')
+        Group.objects.get(name='Laboratory')
     except:
         group = Group(name='Laboratory')
         group.save()
     try:
-        group = Group.objects.get(name='Hospital')
+        Group.objects.get(name='Hospital')
     except:
         group = Group(name='Hospital')
         group.save()
@@ -1380,17 +1393,111 @@ def add_groups():
 def add_patients():
     group = Group.objects.get(name='Patient')
     data = [['1111122222223', 'Afnan Bashir'], ['2222233333334', 'Talha Jaleel'],
-            ['3333344444445', 'Usama Rizwan'], ['4444455555556', 'Jahanzaib Rao']]
+            ['3333344444445', 'Usama Rizwan'], ['4444455555556',
+                                                'Jahanzaib Rao'], ['5555566666667', 'Bilal Tahir'],
+            ['6666677777778', 'Rohan Akhtar'], ['7777788888889',
+                                                'Usama Malik'], ['8888899999990', 'Jawad Gujjar'],
+            ['9999900000001', 'Usama Bashir'], ['0000011111112',
+                                                'Muneeb Mughal'], ['5555555555666', 'Moosa Rao'],
+            ['1236547893692', 'Haris Rao'], ['1472589632581',
+                                             'Affan Rao'], ['0000000000111', 'Rao Hanzala'],
+            ['1111111111222', 'Minhaj Rao'], ['2222222222333', 'Saad Rao'], ['3333333333444', 'Waqar Rao'], ['4444444444555', 'Abdullah Ansar']]
+
     for d in data:
         try:
+            x = User.objects.get(username=d[0])
+            x.delete()
             x = User(
                 username=d[0], password='12abcd34')
             x.save()
-            x.groups.add(group)
-
-            z = Patient(CNIC=d[0], fName=d[1].split()[0], lName=d[1].split()[1],
-                        phone='03212233445', dob='2021-07-15', address='852-B Faisal Town Lahore',
-                        email='patient@gmail.com', user=x, verification=True)
-            z.save()
         except:
-            pass
+            x = User(
+                username=d[0], password='12abcd34')
+            x.save()
+        x.groups.add(group)
+
+        z = Patient(CNIC=d[0], fName=d[1].split()[0], lName=d[1].split()[1],
+                    phone='03212233445', dob='2021-07-15', address='852-B Faisal Town Lahore',
+                    email='patient@gmail.com', user=x, verification=True)
+        z.save()
+
+
+def add_doctors():
+    group = Group.objects.get(name='Doctor')
+    data = [['1111111111222', 'Docotor Sarim', 'doctorsarim'], ['2222222222333', 'Doctor Abeeda', 'doctorabeeda'], ['3333333333444', 'Doctor Sameen', 'docotorsameen'],
+            ['1236547893692', 'Doctor Aamir', 'doctoraamir'], ['1472589632581',
+                                                               'Doctor Asif', 'doctorasif'], ['0000000000111', 'Doctor Saif', 'doctorsaif'],
+            ['9999900000001', 'Doctor Qasim', 'doctorqasim'], ['0000011111112', 'Doctor Zareen',
+                                                               'doctorzareen'], ['5555555555666', 'Doctor Ibrahim', 'doctoribrahim'],
+            ['6666677777778', 'Doctor Ishrat', 'doctorishrat'], ['7777788888889', 'Doctor Zeeshan',
+                                                                 'doctorzeeshan'], ['8888899999990', 'Doctor Noshaba', 'doctornoshaba'],
+            ['1111122222223', 'Doctor Haroon', 'doctorharoon'], ['2222233333334', 'Doctor Ifrah', 'doctorifrah'], ['4444444444555', 'Doctor Usman', 'doctorusman']]
+    for d in data:
+        try:
+            x = User.objects.get(username=d[0])
+            x.delete()
+            x = User(
+                username=d[2], password='12abcd34')
+            x.save()
+        except:
+            x = User(
+                username=d[2], password='12abcd34')
+            x.save()
+        x.groups.add(group)
+
+        z = Doctor(CNIC=d[0], fName=d[1].split()[0], lName=d[1].split()[1], license_No=d[2],
+                   phone='03212233445', address='852-B Faisal Town Lahore',
+                   email='doctor@gmail.com', user=x)
+        z.save()
+
+
+def add_hospitals():
+    group = Group.objects.get(name='Hospital')
+    data = [['hospitallahore', 'Lahore Hospital', 'Lahore'], ['hospitalsheikhupura', 'Sheikhupura Hospital', 'Sheikhupura'], ['hospitalkarachi', 'Karachi Hopital', 'Karachi'],
+            ['hospitalmultan', 'Multan Hospital', 'Multan'], ['hospitalislamabad',
+                                                              'Islamabad Hospital', 'Islamabad'], ['hospitalpeshawar', 'Peshawar Hospital', 'Peshawar'],
+            ['hospitalquetta', 'Quetta Hospital', 'Quetta'], ['hospitalsahiwal', 'Sahiwal Hospital',
+                                                              'Sahiwal'], ['hospitalfaisalbad', 'Faisalabad Hospital', 'Faisalabad'],
+            ['hospitallodhran', 'Lodhran Hospital', "Lodhran"]]
+    for d in data:
+        try:
+            x = User.objects.get(username=d[0])
+            x.delete()
+            x = User(
+                username=d[0], password='12abcd34')
+            x.save()
+        except:
+            x = User(
+                username=d[0], password='12abcd34')
+            x.save()
+        x.groups.add(group)
+
+        z = Hospital(license_No=d[0], name=d[1], city=d[2],
+                     branch_code=1, user=x)
+        z.save()
+
+
+def add_laboratories():
+    group = Group.objects.get(name='Laboratory')
+    data = [['laboratorylahore', 'Lahore Lab', 'Lahore'], ['laboratorysheikhopura', 'Sheikhupura Lab', 'Sheikhupura'], ['laboratorykarachi', 'Karachi Lab', 'Karachi'],
+            ['laboratorymultan', 'Multan Lab', 'Multan'], ['laboratoryislamabad',
+                                                           'Islamabad Lab', 'Islamabad'], ['laboratorypeshawar', 'Peshawar Lab', 'Peshawar'],
+            ['laboratoryquetta', 'Quetta Lab', 'Quetta'], ['laboratorysahiwal', 'Sahiwal Lab',
+                                                           'Sahiwal'], ['laboratoryfaisalbad', 'Faisalabad Lab', 'Faisalabad'],
+            ['laboratorylodhran', 'Lodhran Lab', "Lodhran"]]
+    for d in data:
+        try:
+            x = User.objects.get(username=d[0])
+            x.delete()
+            x = User(
+                username=d[0], password='12abcd34')
+            x.save()
+        except:
+            x = User(
+                username=d[0], password='12abcd34')
+            x.save()
+        x.groups.add(group)
+
+        z = Laboratory(license_No=d[0], name=d[1], city=d[2],
+                       branch_code=1, user=x)
+        z.save()
