@@ -1,6 +1,7 @@
 import datetime
 from calendar import month_name
 from datetime import date, timedelta
+import random
 from base64 import b64encode
 from time import strptime
 from cryptography.fernet import Fernet
@@ -1154,10 +1155,17 @@ def loadSenders(request):
 
 
 def analysisByCity(request):
+    text = "Top "
+    cities = []
+    prescriptions = Prescription.objects.all()
+    for prescription in prescriptions:
+        if prescription.city not in cities:
+            cities.append(prescription.city)
     user = User.objects.get(username=request.user.username)
     user = user.first_name + " " + user.last_name
     try:
         city = request.POST['city']
+
     except:
         city = None
     try:
@@ -1181,12 +1189,27 @@ def analysisByCity(request):
         else:
             temp = {prescription.label: 1}
             diseases.update(temp)
-    data = {}
+    data = []
     for key, value in diseases.items():
-        data.update({key:value})
-
-    context = {'diseases': diseases, 'data': json.dumps(data), 'user': user}
-    print(data)
+        data.append([key, value])
+    data = sorted(data, key=lambda x: x[1], reverse=True)
+    if len(data) > 10:
+        data = data[:10]
+        text += "10 diseases in "
+    if len(data) > 1:
+        text += str(len(data)) + " diseases in "
+    else:
+        text = "Only Disease in "
+    if city:
+        text += city
+    else:
+        text += "Pakistan"
+    if start and end:
+        # start = datetime.datetime.strptime(start, "%y/%m/%d").strftime("%d-%m-%y")
+        text += " during " + str(start)+" to "+str(end)
+    random.shuffle(data)
+    context = {'diseases': diseases, 'data': json.dumps(
+        data), 'cities': cities, 'text': text, 'user': user}
     return render(request, 'BackEndApp/analysisByCity.html', context)
 
 
