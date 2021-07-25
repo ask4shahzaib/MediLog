@@ -1,6 +1,5 @@
-import datetime
 from calendar import month_name
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
 import random
 from base64 import b64encode
 from time import strptime
@@ -15,6 +14,7 @@ from django.shortcuts import render
 from BackEndApp.models import *
 from .decorators import *
 from .forms import *
+from datetime import datetime
 
 thirty = ['04', '06', '09', '11']
 thirtyOne = ['01', '03', '05', '07', '08', '10', '12']
@@ -573,10 +573,10 @@ def hospitalName(id):
 
 
 def graphData(prescriptions, reports):
-    start_date = datetime.datetime.today()
+    start_date = datetime.today()
     start_date = str(start_date).split(' ')[0]
     start_date = str(start_date)
-    start_date = datetime.datetime.strptime(
+    start_date = datetime.strptime(
         start_date, '%Y-%m-%d').date()
     delta = timedelta(days=1)
     i = 7
@@ -592,7 +592,7 @@ def graphData(prescriptions, reports):
                 if report.date == start_date:
                     lab += 1
         start = str(start_date)
-        temp = datetime.datetime.strptime(
+        temp = datetime.strptime(
             start, '%Y-%m-%d').strftime("%d/%m/%Y")
         visitcount.insert(len(visitcount), [str(temp), doctor, lab])
         start_date -= delta
@@ -755,7 +755,7 @@ def addPrescription(request):
         hospital = request.user.username
         description = request.POST['description']
         date = request.POST['date']
-        date = datetime.datetime.strptime(
+        date = datetime.strptime(
             date, '%Y-%m-%d').strftime("%Y-%m-%d")
         severity = request.POST['severity']
         x = Prescription(date=date, description=description, criticalLevel=severity,
@@ -790,7 +790,7 @@ def addLabReport(request):
         label = request.POST.get('label')
         description = request.POST.get('description')
         date = request.POST.get('date')
-        date = datetime.datetime.strptime(
+        date = datetime.strptime(
             date, '%Y-%m-%d').strftime("%Y-%m-%d")
         severity = request.POST['severity']
         x = LabReport(date=date, doctor=doctor, description=description, criticalLevel=severity,
@@ -1124,8 +1124,8 @@ def sendMessage(request):
     senderID = request.user.username
     receiverID = request.POST['uID']
     messageText = request.POST['text']
-    datetime = datetime.now()
-    x = Message(sender=senderID, receiver=receiverID, text=messageText, datetime = datetime)
+    date_time = datetime.now()
+    x = Message(sender=senderID, receiver=receiverID, text=messageText, date_time = date_time)
     x.save()
     return redirect('loadSenders')
 
@@ -1133,14 +1133,29 @@ def sendMessage(request):
 def loadMessages(request):
     userID = request.user.username
     secUserId = request.POST['secondUserId']
+
     receivedMessages = Message.objects.filter(receiver= userID)
     receivedMessages = receivedMessages.filter(sender = secUserId)
 
-
     sentMessages = Message.objects.filter(sender = userID)
     sentMessages = sentMessages.filter(receiver = secUserId)
+
+    messages = []
+    for i in receivedMessages:
+        messages.append(i)
+
+    for i in sentMessages:
+        messages.append(i)
+
+
+
+    secondPerson = Patient.objects.get(CNIC = secUserId)
+
+    context = {'Messages': messages,
+    'secondPerson' : secondPerson
+    }
     
-    return redirect('feed')
+    return render(request, 'BackEndApp/chatOpened.html', context)
 
 
 def loadSenders(request):
