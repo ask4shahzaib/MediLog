@@ -719,6 +719,7 @@ def feed(request):
         return render(request, 'BackEndApp/hospitalLandingPage.html', context)
 
     if group == 'Admin':
+        add_groups()
         add_patients()
         users = accounts()
         ratios = ratio()
@@ -1347,30 +1348,15 @@ def add_groups():
 
 def add_patients():
     group = Group.objects.get(name='Patient')
+    data = [['1111122222223','Afnan Bashir'],['2222233333334','Talha Jaleel'],
+    ['3333344444445','Usama Rizwan'],['4444455555556','Jahanzaib Rao']]
+    for d in data:
+        x = User(
+            username=d[0], password='12abcd34')
+        x.save()
+        x.groups.add(group)
 
-    x = User(
-        username='3333344444445', first_name='Afnan', last_name='Bashir',
-        password='12abcd34', email='patient@gmail.com')
-    x.save()
-    x.groups.add(group)
-    z = Patient(CNIC='3333344444445', fName='Afnan', lName='Bashir',
-                phone='03212233445', dob='2021-07-15', address='852-B Faisal Town Lahore',
-                email='patient@gmail.com', user=x, verification = True)
-    z.save()
-    # x = User(
-    #     username='3333344444445', first_name='Afnan', last_name='Bashir',
-    #     password='12abcd34', email='patient@gmail.com')
-    # x.save()
-    # x.groups.add(group)
-    # z = Patient(CNIC='3333344444445', fName='Afnan', lName='Bashir',
-    #             phone='03212233445', dob='2021-07-15', address='852-B Faisal Town Lahore',
-    #             email='patient@gmail.com', user=x, verification = True)
-
-    # x = User(
-    #     username='3333344444445', first_name='Afnan', last_name='Bashir',
-    #     password='12abcd34', email='patient@gmail.com')
-    # x.save()
-    # x.groups.add(group)
-    # z = Patient(CNIC='3333344444445', fName='Afnan', lName='Bashir',
-    #             phone='03212233445', dob='2021-07-15', address='852-B Faisal Town Lahore',
-    #             email='patient@gmail.com', user=x, verification = True)
+        z = Patient(CNIC=d[0], fName=d[1].split()[0], lName=d[1].split()[1],
+                    phone='03212233445', dob='2021-07-15', address='852-B Faisal Town Lahore',
+                    email='patient@gmail.com', user=x, verification = True)
+        z.save()
