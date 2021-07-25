@@ -1348,8 +1348,8 @@ def add_groups():
 
 def add_patients():
     group = Group.objects.get(name='Patient')
-    data = [['1111122222223','Afnan Bashir'],['2222233333334','Talha Jaleel'],
-    ['3333344444445','Usama Rizwan'],['4444455555556','Jahanzaib Rao']]
+    data = [['1111122222223', 'Afnan Bashir'], ['2222233333334', 'Talha Jaleel'],
+            ['3333344444445', 'Usama Rizwan'], ['4444455555556', 'Jahanzaib Rao']]
     for d in data:
         try:
             x = User(
@@ -1359,7 +1359,7 @@ def add_patients():
 
             z = Patient(CNIC=d[0], fName=d[1].split()[0], lName=d[1].split()[1],
                         phone='03212233445', dob='2021-07-15', address='852-B Faisal Town Lahore',
-                        email='patient@gmail.com', user=x, verification = True)
+                        email='patient@gmail.com', user=x, verification=True)
             z.save()
         except:
             pass
