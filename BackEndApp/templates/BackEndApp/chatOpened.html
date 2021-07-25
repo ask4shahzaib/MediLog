@@ -1,6 +1,7 @@
 {%load static%}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -27,158 +28,157 @@
 
     <link rel="stylesheet" href="css/styles.css">
     <link rel="icon" href="images/favicon1.ico">
-  <link rel="preconnect" href="https://fonts.gstatic.com">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
 </head>
 <style>
-  .container {
-    border: 2px solid #dedede;
-    background-color: #f1f1f1;
-    border-radius: 5px;
-    padding: 10px;
-    margin: 10px 0;
-    position: absolute;
-    overflow: scroll;
-    height: 300px;
-  }
-  .chat-container {
-    border: 2px solid #dedede;
-    background-color: #f1f1f1;
-    border-radius: 5px;
-    padding: 10px;
-    margin: 10px 0;
-    width: 100%;
-  }
-  .darker {
-    border-color: #ccc;
-    background-color: #ddd;
-    width: 100%;
-  }
-  
-  .container::after {
-    content: "";
-    clear: both;
-    display: table;
-  }
-  
-  .container img {
-    float: left;
-    max-width: 30px;
-    width: 50%;
-    margin-right: 20px;
-    border-radius: 50%;
-    max-height: 35px;
-  }
-  
-  .container img.right {
-    float: right;
-    margin-left: 20px;
-    margin-right:0;
-  }
-  
-  .time-right {
-    float: right;
-    color: #aaa;
-  }
-  
-  .time-left {
-    float: left;
-    color: #999;
-  }
-  .send-btn
-  {
-    height: 40px;
-    width: 60px;
-    background-color: #04AA6D;
-    color: black;
-    border-radius: 8px;
-    border-color: #04AA6D;
-    float: right;
-  }
-  .send-btn:hover
-  {
-    border-color: #04AA6D;
-    background-color: white;
-  }
-  </style>
+    .container {
+        border: 2px solid #dedede;
+        background-color: #f1f1f1;
+        border-radius: 5px;
+        padding: 10px;
+        margin: 10px 0;
+        position: absolute;
+        overflow: scroll;
+        height: 300px;
+    }
+    
+    .chat-container {
+        border: 2px solid #dedede;
+        background-color: #f1f1f1;
+        border-radius: 5px;
+        padding: 10px;
+        margin: 10px 0;
+        width: 100%;
+    }
+    
+    .darker {
+        border-color: #ccc;
+        background-color: #ddd;
+        width: 100%;
+    }
+    
+    .container::after {
+        content: "";
+        clear: both;
+        display: table;
+    }
+    
+    .container img {
+        float: left;
+        max-width: 30px;
+        width: 50%;
+        margin-right: 20px;
+        border-radius: 50%;
+        max-height: 35px;
+    }
+    
+    .container img.right {
+        float: right;
+        margin-left: 20px;
+        margin-right: 0;
+    }
+    
+    .time-right {
+        float: right;
+        color: #aaa;
+    }
+    
+    .time-left {
+        float: left;
+        color: #999;
+    }
+    
+    .send-btn {
+        height: 40px;
+        width: 60px;
+        background-color: #04AA6D;
+        color: black;
+        border-radius: 8px;
+        border-color: #04AA6D;
+        float: right;
+    }
+    
+    .send-btn:hover {
+        border-color: #04AA6D;
+        background-color: white;
+    }
+</style>
+
 <body class="bBody">
 
 
-  <nav class="navbar  navbar-fixed-top" style="background-color: rgb(227, 254, 255); padding: 5px 0px; margin: 0px 0px; box-shadow: 2px 2px rgba(134, 133, 133, 0.1);">
-    <div class="container-fluid">
+    <nav class="navbar  navbar-fixed-top" style="background-color: rgb(227, 254, 255); padding: 5px 0px; margin: 0px 0px; box-shadow: 2px 2px rgba(134, 133, 133, 0.1);">
+        <div class="container-fluid">
 
-        <div class="navbar-header">
-            <a href="#" class="navbar-left">
-                <img src="{% static 'images/UI/logo.png' %}" width="auto" height="50px">
-            </a>
-        </div>
+            <div class="navbar-header">
+                <a href="#" class="navbar-left">
+                    <img src="{% static 'images/UI/logo.png' %}" width="auto" height="50px">
+                </a>
+            </div>
 
-        <div class="collapse navbar-collapse navbar-right" id="navbarSupportedContent">
-            <ul class="nav navbar-nav float-left ml-auto">
-                <li style="margin-top: 15px;">Hello, {{user}}</li>
-                <li><a href="{% url 'logout' %}">Logout <i class="fas fa-sign-out-alt"></i></span></a></li>
-            </ul>
+            <div class="collapse navbar-collapse navbar-right" id="navbarSupportedContent">
+                <ul class="nav navbar-nav float-left ml-auto">
+                    <li style="margin-top: 15px;">Hello, {{user}}</li>
+                    <li><a href="{% url 'logout' %}">Logout <i class="fas fa-sign-out-alt"></i></span></a></li>
+                </ul>
+            </div>
+
         </div>
+    </nav>
+
+    <div class="wrapper">
+
+        {%if patient%} {% include 'BackEndApp/patientSidebar.html' %} {% elif not patient %} {% include 'BackEndApp/doctorSidebar.html' %} {%endif%}
 
     </div>
-</nav>
 
-<div class="wrapper">
+    <div class="usableBody">
 
-    {% include 'BackEndApp/patientSidebar.html' %}
 
-</div>
-
-<div class="usableBody">
-
-    
         <div class="container" id="con" style="width: 60%; left: 20%; right: 20%; top: 10%; height: 70%;">
 
-          <div>
+            <div>
 
-            {% for Message in Messages %}
-            
-            {% if Message.sender == secondPerson.CNIC  %}
+                {% for Message in Messages %} {% if Message.sender == secondPerson.CNIC %}
 
-                  <h5>{{secondPerson.fName}}</h5>
-            
-            {% endif %}
+                <h5>{{secondPerson.fName}}</h5>
 
-            {% if Message.sender != secondPerson.CNIC  %}
+                {% endif %} {% if Message.sender != secondPerson.CNIC %}
 
-                  <h5>You</h5>
-            
-            {% endif %}
+                <h5>You</h5>
 
-            <div class="chat-container">
-  
-              <p>{{Message.text}}</p>
+                {% endif %}
+
+                <div class="chat-container">
+
+                    <p>{{Message.text}}</p>
+                </div>
+
+                {% endfor %}
+
             </div>
-  
-            {% endfor %}
-            
-          </div>
-          
-          <div>
-            <form action="/sendMessage/" method="POST">
-              {%csrf_token%}
-              <input type="hidden" value="{{secondPerson.CNIC}}" name="uID">
-            <input style="height: 40px; width: 85%; border-radius: 8px;" type="text" id="text" name="text"/>
-            <button class="send-btn" type="submit" >Send</button>
-          </form>
-          </div>
-      </div>
-</div>
+
+            <div>
+                <form action="/sendMessage/" method="POST">
+                    {%csrf_token%}
+                    <input type="hidden" value="{{secondPerson.CNIC}}" name="uID">
+                    <input style="height: 40px; width: 85%; border-radius: 8px;" type="text" id="text" name="text" />
+                    <button class="send-btn" type="submit">Send</button>
+                </form>
+            </div>
+        </div>
+    </div>
 
 
-        <script>
-         window.onload = function()
-          {
+    <script>
+        window.onload = function() {
             var chat = document.getElementById("con");
             chat.scrollTop = chat.scrollHeight;
-          }
-        </script>
+        }
+    </script>
 </body>
+
 </html>

@@ -37,7 +37,7 @@ class Patient(models.Model):
     dob = models.DateField()
     trustedContact = models.CharField(max_length=13)
     phone = models.CharField(max_length=11, null=True,
-    validators=[MinLengthValidator(11)])
+                             validators=[MinLengthValidator(11)])
     address = models.CharField(max_length=999, null=True)
     email = models.CharField(max_length=100, null=True)
     photo = models.ImageField(
@@ -145,7 +145,7 @@ class Message(models.Model):
     sender = models.CharField(max_length=30, null=False)
     receiver = models.CharField(max_length=30, null=False)
     text = models.CharField(max_length=300, null=False)
-    date_time = models.DateField()
+    date_time = models.DateTimeField()
 
     def __str__(self):
         return self.sender

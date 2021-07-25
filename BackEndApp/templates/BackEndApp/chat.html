@@ -1,6 +1,7 @@
 {%load static%}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <link rel="JavaScript" href="{% static '/js/index.js' %}" />
     <link rel="stylesheet" href="{% static '/css/styles.css' %}" />
@@ -13,10 +14,10 @@
 </head>
 
 
-    <body class="bBody">
+<body class="bBody">
 
 
-      <nav class="navbar  navbar-fixed-top" style="background-color: rgb(227, 254, 255); padding: 5px 0px; margin: 0px 0px; box-shadow: 2px 2px rgba(134, 133, 133, 0.1);">
+    <nav class="navbar  navbar-fixed-top" style="background-color: rgb(227, 254, 255); padding: 5px 0px; margin: 0px 0px; box-shadow: 2px 2px rgba(134, 133, 133, 0.1);">
         <div class="container-fluid">
 
             <div class="navbar-header">
@@ -35,43 +36,41 @@
         </div>
     </nav>
     <div class="wrapper">
+        {%if patient%} {% include 'BackEndApp/patientSidebar.html' %} {% elif not patient %} {% include 'BackEndApp/doctorSidebar.html' %} {%endif%}
+    </div>
 
-        {% include 'BackEndApp/adminSidebar.html' %}
+
+    <div class="usableBody">
+
+
+        <div class="list-group" style="position: absolute; left: 2%; top: 3%; right: 50%;">
+            {% for chatPerson in chatPeople %}
+
+            <form action="/loadMessages/" method="POST">
+                {%csrf_token%}
+                <button type="submit" class="list-group-item list-group-item-action active" value="{{chatPerson.CNIC}}" name="secondUserId" id="secondUserId">{{chatPerson}}</button>
+
+            </form>
+
+            {% endfor %}
+        </div>
+
+        <div id="myForm" style="position:absolute; left: 55%; right: 0%; top: 20px;">
+            <form action="/sendMessage/" class="form-container" method="POST">
+                {%csrf_token%}
+                <input placeholder="User ID" name="uID" id="uID" type="uID" required style="width: 500px; height: 40px;" />
+                <textarea placeholder="Type message" name="text" id="text" required style="width: 500px; height: 500px;"></textarea>
+                <button id="ViewRecordSubmit" class="btn" type="submit" style="width: 500px;">Send</button>
+            </form>
+
+
+        </div>
+
 
     </div>
 
 
-      <div class="usableBody">
 
-
-        <div class="list-group" style="position: absolute; left: 2%; top: 3%; right: 50%;">
-          {% for chatPerson in chatPeople %}
-  
-          <form action="/loadMessages/" method="POST">
-            {%csrf_token%}
-            <button type="submit" class="list-group-item list-group-item-action active" value="{{chatPerson.CNIC}}" name = "secondUserId" id = "secondUserId">{{chatPerson}}</button>
-  
-          </form>
-            
-          {% endfor %}
-        </div>
-  
-        <div id="myForm" style="position:absolute; left: 55%; right: 0%; top: 20px;">
-          <form action="/sendMessage/" class="form-container" method="POST">
-              {%csrf_token%}
-              <input placeholder="User ID" name="uID" id="uID" type="uID" required style="width: 500px; height: 40px;"/>
-              <textarea placeholder="Type message" name="text" id="text" required style="width: 500px; height: 500px;"></textarea>
-              <button id="ViewRecordSubmit" class="btn" type="submit" style="width: 500px;">Send</button>
-          </form>
-  
-        
-        </div>
-
-
-      </div>
-        
-      
-
-    </body>
+</body>
 
 </html>

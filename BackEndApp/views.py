@@ -1140,7 +1140,8 @@ def sendMessage(request):
     receiverID = request.POST['uID']
     messageText = request.POST['text']
     date_time = datetime.now()
-    x = Message(sender=senderID, receiver=receiverID, text=messageText, date_time = date_time)
+    x = Message(sender=senderID, receiver=receiverID,
+                text=messageText, date_time=date_time)
     x.save()
     return redirect('loadSenders')
 
@@ -1149,11 +1150,11 @@ def loadMessages(request):
     userID = request.user.username
     secUserId = request.POST['secondUserId']
 
-    receivedMessages = Message.objects.filter(receiver= userID)
-    receivedMessages = receivedMessages.filter(sender = secUserId)
+    receivedMessages = Message.objects.filter(receiver=userID)
+    receivedMessages = receivedMessages.filter(sender=secUserId)
 
-    sentMessages = Message.objects.filter(sender = userID)
-    sentMessages = sentMessages.filter(receiver = secUserId)
+    sentMessages = Message.objects.filter(sender=userID)
+    sentMessages = sentMessages.filter(receiver=secUserId)
 
     messages = []
     for i in receivedMessages:
@@ -1161,15 +1162,22 @@ def loadMessages(request):
 
     for i in sentMessages:
         messages.append(i)
+    messages.sort(key = lambda x: x.date_time)
+    group = request.user.groups.all()
+    group = str(group[0])
+    patient = True
+    if group == 'Patient':
+        user = Patient.objects.get(CNIC=request.user.username)
+    else:
+        user = Doctor.objects.get(license_No=request.user.username)
+        patient = False
 
-
-
-    secondPerson = Patient.objects.get(CNIC = secUserId)
+    secondPerson = Patient.objects.get(CNIC=secUserId)
 
     context = {'Messages': messages,
-    'secondPerson' : secondPerson
-    }
-    
+               'secondPerson': secondPerson, 'user': user, 'patient': patient
+               }
+
     return render(request, 'BackEndApp/chatOpened.html', context)
 
 
@@ -1187,8 +1195,15 @@ def loadSenders(request):
         user = Patient.objects.get(CNIC=message.receiver)
         if user not in chatPeople:
             chatPeople.append(user)
-
-    context = {'chatPeople': chatPeople}
+    group = request.user.groups.all()
+    group = str(group[0])
+    patient = True
+    if group == 'Patient':
+        user = Patient.objects.get(CNIC=request.user.username)
+    else:
+        user = Doctor.objects.get(license_No=request.user.username)
+        patient = False
+    context = {'chatPeople': chatPeople, 'user': user, 'patient': patient}
     return render(request, 'BackEndApp/chat.html', context)
 
 
