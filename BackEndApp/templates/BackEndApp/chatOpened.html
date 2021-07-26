@@ -23,6 +23,10 @@
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet"> 
+
 
     <link rel="stylesheet" href="css/styles.css">
     <link rel="icon" href="images/favicon1.ico">
@@ -95,7 +99,7 @@
 
 .send-btn {
     height: 40px;
-    width: 70px;
+    width: 45px;
     background-color: rgb(0, 174, 255);
     color: black;
     border-radius: 8px;
@@ -140,7 +144,7 @@
 
     <div class="usableBody">
 
-
+        <h2 style="text-align: center; font-family: 'Roboto', sans-serif; " > <b> Medi Chat  with {{secondPerson.fName}} {{secondPerson.lName}}</b></h2>
         <div class="container" id="con" style="width: 60%; left: 20%; right: 20%; top: 10%; height: 70%;">
 
             <div>
@@ -171,8 +175,8 @@
                 <form action="/sendMessage2/" method="POST">
                     {%csrf_token%}
                     <input type="hidden" value="{{secondPerson.license_No}}" name="uID">
-                    <input style="height: 40px; width: 90%; border-radius: 8px; " type="text" id="text" name="text" />
-                    <button class="send-btn" type="submit"> Send<i class="fas fa-paper-plane"></i> </button>
+                    <input style="height: 40px; width: 93%; border-radius: 8px; " type="text" id="text" name="text" />
+                    <button class="send-btn" type="submit"> <i class="fas fa-paper-plane"></i> </button>
                 </form>
             </div>
         </div>
