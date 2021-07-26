@@ -44,13 +44,8 @@
 
                 <ul class="nav navbar-nav float-left ml-auto">
                     <ul class="nav navbar-nav float-left ml-auto">
-                        {%if check%}
-                        <li style="margin-top: 15px;">Hello, {{person}}</li>
+                        <li style="margin-top: 15px;">Hello, {{user}}</li>
                         <li><a href="{% url 'logout' %}">Logout <i class="fas fa-sign-out-alt"></i></span></a></li>
-                        {%endif%} {%if not check%}
-                        <li style="margin-top: 15px;">Hello, {{doctor}}</li>
-                        <li><a href="{% url 'logout' %}">Logout <i class="fas fa-sign-out-alt"></i></span></a></li>
-                        {%endif%}
                     </ul>
                 </ul>
             </div>
@@ -59,12 +54,7 @@
     </nav>
     <div class="wrapper">
 
-
-        <!-- Patient's sidebar -->
-        {% if check %} {% include 'BackEndApp/patientSidebar.html' %} {%endif%} {%if not check%}
-        <!-- Doctor's Sidebar  -->
-
-        {% include 'BackEndApp/patientSidebar.html' %} {%endif%}
+        {% include 'BackEndApp/patientSidebar.html' %}
 
     </div>
 

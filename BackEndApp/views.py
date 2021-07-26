@@ -1040,19 +1040,31 @@ def registerLab(request):
 
 
 def addPatient(request):
-    return render(request, 'BackEndApp/addPatient.html')
+    user = User.objects.get(username=request.user.username)
+    user = user.first_name + " " + user.last_name
+    context = {'user': user}
+    return render(request, 'BackEndApp/addPatient.html', context)
 
 
 def addDoctor(request):
-    return render(request, 'BackEndApp/addDoctor.html')
+    user = User.objects.get(username=request.user.username)
+    user = user.first_name + " " + user.last_name
+    context = {'user': user}
+    return render(request, 'BackEndApp/addDoctor.html', context)
 
 
 def addLaboratory(request):
-    return render(request, 'BackEndApp/addLaboratory.html')
+    user = User.objects.get(username=request.user.username)
+    user = user.first_name + " " + user.last_name
+    context = {'user': user}
+    return render(request, 'BackEndApp/addLaboratory.html', context)
 
 
 def addHospital(request):
-    return render(request, 'BackEndApp/addHospital.html')
+    user = User.objects.get(username=request.user.username)
+    user = user.first_name + " " + user.last_name
+    context = {'user': user}
+    return render(request, 'BackEndApp/addHospital.html', context)
 
 
 def followUpFiles(request):
@@ -1123,7 +1135,8 @@ def viewConnections(request):
     if request.method == 'GET':
         connections = Patient.objects.filter(
             trustedContact=request.user.username)
-        context = {'connections': connections}
+        user = Patient.objects.get(CNIC=request.user.username)
+        context = {'connections': connections, 'user': user}
         return render(request, 'BackEndApp/connections.html', context)
     else:
         cnic = request.POST['cnic']
@@ -1136,14 +1149,14 @@ def viewConnections(request):
         data = timelineData(cnic)
         if data == []:
             data = False
-        person = Patient.objects.get(CNIC=request.user.username)
+        user = Patient.objects.get(CNIC=request.user.username)
         text, sum = summary(cnic)
         context = {
             'text': text,
             'sum': sum,
             'patient': False,
             'data': data,
-            'person': person
+            'user': user
         }
         return render(request, "BackEndApp/timeline.html", context)
 
@@ -1422,7 +1435,7 @@ def add_patients():
 
 def add_doctors():
     group = Group.objects.get(name='Doctor')
-    data = [['1111111111222', 'Docotor Sarim', 'doctorsarim'], ['2222222222333', 'Doctor Abeeda', 'doctorabeeda'], ['3333333333444', 'Doctor Sameen', 'docotorsameen'],
+    data = [['1111111111222', 'Docotr Sarim', 'doctorsarim'], ['2222222222333', 'Doctor Abeeda', 'doctorabeeda'], ['3333333333444', 'Doctor Sameen', 'docotrsameen'],
             ['1236547893692', 'Doctor Aamir', 'doctoraamir'], ['1472589632581',
                                                                'Doctor Asif', 'doctorasif'], ['0000000000111', 'Doctor Saif', 'doctorsaif'],
             ['9999900000001', 'Doctor Qasim', 'doctorqasim'], ['0000011111112', 'Doctor Zareen',
