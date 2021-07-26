@@ -1174,12 +1174,13 @@ def sendMessage(request):
 
     senderID = request.user.username
     receiverID = request.POST['uID']
+    request.session['secUserId'] = receiverID
     messageText = request.POST['text']
     date_time = datetime.now()
     x = Message(sender=senderID, receiver=receiverID,
                 text=messageText, date_time=date_time)
     x.save()
-    return redirect('loadSenders')
+    return redirect('loadMessages')
 
 
 def sendMessage2(request):
@@ -1223,13 +1224,7 @@ def loadMessages(request):
     messages.sort(key = lambda x: x.date_time)
     user = Doctor.objects.get(license_No=userID)
     
-
     secondPerson = Doctor.objects.get(license_No=secUserId)
-
-    for m in messages:
-        print(m.receiver)
-
-
 
     context = {'Messages': messages,
                'secondPerson': secondPerson, 'user': user
@@ -1258,6 +1253,7 @@ def loadSenders(request):
         user = Doctor.objects.get(license_No=message.receiver)
         if user not in chatPeople:
             chatPeople.append(user)
+    chatPeople.reverse()
     group = request.user.groups.all()
     group = str(group[0])
 

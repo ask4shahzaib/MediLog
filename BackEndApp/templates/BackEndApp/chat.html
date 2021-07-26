@@ -48,8 +48,8 @@
 
             <form action="/loadMessages/" method="POST">
                 {%csrf_token%}
-                <button type="submit" class="list-group-item list-group-item-action active" value="{{chatPerson.license_No}}" name="secondUserId" id="secondUserId">{{chatPerson}}</button>
-
+                <button type="submit" style="margin-bottom: 5px;" class="list-group-item list-group-item-action active" value="{{chatPerson.license_No}}" name="secondUserId" id="secondUserId">{{chatPerson}}</button>
+                    
             </form>
 
             {% endfor %}
