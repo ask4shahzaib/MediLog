@@ -1205,9 +1205,8 @@ def loadMessages(request):
     for i in sentMessages:
         messages.append(i)
 
-    messages.sort(key = lambda x: x.date_time)
+    messages.sort(key=lambda x: x.date_time)
     user = Doctor.objects.get(license_No=request.user.username)
-    
 
     secondPerson = Doctor.objects.get(license_No=secUserId)
 
@@ -1233,7 +1232,7 @@ def loadSenders(request):
     try:
         messages = Message.objects.filter(sender=receiverID)
     except:
-        messages=None
+        messages = None
     for message in messages:
         user = Doctor.objects.get(license_No=message.receiver)
         if user not in chatPeople:
@@ -1242,7 +1241,7 @@ def loadSenders(request):
     group = str(group[0])
 
     user = Doctor.objects.get(license_No=request.user.username)
-    
+
     context = {'chatPeople': chatPeople, 'user': user}
     return render(request, 'BackEndApp/chat.html', context)
 
@@ -1263,7 +1262,7 @@ def analysisByCity(request):
     try:
         start = request.POST['start']
         end = request.POST['end']
-    except: 
+    except:
         start = None
         end = None
     diseases = {}
@@ -1285,9 +1284,9 @@ def analysisByCity(request):
     for key, value in diseases.items():
         data.append([key, value])
     data = sorted(data, key=lambda x: x[1], reverse=True)
-    if len(data) > 10:
-        data = data[:10]
-        text += "10 diseases in "
+    if len(data) > 7:
+        data = data[:7]
+        text += "7 diseases in "
     if len(data) > 1:
         text += str(len(data)) + " diseases in "
     else:
@@ -1342,8 +1341,8 @@ def analysisByDisease(request):
     for key, value in data.items():
         temp.append([key, value])
     data = temp
-    if len(data) > 10:
-        data = data[:10]
+    if len(data) > 7:
+        data = data[:7]
     if disease:
         if len(data) > 1:
             text += str(len(data)) + " cities with most patients of " + disease
@@ -1381,6 +1380,7 @@ def ratio():
     i = 0
     for d in data:
         if i < 5:
+            i += 1
             pass
         else:
             i += d[1]
@@ -1448,11 +1448,7 @@ def add_patients():
 
 def add_doctors():
     group = Group.objects.get(name='Doctor')
-<<<<<<< HEAD
-    data = [['1111111111222', 'Docotr Sarim', 'doctorsarim'], ['2222222222333', 'Doctor Abeeda', 'doctorabeeda'], ['3333333333444', 'Doctor Sameen', 'docotrsameen'],
-=======
-    data = [['1111111111222', 'doctor Sarim', 'doctorsarim'], ['2222222222333', 'Doctor Abeeda', 'doctorabeeda'], ['3333333333444', 'Doctor Sameen', 'doctorsameen'],
->>>>>>> 21f2fdce08840188fe6d94272d3ab185792299cd
+    data = [['1111111111222', 'Doctor Sarim', 'doctorsarim'], ['2222222222333', 'Doctor Abeeda', 'doctorabeeda'], ['3333333333444', 'Doctor Sameen', 'doctorsameen'],
             ['1236547893692', 'Doctor Aamir', 'doctoraamir'], ['1472589632581',
                                                                'Doctor Asif', 'doctorasif'], ['0000000000111', 'Doctor Saif', 'doctorsaif'],
             ['9999900000001', 'Doctor Qasim', 'doctorqasim'], ['0000011111112', 'Doctor Zareen',
@@ -1483,7 +1479,7 @@ def add_hospitals():
             ['hospitalmultan', 'Multan Hospital', 'Multan'], ['hospitalislamabad',
                                                               'Islamabad Hospital', 'Islamabad'], ['hospitalpeshawar', 'Peshawar Hospital', 'Peshawar'],
             ['hospitalquetta', 'Quetta Hospital', 'Quetta'], ['hospitalsahiwal', 'Sahiwal Hospital',
-                                                              'Sahiwal'], ['hospitalfaisalbad', 'Faisalabad Hospital', 'Faisalabad'],
+                                                              'Sahiwal'], ['hospitalfaisalabad', 'Faisalabad Hospital', 'Faisalabad'],
             ['hospitallodhran', 'Lodhran Hospital', "Lodhran"]]
     for d in data:
         try:
@@ -1507,7 +1503,7 @@ def add_laboratories():
             ['laboratorymultan', 'Multan Lab', 'Multan'], ['laboratoryislamabad',
                                                            'Islamabad Lab', 'Islamabad'], ['laboratorypeshawar', 'Peshawar Lab', 'Peshawar'],
             ['laboratoryquetta', 'Quetta Lab', 'Quetta'], ['laboratorysahiwal', 'Sahiwal Lab',
-                                                           'Sahiwal'], ['laboratoryfaisalbad', 'Faisalabad Lab', 'Faisalabad'],
+                                                           'Sahiwal'], ['laboratoryfaisalabad', 'Faisalabad Lab', 'Faisalabad'],
             ['laboratorylodhran', 'Lodhran Lab', "Lodhran"]]
     for d in data:
         try:
