@@ -467,11 +467,11 @@ def summary(cnic):
         i = 1
         for d in data:
             if len(data) == 1:
-                text += " " + d.description + "."
+                text += " " + d.label + "."
             elif i == len(data):
-                text += " and " + d.description + "."
+                text += " and " + d.label + "."
             else:
-                text += " " + d.description + ","
+                text += " " + d.label + ","
             i += 1
 
     return text, data
@@ -1039,6 +1039,8 @@ def registerLab(request):
         return render(request, 'BackEndApp/adminHomePage.html')
 
 
+@login_required(login_url='login')
+@allowed_users(allowed=['Admin'])
 def addPatient(request):
     user = User.objects.get(username=request.user.username)
     user = user.first_name + " " + user.last_name
@@ -1046,6 +1048,8 @@ def addPatient(request):
     return render(request, 'BackEndApp/addPatient.html', context)
 
 
+@login_required(login_url='login')
+@allowed_users(allowed=['Admin'])
 def addDoctor(request):
     user = User.objects.get(username=request.user.username)
     user = user.first_name + " " + user.last_name
@@ -1053,6 +1057,8 @@ def addDoctor(request):
     return render(request, 'BackEndApp/addDoctor.html', context)
 
 
+@login_required(login_url='login')
+@allowed_users(allowed=['Admin'])
 def addLaboratory(request):
     user = User.objects.get(username=request.user.username)
     user = user.first_name + " " + user.last_name
@@ -1060,6 +1066,8 @@ def addLaboratory(request):
     return render(request, 'BackEndApp/addLaboratory.html', context)
 
 
+@login_required(login_url='login')
+@allowed_users(allowed=['Admin'])
 def addHospital(request):
     user = User.objects.get(username=request.user.username)
     user = user.first_name + " " + user.last_name
@@ -1101,6 +1109,7 @@ def addFollowUp(request):
         return render(request, 'BackEndApp/followUpForm.html')
 
 
+@login_required(login_url='login')
 def about(request):
     group = request.user.groups.all()
     group = str(group[0])
@@ -1177,11 +1186,17 @@ def loadMessages(request):
     userID = request.user.username
     secUserId = request.POST['secondUserId']
 
-    receivedMessages = Message.objects.filter(receiver=userID)
-    receivedMessages = receivedMessages.filter(sender=secUserId)
+    try:
+        receivedMessages = Message.objects.filter(receiver=userID)
+        receivedMessages = receivedMessages.filter(sender=secUserId)
+    except:
+        receivedMessages = None
 
-    sentMessages = Message.objects.filter(sender=userID)
-    sentMessages = sentMessages.filter(receiver=secUserId)
+    try:
+        sentMessages = Message.objects.filter(sender=userID)
+        sentMessages = sentMessages.filter(receiver=secUserId)
+    except:
+        sentMessages = None
 
     messages = []
     for i in receivedMessages:
@@ -1189,20 +1204,15 @@ def loadMessages(request):
 
     for i in sentMessages:
         messages.append(i)
-    messages.sort(key=lambda x: x.date_time)
-    group = request.user.groups.all()
-    group = str(group[0])
-    patient = True
-    if group == 'Patient':
-        user = Patient.objects.get(CNIC=request.user.username)
-    else:
-        user = Doctor.objects.get(license_No=request.user.username)
-        patient = False
 
-    secondPerson = Patient.objects.get(CNIC=secUserId)
+    messages.sort(key = lambda x: x.date_time)
+    user = Doctor.objects.get(license_No=request.user.username)
+    
+
+    secondPerson = Doctor.objects.get(license_No=secUserId)
 
     context = {'Messages': messages,
-               'secondPerson': secondPerson, 'user': user, 'patient': patient
+               'secondPerson': secondPerson, 'user': user
                }
 
     return render(request, 'BackEndApp/chatOpened.html', context)
@@ -1213,24 +1223,27 @@ def loadSenders(request):
     chatPeople = []
     messages = Message.objects.filter(receiver=receiverID)
     for message in messages:
-        user = Patient.objects.get(CNIC=message.sender)
+        try:
+            user = Doctor.objects.get(license_No=message.sender)
+        except:
+            user = None
         if user not in chatPeople:
             chatPeople.append(user)
 
-    messages = Message.objects.filter(sender=receiverID)
+    try:
+        messages = Message.objects.filter(sender=receiverID)
+    except:
+        messages=None
     for message in messages:
-        user = Patient.objects.get(CNIC=message.receiver)
+        user = Doctor.objects.get(license_No=message.receiver)
         if user not in chatPeople:
             chatPeople.append(user)
     group = request.user.groups.all()
     group = str(group[0])
-    patient = True
-    if group == 'Patient':
-        user = Patient.objects.get(CNIC=request.user.username)
-    else:
-        user = Doctor.objects.get(license_No=request.user.username)
-        patient = False
-    context = {'chatPeople': chatPeople, 'user': user, 'patient': patient}
+
+    user = Doctor.objects.get(license_No=request.user.username)
+    
+    context = {'chatPeople': chatPeople, 'user': user}
     return render(request, 'BackEndApp/chat.html', context)
 
 
@@ -1250,7 +1263,7 @@ def analysisByCity(request):
     try:
         start = request.POST['start']
         end = request.POST['end']
-    except:
+    except: 
         start = None
         end = None
     diseases = {}
@@ -1435,7 +1448,11 @@ def add_patients():
 
 def add_doctors():
     group = Group.objects.get(name='Doctor')
+<<<<<<< HEAD
     data = [['1111111111222', 'Docotr Sarim', 'doctorsarim'], ['2222222222333', 'Doctor Abeeda', 'doctorabeeda'], ['3333333333444', 'Doctor Sameen', 'docotrsameen'],
+=======
+    data = [['1111111111222', 'doctor Sarim', 'doctorsarim'], ['2222222222333', 'Doctor Abeeda', 'doctorabeeda'], ['3333333333444', 'Doctor Sameen', 'doctorsameen'],
+>>>>>>> 21f2fdce08840188fe6d94272d3ab185792299cd
             ['1236547893692', 'Doctor Aamir', 'doctoraamir'], ['1472589632581',
                                                                'Doctor Asif', 'doctorasif'], ['0000000000111', 'Doctor Saif', 'doctorsaif'],
             ['9999900000001', 'Doctor Qasim', 'doctorqasim'], ['0000011111112', 'Doctor Zareen',
