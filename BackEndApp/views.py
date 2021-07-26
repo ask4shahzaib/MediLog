@@ -1182,10 +1182,25 @@ def sendMessage(request):
     return redirect('loadSenders')
 
 
+def sendMessage2(request):
+    senderID = request.user.username
+    receiverID = request.session['receiver']
+    messageText = request.POST['text']
+    date_time = datetime.now()
+    x = Message(sender=senderID, receiver=receiverID,
+                text=messageText, date_time=date_time)
+    x.save()
+    return redirect('loadMessages')
+    
+
+
 def loadMessages(request):
     userID = request.user.username
-    secUserId = request.POST['secondUserId']
-
+    try:
+        secUserId = request.POST['secondUserId']
+        request.session['receiver'] = secUserId
+    except:
+        secUserId = request.session['receiver']
     try:
         receivedMessages = Message.objects.filter(receiver=userID)
         receivedMessages = receivedMessages.filter(sender=secUserId)
@@ -1206,10 +1221,15 @@ def loadMessages(request):
         messages.append(i)
 
     messages.sort(key = lambda x: x.date_time)
-    user = Doctor.objects.get(license_No=request.user.username)
+    user = Doctor.objects.get(license_No=userID)
     
 
     secondPerson = Doctor.objects.get(license_No=secUserId)
+
+    for m in messages:
+        print(m.receiver)
+
+
 
     context = {'Messages': messages,
                'secondPerson': secondPerson, 'user': user
@@ -1448,11 +1468,7 @@ def add_patients():
 
 def add_doctors():
     group = Group.objects.get(name='Doctor')
-<<<<<<< HEAD
-    data = [['1111111111222', 'Docotr Sarim', 'doctorsarim'], ['2222222222333', 'Doctor Abeeda', 'doctorabeeda'], ['3333333333444', 'Doctor Sameen', 'docotrsameen'],
-=======
-    data = [['1111111111222', 'doctor Sarim', 'doctorsarim'], ['2222222222333', 'Doctor Abeeda', 'doctorabeeda'], ['3333333333444', 'Doctor Sameen', 'doctorsameen'],
->>>>>>> 21f2fdce08840188fe6d94272d3ab185792299cd
+    data = [['1111111111222', 'Doctor Sarim', 'doctorsarim'], ['2222222222333', 'Doctor Abeeda', 'doctorabeeda'], ['3333333333444', 'Doctor Sameen', 'doctorsameen'],
             ['1236547893692', 'Doctor Aamir', 'doctoraamir'], ['1472589632581',
                                                                'Doctor Asif', 'doctorasif'], ['0000000000111', 'Doctor Saif', 'doctorsaif'],
             ['9999900000001', 'Doctor Qasim', 'doctorqasim'], ['0000011111112', 'Doctor Zareen',

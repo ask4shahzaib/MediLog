@@ -27,6 +27,7 @@ urlpatterns = [
     path('loadSenders/', views.loadSenders, name='loadSenders'),
     path('loadMessages/', views.loadMessages, name='loadMessages'),
     path('sendMessage/', views.sendMessage, name='sendMessage'),
+    path('sendMessage2/', views.sendMessage2, name='sendMessage2'),
     
     path('addFollowUp/', views.addFollowUp, name='addFollowUp'),
     path('about/', views.about, name='about'),
