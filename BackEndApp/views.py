@@ -467,11 +467,11 @@ def summary(cnic):
         i = 1
         for d in data:
             if len(data) == 1:
-                text += " " + d.description + "."
+                text += " " + d.label + "."
             elif i == len(data):
-                text += " and " + d.description + "."
+                text += " and " + d.label + "."
             else:
-                text += " " + d.description + ","
+                text += " " + d.label + ","
             i += 1
 
     return text, data
@@ -1435,7 +1435,7 @@ def add_patients():
 
 def add_doctors():
     group = Group.objects.get(name='Doctor')
-    data = [['1111111111222', 'Docotor Sarim', 'doctorsarim'], ['2222222222333', 'Doctor Abeeda', 'doctorabeeda'], ['3333333333444', 'Doctor Sameen', 'docotorsameen'],
+    data = [['1111111111222', 'doctor Sarim', 'doctorsarim'], ['2222222222333', 'Doctor Abeeda', 'doctorabeeda'], ['3333333333444', 'Doctor Sameen', 'doctorsameen'],
             ['1236547893692', 'Doctor Aamir', 'doctoraamir'], ['1472589632581',
                                                                'Doctor Asif', 'doctorasif'], ['0000000000111', 'Doctor Saif', 'doctorsaif'],
             ['9999900000001', 'Doctor Qasim', 'doctorqasim'], ['0000011111112', 'Doctor Zareen',
