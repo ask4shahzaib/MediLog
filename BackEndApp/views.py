@@ -1025,18 +1025,26 @@ def registerLab(request):
         return render(request, 'BackEndApp/adminHomePage.html')
 
 
+@login_required(login_url='login')
+@allowed_users(allowed=['Admin'])
 def addPatient(request):
     return render(request, 'BackEndApp/addPatient.html')
 
 
+@login_required(login_url='login')
+@allowed_users(allowed=['Admin'])
 def addDoctor(request):
     return render(request, 'BackEndApp/addDoctor.html')
 
 
+@login_required(login_url='login')
+@allowed_users(allowed=['Admin'])
 def addLaboratory(request):
     return render(request, 'BackEndApp/addLaboratory.html')
 
 
+@login_required(login_url='login')
+@allowed_users(allowed=['Admin'])
 def addHospital(request):
     return render(request, 'BackEndApp/addHospital.html')
 
@@ -1075,6 +1083,7 @@ def addFollowUp(request):
         return render(request, 'BackEndApp/followUpForm.html')
 
 
+@login_required(login_url='login')
 def about(request):
     group = request.user.groups.all()
     group = str(group[0])
@@ -1150,11 +1159,17 @@ def loadMessages(request):
     userID = request.user.username
     secUserId = request.POST['secondUserId']
 
-    receivedMessages = Message.objects.filter(receiver=userID)
-    receivedMessages = receivedMessages.filter(sender=secUserId)
+    try:
+        receivedMessages = Message.objects.filter(receiver=userID)
+        receivedMessages = receivedMessages.filter(sender=secUserId)
+    except:
+        receivedMessages = None
 
-    sentMessages = Message.objects.filter(sender=userID)
-    sentMessages = sentMessages.filter(receiver=secUserId)
+    try:
+        sentMessages = Message.objects.filter(sender=userID)
+        sentMessages = sentMessages.filter(receiver=secUserId)
+    except:
+        sentMessages = None
 
     messages = []
     for i in receivedMessages:
@@ -1162,20 +1177,15 @@ def loadMessages(request):
 
     for i in sentMessages:
         messages.append(i)
-    messages.sort(key = lambda x: x.date_time)
-    group = request.user.groups.all()
-    group = str(group[0])
-    patient = True
-    if group == 'Patient':
-        user = Patient.objects.get(CNIC=request.user.username)
-    else:
-        user = Doctor.objects.get(license_No=request.user.username)
-        patient = False
 
-    secondPerson = Patient.objects.get(CNIC=secUserId)
+    messages.sort(key = lambda x: x.date_time)
+    user = Doctor.objects.get(license_No=request.user.username)
+    
+
+    secondPerson = Doctor.objects.get(license_No=secUserId)
 
     context = {'Messages': messages,
-               'secondPerson': secondPerson, 'user': user, 'patient': patient
+               'secondPerson': secondPerson, 'user': user
                }
 
     return render(request, 'BackEndApp/chatOpened.html', context)
@@ -1186,24 +1196,27 @@ def loadSenders(request):
     chatPeople = []
     messages = Message.objects.filter(receiver=receiverID)
     for message in messages:
-        user = Patient.objects.get(CNIC=message.sender)
+        try:
+            user = Doctor.objects.get(license_No=message.sender)
+        except:
+            user = None
         if user not in chatPeople:
             chatPeople.append(user)
 
-    messages = Message.objects.filter(sender=receiverID)
+    try:
+        messages = Message.objects.filter(sender=receiverID)
+    except:
+        messages=None
     for message in messages:
-        user = Patient.objects.get(CNIC=message.receiver)
+        user = Doctor.objects.get(license_No=message.receiver)
         if user not in chatPeople:
             chatPeople.append(user)
     group = request.user.groups.all()
     group = str(group[0])
-    patient = True
-    if group == 'Patient':
-        user = Patient.objects.get(CNIC=request.user.username)
-    else:
-        user = Doctor.objects.get(license_No=request.user.username)
-        patient = False
-    context = {'chatPeople': chatPeople, 'user': user, 'patient': patient}
+
+    user = Doctor.objects.get(license_No=request.user.username)
+    
+    context = {'chatPeople': chatPeople, 'user': user}
     return render(request, 'BackEndApp/chat.html', context)
 
 
@@ -1223,7 +1236,7 @@ def analysisByCity(request):
     try:
         start = request.POST['start']
         end = request.POST['end']
-    except:
+    except: 
         start = None
         end = None
     diseases = {}
