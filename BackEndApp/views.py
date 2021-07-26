@@ -1221,9 +1221,15 @@ def loadMessages(request):
     for i in sentMessages:
         messages.append(i)
 
+<<<<<<< HEAD
     messages.sort(key = lambda x: x.date_time)
     user = Doctor.objects.get(license_No=userID)
     
+=======
+    messages.sort(key=lambda x: x.date_time)
+    user = Doctor.objects.get(license_No=request.user.username)
+
+>>>>>>> sadman
     secondPerson = Doctor.objects.get(license_No=secUserId)
 
     context = {'Messages': messages,
@@ -1248,7 +1254,7 @@ def loadSenders(request):
     try:
         messages = Message.objects.filter(sender=receiverID)
     except:
-        messages=None
+        messages = None
     for message in messages:
         user = Doctor.objects.get(license_No=message.receiver)
         if user not in chatPeople:
@@ -1258,7 +1264,7 @@ def loadSenders(request):
     group = str(group[0])
 
     user = Doctor.objects.get(license_No=request.user.username)
-    
+
     context = {'chatPeople': chatPeople, 'user': user}
     return render(request, 'BackEndApp/chat.html', context)
 
@@ -1279,7 +1285,7 @@ def analysisByCity(request):
     try:
         start = request.POST['start']
         end = request.POST['end']
-    except: 
+    except:
         start = None
         end = None
     diseases = {}
@@ -1301,9 +1307,9 @@ def analysisByCity(request):
     for key, value in diseases.items():
         data.append([key, value])
     data = sorted(data, key=lambda x: x[1], reverse=True)
-    if len(data) > 10:
-        data = data[:10]
-        text += "10 diseases in "
+    if len(data) > 7:
+        data = data[:7]
+        text += "7 diseases in "
     if len(data) > 1:
         text += str(len(data)) + " diseases in "
     else:
@@ -1358,8 +1364,8 @@ def analysisByDisease(request):
     for key, value in data.items():
         temp.append([key, value])
     data = temp
-    if len(data) > 10:
-        data = data[:10]
+    if len(data) > 7:
+        data = data[:7]
     if disease:
         if len(data) > 1:
             text += str(len(data)) + " cities with most patients of " + disease
@@ -1397,6 +1403,7 @@ def ratio():
     i = 0
     for d in data:
         if i < 5:
+            i += 1
             pass
         else:
             i += d[1]
@@ -1495,7 +1502,7 @@ def add_hospitals():
             ['hospitalmultan', 'Multan Hospital', 'Multan'], ['hospitalislamabad',
                                                               'Islamabad Hospital', 'Islamabad'], ['hospitalpeshawar', 'Peshawar Hospital', 'Peshawar'],
             ['hospitalquetta', 'Quetta Hospital', 'Quetta'], ['hospitalsahiwal', 'Sahiwal Hospital',
-                                                              'Sahiwal'], ['hospitalfaisalbad', 'Faisalabad Hospital', 'Faisalabad'],
+                                                              'Sahiwal'], ['hospitalfaisalabad', 'Faisalabad Hospital', 'Faisalabad'],
             ['hospitallodhran', 'Lodhran Hospital', "Lodhran"]]
     for d in data:
         try:
@@ -1519,7 +1526,7 @@ def add_laboratories():
             ['laboratorymultan', 'Multan Lab', 'Multan'], ['laboratoryislamabad',
                                                            'Islamabad Lab', 'Islamabad'], ['laboratorypeshawar', 'Peshawar Lab', 'Peshawar'],
             ['laboratoryquetta', 'Quetta Lab', 'Quetta'], ['laboratorysahiwal', 'Sahiwal Lab',
-                                                           'Sahiwal'], ['laboratoryfaisalbad', 'Faisalabad Lab', 'Faisalabad'],
+                                                           'Sahiwal'], ['laboratoryfaisalabad', 'Faisalabad Lab', 'Faisalabad'],
             ['laboratorylodhran', 'Lodhran Lab', "Lodhran"]]
     for d in data:
         try:
