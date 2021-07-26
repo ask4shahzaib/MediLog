@@ -24,8 +24,6 @@
 
 
 
-
-
     <link rel="stylesheet" href="css/styles.css">
     <link rel="icon" href="images/favicon1.ico">
     <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -93,16 +91,17 @@
     
     .send-btn {
         height: 40px;
-        width: 60px;
-        background-color: #04AA6D;
+        width: 70px;
+        background-color: rgb(0, 174, 255);
         color: black;
         border-radius: 8px;
-        border-color: #04AA6D;
+        border-color: rgb(0, 174, 255);
         float: right;
+        /* position: fixed; */
     }
     
     .send-btn:hover {
-        border-color: #04AA6D;
+        border-color:  rgb(0, 174, 255);
         background-color: white;
     }
 </style>
@@ -114,7 +113,7 @@
         <div class="container-fluid">
 
             <div class="navbar-header">
-                <a href="#" class="navbar-left">
+                <a href="{% url 'feed' %}" class="navbar-left">
                     <img src="{% static 'images/UI/logo.png' %}" width="auto" height="50px">
                 </a>
             </div>
@@ -131,8 +130,7 @@
 
     <div class="wrapper">
 
-        {%if patient%} {% include 'BackEndApp/patientSidebar.html' %} {% elif not patient %} {% include 'BackEndApp/doctorSidebar.html' %} {%endif%}
-
+        {% include 'BackEndApp/doctorSidebar.html' %}
     </div>
 
     <div class="usableBody">
@@ -144,19 +142,18 @@
 
                 {% for Message in Messages %} {% if Message.sender == secondPerson.CNIC %}
 
-                <h5>{{secondPerson.fName}}</h5>
+                <h5 style="color: crimson;" > <b> {{secondPerson.fName}} {{secondPerson.lName}} </b></h5>
 
                 {% endif %} {% if Message.sender != secondPerson.CNIC %}
 
-                <h5>You</h5>
-
+                
+                <h5 style="color: blue;"> <b> You </b></h5>
+            
                 {% endif %}
-
                 <div class="chat-container">
 
                     <p>{{Message.text}}</p>
                 </div>
-
                 {% endfor %}
 
             </div>
@@ -165,8 +162,8 @@
                 <form action="/sendMessage/" method="POST">
                     {%csrf_token%}
                     <input type="hidden" value="{{secondPerson.CNIC}}" name="uID">
-                    <input style="height: 40px; width: 85%; border-radius: 8px;" type="text" id="text" name="text" />
-                    <button class="send-btn" type="submit">Send</button>
+                    <input style="height: 40px; width: 90%; border-radius: 8px; " type="text" id="text" name="text" />
+                    <button class="send-btn" type="submit"> Send<i class="fas fa-paper-plane"></i> </button>
                 </form>
             </div>
         </div>
