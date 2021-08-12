@@ -1185,23 +1185,23 @@ def sendMessage(request):
 
 def sendMessage2(request):
     senderID = request.user.username
-    receiverID = request.session['receiver']
+    receiverID = request.POST['uID']
+    request.session['secUserId'] = receiverID
     messageText = request.POST['text']
     date_time = datetime.now()
     x = Message(sender=senderID, receiver=receiverID,
                 text=messageText, date_time=date_time)
     x.save()
     return redirect('loadMessages')
-    
 
 
 def loadMessages(request):
     userID = request.user.username
     try:
         secUserId = request.POST['secondUserId']
-        request.session['receiver'] = secUserId
+        request.session['secondUserId'] = secUserId
     except:
-        secUserId = request.session['receiver']
+        secUserId = request.session['secUserId']
     try:
         receivedMessages = Message.objects.filter(receiver=userID)
         receivedMessages = receivedMessages.filter(sender=secUserId)
@@ -1221,15 +1221,9 @@ def loadMessages(request):
     for i in sentMessages:
         messages.append(i)
 
-<<<<<<< HEAD
-    messages.sort(key = lambda x: x.date_time)
-    user = Doctor.objects.get(license_No=userID)
-    
-=======
     messages.sort(key=lambda x: x.date_time)
     user = Doctor.objects.get(license_No=request.user.username)
 
->>>>>>> sadman
     secondPerson = Doctor.objects.get(license_No=secUserId)
 
     context = {'Messages': messages,
@@ -1256,7 +1250,10 @@ def loadSenders(request):
     except:
         messages = None
     for message in messages:
-        user = Doctor.objects.get(license_No=message.receiver)
+        try:
+            user = Doctor.objects.get(license_No=message.receiver)
+        except ObjectDoesNotExist:
+            user = None
         if user not in chatPeople:
             chatPeople.append(user)
     chatPeople.reverse()
